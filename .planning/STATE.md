@@ -10,23 +10,23 @@ See: .planning/PROJECT.md
 ## Current Position
 
 Phase: 1 of 4 (Foundation & Routing)
-Plan: 1 of 4 complete
+Plan: 2 of 4 complete
 Status: In progress
-Last activity: 2026-01-17 - Completed 01-01-PLAN.md
+Last activity: 2026-01-17 - Completed 01-02-PLAN.md
 
-Progress: [Phase 1] ██░░░░░░░░ 25%
+Progress: [Phase 1] █████░░░░░ 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: ~1 min
+- Total plans completed: 2
+- Average duration: ~1.5 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1 - Foundation & Routing | 1/4 | ~1 min | ~1 min |
+| 1 - Foundation & Routing | 2/4 | ~3 min | ~1.5 min |
 
 ## Accumulated Context
 
@@ -37,6 +37,10 @@ Progress: [Phase 1] ██░░░░░░░░ 25%
 | 01-01 | External Docker networks via init-networks.sh | Cross-stack communication requires networks created outside compose files |
 | 01-01 | DNS-only mode for Cloudflare | Traefik handles SSL termination directly; proxy would interfere |
 | 01-01 | Wildcard DNS *.ragnalab.xyz | Single A record covers all future subdomains |
+| 01-02 | Socket proxy endpoint (tcp://socket-proxy:2375) | Security best practice - never mount Docker socket directly |
+| 01-02 | Let's Encrypt staging server first | Avoid rate limits during testing |
+| 01-02 | Restrictive CSP default | Apps needing relaxed CSP define their own middleware |
+| 01-02 | Two rate limit tiers (100/s, 10/s) | Standard for most endpoints, strict for sensitive ones |
 
 ### Pending Todos
 
@@ -49,5 +53,5 @@ Progress: [Phase 1] ██░░░░░░░░ 25%
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Completed 01-01-PLAN.md
+Stopped at: Completed 01-02-PLAN.md
 Resume file: None
