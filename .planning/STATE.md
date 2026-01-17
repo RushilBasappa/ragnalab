@@ -10,17 +10,17 @@ See: .planning/PROJECT.md
 ## Current Position
 
 Phase: 4 of 4 (Applications & Templates)
-Plan: 1 of 3 complete
+Plan: 2 of 3 complete
 Status: In progress
-Last activity: 2026-01-17 - Completed 04-01-PLAN.md (Homepage Dashboard)
+Last activity: 2026-01-17 - Completed 04-02-PLAN.md (Vaultwarden Password Manager)
 
-Progress: █████████████████████░ 75% (12/16 plans across phases)
+Progress: ██████████████████████░ 81% (13/16 plans across phases)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
-- Average duration: ~2.4 min
+- Total plans completed: 13
+- Average duration: ~2.5 min
 
 **By Phase:**
 
@@ -29,7 +29,7 @@ Progress: █████████████████████░ 75%
 | 1 - Foundation & Routing | 4/4 | ~8 min | ~2 min |
 | 2 - VPN & Production Readiness | 4/4 | ~10 min | ~2.5 min |
 | 3 - Operational Infrastructure | 3/3 | ~11 min | ~3.7 min |
-| 4 - Applications & Templates | 1/3 | ~2 min | ~2 min |
+| 4 - Applications & Templates | 2/3 | ~6 min | ~3 min |
 
 ## Accumulated Context
 
@@ -37,6 +37,8 @@ Progress: █████████████████████░ 75%
 
 | Phase-Plan | Decision | Rationale |
 |------------|----------|-----------|
+| 04-02 | SMTP vars omitted from Vaultwarden compose | Vaultwarden validates strictly - empty vars cause startup failure |
+| 04-02 | Socket proxy restart for new container discovery | New containers not immediately discovered by Traefik via socket proxy |
 | 04-01 | Direct socket mount for Homepage | Same pattern as uptime-kuma for container discovery |
 | 04-01 | Config as local directory not volume | YAML config files belong in version control |
 | 04-01 | showStats disabled | Reduces Pi CPU usage from stats polling |
@@ -93,5 +95,5 @@ Progress: █████████████████████░ 75%
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Completed 04-01-PLAN.md (Homepage Dashboard)
+Stopped at: Completed 04-02-PLAN.md (Vaultwarden Password Manager)
 Resume file: None
