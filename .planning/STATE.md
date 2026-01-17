@@ -5,22 +5,22 @@
 See: .planning/PROJECT.md
 
 **Core value:** Secure, private-only access to self-hosted applications with professional-grade HTTPS, automatic service discovery, and dead-simple process for adding new apps.
-**Current focus:** Phase 3 Complete - Ready for Phase 4
+**Current focus:** Phase 4 - Applications & Templates
 
 ## Current Position
 
-Phase: 3 of 4 (Operational Infrastructure) - COMPLETE
-Plan: 3 of 3 complete
-Status: Phase complete
-Last activity: 2026-01-17 - Completed 03-03-PLAN.md (Restore Procedure & Phase Verification)
+Phase: 4 of 4 (Applications & Templates)
+Plan: 1 of 3 complete
+Status: In progress
+Last activity: 2026-01-17 - Completed 04-01-PLAN.md (Homepage Dashboard)
 
-Progress: ████████████████████░ 69% (11/16 plans across phases)
+Progress: █████████████████████░ 75% (12/16 plans across phases)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
-- Average duration: ~2.5 min
+- Total plans completed: 12
+- Average duration: ~2.4 min
 
 **By Phase:**
 
@@ -29,6 +29,7 @@ Progress: ████████████████████░ 69% (1
 | 1 - Foundation & Routing | 4/4 | ~8 min | ~2 min |
 | 2 - VPN & Production Readiness | 4/4 | ~10 min | ~2.5 min |
 | 3 - Operational Infrastructure | 3/3 | ~11 min | ~3.7 min |
+| 4 - Applications & Templates | 1/3 | ~2 min | ~2 min |
 
 ## Accumulated Context
 
@@ -36,6 +37,9 @@ Progress: ████████████████████░ 69% (1
 
 | Phase-Plan | Decision | Rationale |
 |------------|----------|-----------|
+| 04-01 | Direct socket mount for Homepage | Same pattern as uptime-kuma for container discovery |
+| 04-01 | Config as local directory not volume | YAML config files belong in version control |
+| 04-01 | showStats disabled | Reduces Pi CPU usage from stats polling |
 | 03-03 | Volume naming convention search pattern | Handles both <stack>_<service>-data and <service>-data patterns |
 | 03-03 | Interactive confirmation prompt | Destructive restore operation requires explicit user consent |
 | 03-02 | Weekly backup Sunday 3 AM, 28-day retention | Low-activity time, 4 weeks recovery window |
@@ -89,5 +93,5 @@ Progress: ████████████████████░ 69% (1
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Completed 03-03-PLAN.md (Restore Procedure & Phase Verification) - Phase 3 COMPLETE
+Stopped at: Completed 04-01-PLAN.md (Homepage Dashboard)
 Resume file: None
