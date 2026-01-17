@@ -10,16 +10,16 @@ See: .planning/PROJECT.md
 ## Current Position
 
 Phase: 3 of 4 (Operational Infrastructure)
-Plan: 1 of 3 complete
+Plan: 2 of 3 complete
 Status: In progress
-Last activity: 2026-01-17 - Completed 03-01-PLAN.md (Uptime Kuma Deployment)
+Last activity: 2026-01-17 - Completed 03-02-PLAN.md (Monitoring & Backup)
 
-Progress: ██████████████████░░ 56% (9/16 plans across phases)
+Progress: ███████████████████░ 63% (10/16 plans across phases)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
+- Total plans completed: 10
 - Average duration: ~2.4 min
 
 **By Phase:**
@@ -28,7 +28,7 @@ Progress: ██████████████████░░ 56% (9/16
 |-------|-------|-------|----------|
 | 1 - Foundation & Routing | 4/4 | ~8 min | ~2 min |
 | 2 - VPN & Production Readiness | 4/4 | ~10 min | ~2.5 min |
-| 3 - Operational Infrastructure | 1/3 | ~4 min | ~4 min |
+| 3 - Operational Infrastructure | 2/3 | ~8 min | ~4 min |
 
 ## Accumulated Context
 
@@ -36,6 +36,9 @@ Progress: ██████████████████░░ 56% (9/16
 
 | Phase-Plan | Decision | Rationale |
 |------------|----------|-----------|
+| 03-02 | Weekly backup Sunday 3 AM, 28-day retention | Low-activity time, 4 weeks recovery window |
+| 03-02 | Push monitor for backup verification | 7-day heartbeat detects missed backups |
+| 03-02 | Stop uptime-kuma during backup | Consistent SQLite volume state |
 | 03-01 | Direct Docker socket mount for Uptime Kuma | Socket proxy lacks required endpoints for container monitoring |
 | 03-01 | Backup stop label on containers | Enables safe volume backups by stopping container before backup |
 | 02-01 | Host-level Tailscale (not containerized) | Simpler, more robust; Tailscale is infrastructure like OS |
@@ -64,5 +67,5 @@ Progress: ██████████████████░░ 56% (9/16
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Completed 03-01-PLAN.md (Uptime Kuma Deployment)
+Stopped at: Completed 03-02-PLAN.md (Monitoring & Backup)
 Resume file: None
