@@ -1,0 +1,26 @@
+# Homepage Settings
+# https://gethomepage.dev/configs/settings/
+
+title: RagnaLab
+
+# Theme configuration
+theme: dark
+color: blue
+
+# Header style
+headerStyle: boxed
+
+# Status indicator style
+statusStyle: dot
+
+# Disable container stats (reduces Pi CPU usage)
+showStats: false
+
+# Layout configuration - organize services into groups
+layout:
+  Infrastructure:
+    style: row
+    columns: 3
+  Apps:
+    style: row
+    columns: 3
