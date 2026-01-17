@@ -1,0 +1,68 @@
+# Vaultwarden - Self-hosted Bitwarden-compatible Password Manager
+# Access at: https://vault.ragnalab.xyz
+# Admin panel: https://vault.ragnalab.xyz/admin
+
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    environment:
+      # Admin panel with argon2id hashed token
+      # Generate: docker run --rm -it vaultwarden/server /vaultwarden hash
+      ADMIN_TOKEN: ${VAULTWARDEN_ADMIN_TOKEN}
+      # Security settings - invite only, no open signups
+      SIGNUPS_ALLOWED: "false"
+      INVITATIONS_ALLOWED: "true"
+      # Required for correct invitation links and WebSocket connections
+      DOMAIN: "https://vault.ragnalab.xyz"
+      # 2FA policy: TOTP authenticator only (more secure, no SMTP required)
+      AUTHENTICATOR_ALLOWED: "true"
+      EMAIL_2FA_ALLOWED: "false"
+      # SMTP (optional, for sending invitations)
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_FROM: ${SMTP_FROM:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_SECURITY: ${SMTP_SECURITY:-starttls}
+      SMTP_USERNAME: ${SMTP_USERNAME:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+    volumes:
+      - vaultwarden-data:/data
+    networks:
+      - proxy
+    labels:
+      # Traefik routing
+      - "traefik.enable=true"
+      - "traefik.http.routers.vaultwarden.rule=Host(`vault.ragnalab.xyz`)"
+      - "traefik.http.routers.vaultwarden.entrypoints=websecure"
+      - "traefik.http.routers.vaultwarden.tls=true"
+      - "traefik.http.routers.vaultwarden.tls.certresolver=letsencrypt"
+      - "traefik.http.services.vaultwarden.loadbalancer.server.port=80"
+      - "traefik.docker.network=proxy"
+      # Homepage dashboard
+      - "homepage.group=Apps"
+      - "homepage.name=Vaultwarden"
+      - "homepage.icon=bitwarden.png"
+      - "homepage.href=https://vault.ragnalab.xyz"
+      - "homepage.description=Password Manager"
+      # Backup - stop container during backup for consistent SQLite state
+      - "docker-volume-backup.stop-during-backup=vaultwarden"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+        reservations:
+          memory: 128M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  vaultwarden-data:
+
+networks:
+  proxy:
+    external: true
