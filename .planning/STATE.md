@@ -66,11 +66,12 @@ Progress: ███████████████████░ 63% (10/1
 
 ### Documentation Rules
 
-| Rule | Description |
-|------|-------------|
-| INSTALL.md | Update with complete fresh-install steps for any new setup |
-| README.md | Update with manual setup steps, quick reference commands |
-| Human setup | Any manual/UI-based setup must be documented in both files |
+| File | Purpose |
+|------|---------|
+| README.md | Project overview, structure, daily commands, quick reference |
+| INSTALL.md | Complete fresh-install walkthrough, all manual/UI setup steps |
+
+**Rule:** Any new feature or manual setup must update INSTALL.md. README.md only needs updates for new daily commands or structure changes.
 
 ## Session Continuity
 
