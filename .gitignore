@@ -1,0 +1,6 @@
+# Homepage auto-generated files
+apps/homepage/config/logs/
+apps/homepage/config/custom.css
+apps/homepage/config/custom.js
+apps/homepage/config/kubernetes.yaml
+apps/homepage/config/proxmox.yaml

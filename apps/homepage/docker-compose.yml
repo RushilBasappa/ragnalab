@@ -9,7 +9,8 @@ services:
     environment:
       - HOMEPAGE_ALLOWED_HOSTS=home.ragnalab.xyz
       - PUID=1000
-      - PGID=1000
+      # PGID=123 is the docker group - required for socket access
+      - PGID=123
     volumes:
       # Config files in version control
       - ./config:/app/config

@@ -97,6 +97,7 @@ services:
       - "homepage.description=Reverse Proxy"
       - "homepage.widget.type=traefik"
       - "homepage.widget.url=http://traefik:8080"
+      - "homepage.server=my-docker"
     logging:
       driver: json-file
       options:

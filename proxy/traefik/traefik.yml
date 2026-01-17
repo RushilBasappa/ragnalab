@@ -3,7 +3,7 @@
 
 api:
   dashboard: true
-  insecure: false  # Dashboard served via routers, not :8080
+  insecure: true  # Enables internal API on :8080 for Homepage widget
 
 entryPoints:
   web:

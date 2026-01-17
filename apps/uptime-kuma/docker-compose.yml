@@ -29,7 +29,7 @@ services:
       - "homepage.description=Service Monitoring"
       - "homepage.widget.type=uptimekuma"
       - "homepage.widget.url=http://uptime-kuma:3001"
-      - "homepage.widget.slug=ragnalab"
+      - "homepage.server=my-docker"
       # Backup label for stopping during backup
       - "docker-volume-backup.stop-during-backup=uptime-kuma"
     deploy:

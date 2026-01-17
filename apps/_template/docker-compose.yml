@@ -35,6 +35,7 @@ services:
       - "homepage.icon=myapp.png"  # TODO: find at https://github.com/walkxcode/dashboard-icons
       - "homepage.href=https://myapp.ragnalab.xyz"  # TODO: match subdomain above
       - "homepage.description=Brief description"  # TODO: describe the app
+      - "homepage.server=my-docker"  # Required for Homepage discovery
       # --- Backup label (uncomment if persistent data) ---
       # - "docker-volume-backup.stop-during-backup=myapp"  # TODO: match container name
     deploy:
