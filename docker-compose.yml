@@ -1,6 +1,0 @@
-# RagnaLab - Main Compose File
-# Usage: docker compose up -d
-
-include:
-  - proxy/docker-compose.yml
-  - apps/whoami/docker-compose.yml
