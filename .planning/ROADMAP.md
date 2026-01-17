@@ -23,7 +23,13 @@ This roadmap follows a strict dependency order derived from the 47 v1 requiremen
 4. Wildcard DNS `*.ragnalab.xyz` resolves to Tailscale IP address
 5. Security headers middleware (HSTS, CSP, X-Frame-Options) applies to all routes
 
-**Plans:** (created by /gsd:plan-phase)
+**Plans:** 4 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Project structure, Docker networks, Cloudflare DNS setup
+- [ ] 01-02-PLAN.md — Traefik static config and security middleware
+- [ ] 01-03-PLAN.md — Docker Compose files (proxy infrastructure + whoami test service)
+- [ ] 01-04-PLAN.md — Deploy and verify all success criteria
 
 ---
 
@@ -82,7 +88,7 @@ This roadmap follows a strict dependency order derived from the 47 v1 requiremen
 
 | Phase | Status | Completed |
 |-------|--------|-----------|
-| 1 - Foundation & Routing | Not started | — |
+| 1 - Foundation & Routing | Planned | — |
 | 2 - VPN & Production Readiness | Not started | — |
 | 3 - Operational Infrastructure | Not started | — |
 | 4 - Applications & Templates | Not started | — |
