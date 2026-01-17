@@ -10,24 +10,25 @@ See: .planning/PROJECT.md
 ## Current Position
 
 Phase: 3 of 4 (Operational Infrastructure)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-01-17 - Completed Phase 2
+Plan: 1 of 3 complete
+Status: In progress
+Last activity: 2026-01-17 - Completed 03-01-PLAN.md (Uptime Kuma Deployment)
 
-Progress: ████████████████░░░░ 50% (2/4 phases)
+Progress: ██████████████████░░ 56% (9/16 plans across phases)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: ~2.25 min
+- Total plans completed: 9
+- Average duration: ~2.4 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1 - Foundation & Routing | 4/4 ✓ | ~8 min | ~2 min |
-| 2 - VPN & Production Readiness | 4/4 ✓ | ~10 min | ~2.5 min |
+| 1 - Foundation & Routing | 4/4 | ~8 min | ~2 min |
+| 2 - VPN & Production Readiness | 4/4 | ~10 min | ~2.5 min |
+| 3 - Operational Infrastructure | 1/3 | ~4 min | ~4 min |
 
 ## Accumulated Context
 
@@ -35,6 +36,8 @@ Progress: ████████████████░░░░ 50% (2/4 
 
 | Phase-Plan | Decision | Rationale |
 |------------|----------|-----------|
+| 03-01 | Direct Docker socket mount for Uptime Kuma | Socket proxy lacks required endpoints for container monitoring |
+| 03-01 | Backup stop label on containers | Enables safe volume backups by stopping container before backup |
 | 02-01 | Host-level Tailscale (not containerized) | Simpler, more robust; Tailscale is infrastructure like OS |
 | 02-01 | Dual access (local + VPN) instead of VPN-only | User prefers local network access; VPN for remote only |
 | 01-01 | External Docker networks via Makefile | Cross-stack communication requires networks created outside compose files |
@@ -61,5 +64,5 @@ Progress: ████████████████░░░░ 50% (2/4 
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Phase 1 complete, ready for Phase 2
+Stopped at: Completed 03-01-PLAN.md (Uptime Kuma Deployment)
 Resume file: None
