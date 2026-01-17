@@ -1,0 +1,62 @@
+# Traefik Dynamic Configuration - Middlewares
+# Referenced via @file namespace: security-headers@file, rate-limit@file
+
+http:
+  middlewares:
+    # Security Headers Middleware (SEC-03)
+    # Apply to all services: traefik.http.routers.X.middlewares=security-headers@file
+    security-headers:
+      headers:
+        # HSTS - Force HTTPS for 1 year
+        stsSeconds: 31536000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        forceSTSHeader: true
+
+        # Prevent clickjacking (X-Frame-Options equivalent)
+        frameDeny: true
+
+        # Prevent MIME type sniffing
+        contentTypeNosniff: true
+
+        # XSS protection (legacy but still useful)
+        browserXssFilter: true
+
+        # Content Security Policy
+        # Restrictive default - apps can override with their own middleware
+        contentSecurityPolicy: >-
+          default-src 'self';
+          script-src 'self';
+          style-src 'self' 'unsafe-inline';
+          img-src 'self' data:;
+          font-src 'self';
+          object-src 'none';
+          base-uri 'self';
+          form-action 'self';
+          frame-ancestors 'none';
+
+        # Referrer Policy
+        referrerPolicy: "strict-origin-when-cross-origin"
+
+        # Permissions Policy (formerly Feature-Policy)
+        permissionsPolicy: "geolocation=(), microphone=(), camera=()"
+
+        # Hide server information
+        customResponseHeaders:
+          server: ""
+          x-powered-by: ""
+
+    # Rate Limiting Middleware (SEC-04)
+    # Token bucket: 100 requests/second average, burst up to 200
+    rate-limit:
+      rateLimit:
+        average: 100
+        burst: 200
+        period: 1s
+
+    # Stricter rate limit for sensitive endpoints
+    rate-limit-strict:
+      rateLimit:
+        average: 10
+        burst: 20
+        period: 1s
