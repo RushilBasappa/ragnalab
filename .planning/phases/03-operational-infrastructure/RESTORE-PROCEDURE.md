@@ -74,8 +74,8 @@ docker compose -f apps/backup/docker-compose.yml up -d
 
 ## Backup Schedule
 
-- **Frequency:** Weekly (Sunday 3 AM)
-- **Retention:** 28 days (4 weeks)
+- **Frequency:** Daily (3 AM)
+- **Retention:** 7 days
 - **Location:** `/home/rushil/workspace/ragnalab/backups/`
 - **Monitoring:** Uptime Kuma push monitor alerts on missed backup
 

@@ -1,5 +1,5 @@
 # Automated Docker Volume Backup
-# Backs up all volumes with backup labels weekly
+# Backs up all volumes with backup labels daily
 # Notifies Uptime Kuma push monitor on completion
 
 services:
@@ -8,12 +8,12 @@ services:
     container_name: backup
     restart: unless-stopped
     environment:
-      # Weekly backup on Sunday at 3 AM
-      BACKUP_CRON_EXPRESSION: "0 3 * * 0"
+      # Daily backup at 3 AM
+      BACKUP_CRON_EXPRESSION: "0 3 * * *"
       # Filename with timestamp for versioning
       BACKUP_FILENAME: "backup-%Y-%m-%dT%H-%M-%S.tar.gz"
-      # Keep 4 weeks of backups (28 days)
-      BACKUP_RETENTION_DAYS: "28"
+      # Keep 7 days of backups
+      BACKUP_RETENTION_DAYS: "7"
       # Only stop containers with this specific label value
       BACKUP_STOP_DURING_BACKUP_LABEL: "uptime-kuma"
       # Symlink to latest for easy restore reference

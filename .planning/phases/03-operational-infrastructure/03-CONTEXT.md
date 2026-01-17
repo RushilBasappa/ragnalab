@@ -15,7 +15,7 @@ Platform has automated backups, health monitoring, and operational observability
 
 ### Backup Strategy
 - Docker volumes only (not compose files or .planning/)
-- Weekly backup schedule
+- Daily backup schedule (3 AM), 7-day retention
 - Per-service backups (each app's volumes backed up separately for granular restore)
 - Local storage in a `backups/` folder (no offsite upload)
 - Alert via Uptime Kuma on backup failure, plus logging
