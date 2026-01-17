@@ -1,0 +1,59 @@
+# RagnaLab App Template
+# Copy this folder to apps/myapp and replace all TODO items
+#
+# Steps:
+#   1. cp -r apps/_template apps/myapp
+#   2. Edit this file, replacing all TODO markers
+#   3. docker compose -f apps/myapp/docker-compose.yml up -d
+#   4. Verify: Traefik dashboard, Homepage, HTTPS
+#
+# See: apps/_template/README.md for full checklist
+
+services:
+  myapp:  # TODO: rename to your service name
+    image: myimage:latest  # TODO: set actual image
+    container_name: myapp  # TODO: match service name
+    restart: unless-stopped
+    # environment:  # TODO: uncomment and add if needed
+    #   - MY_VAR=value
+    # volumes:  # TODO: uncomment if persistent data needed
+    #   - myapp-data:/data
+    networks:
+      - proxy
+    labels:
+      # --- Traefik labels ---
+      - "traefik.enable=true"
+      - "traefik.http.routers.myapp.rule=Host(`myapp.ragnalab.xyz`)"  # TODO: change subdomain
+      - "traefik.http.routers.myapp.entrypoints=websecure"
+      - "traefik.http.routers.myapp.tls=true"
+      - "traefik.http.routers.myapp.tls.certresolver=letsencrypt"
+      - "traefik.http.services.myapp.loadbalancer.server.port=8080"  # TODO: set actual port
+      - "traefik.docker.network=proxy"
+      # --- Homepage labels ---
+      - "homepage.group=Apps"  # TODO: Infrastructure, Apps, or new category
+      - "homepage.name=My App"  # TODO: display name
+      - "homepage.icon=myapp.png"  # TODO: find at https://github.com/walkxcode/dashboard-icons
+      - "homepage.href=https://myapp.ragnalab.xyz"  # TODO: match subdomain above
+      - "homepage.description=Brief description"  # TODO: describe the app
+      # --- Backup label (uncomment if persistent data) ---
+      # - "docker-volume-backup.stop-during-backup=myapp"  # TODO: match container name
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+        reservations:
+          memory: 128M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# Uncomment if using persistent data:
+# volumes:
+#   myapp-data:
+
+networks:
+  proxy:
+    external: true
