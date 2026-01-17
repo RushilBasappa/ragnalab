@@ -19,13 +19,9 @@ services:
       # 2FA policy: TOTP authenticator only (more secure, no SMTP required)
       AUTHENTICATOR_ALLOWED: "true"
       EMAIL_2FA_ALLOWED: "false"
-      # SMTP (optional, for sending invitations)
-      SMTP_HOST: ${SMTP_HOST:-}
-      SMTP_FROM: ${SMTP_FROM:-}
-      SMTP_PORT: ${SMTP_PORT:-587}
-      SMTP_SECURITY: ${SMTP_SECURITY:-starttls}
-      SMTP_USERNAME: ${SMTP_USERNAME:-}
-      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      # Note: SMTP variables intentionally omitted - Vaultwarden validates them
+      # strictly and fails if partially set. To enable email, add all SMTP_*
+      # variables to docker-compose.yml manually when ready to configure email.
     volumes:
       - vaultwarden-data:/data
     networks:
