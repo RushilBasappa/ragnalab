@@ -34,6 +34,8 @@ Progress: ████████░░░░░░░░░░░░ 25% (1/4 
 
 | Phase-Plan | Decision | Rationale |
 |------------|----------|-----------|
+| 02-01 | Host-level Tailscale (not containerized) | Simpler, more robust; Tailscale is infrastructure like OS |
+| 02-01 | Dual access (local + VPN) instead of VPN-only | User prefers local network access; VPN for remote only |
 | 01-01 | External Docker networks via Makefile | Cross-stack communication requires networks created outside compose files |
 | 01-01 | DNS-only mode for Cloudflare | Traefik handles SSL termination directly; proxy would interfere |
 | 01-01 | Wildcard DNS *.ragnalab.xyz | Single A record covers all future subdomains |

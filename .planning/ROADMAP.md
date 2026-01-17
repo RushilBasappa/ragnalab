@@ -35,14 +35,14 @@ Plans:
 
 ### Phase 2: VPN & Production Readiness
 
-**Goal:** All services are accessible only via Tailscale VPN with production-grade SSL certificates
+**Goal:** Services accessible via both local network and Tailscale VPN with production-grade SSL certificates
 **Depends on:** Phase 1
-**Requirements:** VPN-01, VPN-02, VPN-03, INFRA-05, ROUTE-02, ROUTE-05, STORAGE-01, OPS-03, OPS-04, MON-04, MON-05
+**Requirements:** VPN-01, VPN-02, ROUTE-02, ROUTE-05, STORAGE-01, OPS-03, OPS-04, MON-04, MON-05
 
 **Success Criteria:**
-1. User can access test service (whoami) from Tailscale client with valid production Let's Encrypt certificate
-2. Services are unreachable from public internet (Traefik bound to Tailscale interface only)
-3. Tailscale state persists across container restarts (no re-authentication required)
+1. User can access test service (whoami) with valid production Let's Encrypt certificate
+2. Services accessible via both local network AND Tailscale VPN (dual access)
+3. Tailscale persists across host reboots (systemd service enabled)
 4. HTTP requests automatically redirect to HTTPS for all services
 5. SSD storage architecture validated and Docker data on reliable storage
 
@@ -50,7 +50,7 @@ Plans:
 
 Plans:
 - [ ] 02-01-PLAN.md — Host system preparation (IP forwarding, cgroup memory, thermal check)
-- [ ] 02-02-PLAN.md — Tailscale container deployment and Traefik VPN binding
+- [ ] 02-02-PLAN.md — Tailscale host installation for remote VPN access
 - [ ] 02-03-PLAN.md — Production Let's Encrypt certificates and resource limits
 - [ ] 02-04-PLAN.md — End-to-end verification and storage validation
 
