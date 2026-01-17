@@ -26,10 +26,10 @@ This roadmap follows a strict dependency order derived from the 47 v1 requiremen
 **Plans:** 4 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Project structure, Docker networks, Cloudflare DNS setup
-- [ ] 01-02-PLAN.md — Traefik static config and security middleware
-- [ ] 01-03-PLAN.md — Docker Compose files (proxy infrastructure + whoami test service)
-- [ ] 01-04-PLAN.md — Deploy and verify all success criteria
+- [x] 01-01-PLAN.md — Project structure, Docker networks, Cloudflare DNS setup
+- [x] 01-02-PLAN.md — Traefik static config and security middleware
+- [x] 01-03-PLAN.md — Docker Compose files (proxy infrastructure + whoami test service)
+- [x] 01-04-PLAN.md — Deploy and verify all success criteria
 
 ---
 
@@ -88,7 +88,7 @@ Plans:
 
 | Phase | Status | Completed |
 |-------|--------|-----------|
-| 1 - Foundation & Routing | Planned | — |
+| 1 - Foundation & Routing | ✓ Complete | 2026-01-17 |
 | 2 - VPN & Production Readiness | Not started | — |
 | 3 - Operational Infrastructure | Not started | — |
 | 4 - Applications & Templates | Not started | — |
