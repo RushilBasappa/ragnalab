@@ -20,6 +20,9 @@ Complete setup guide for installing RagnaLab on a fresh Raspberry Pi 5.
 9. [Deploy Infrastructure](#9-deploy-infrastructure)
 10. [Uptime Kuma Setup (Manual)](#10-uptime-kuma-setup-manual)
 11. [Verify Installation](#11-verify-installation)
+12. [Homepage Setup](#12-homepage-setup)
+13. [Vaultwarden Setup](#13-vaultwarden-setup)
+14. [Adding New Applications](#14-adding-new-applications)
 
 ---
 
@@ -358,6 +361,97 @@ Follow prompts, then verify Uptime Kuma still has all monitors.
 
 ---
 
+## 12. Homepage Setup
+
+Homepage auto-discovers services via Docker labels - no manual configuration needed.
+
+### 12.1 Access Homepage
+
+Open https://home.ragnalab.xyz in your browser.
+
+### 12.2 Verify Dashboard
+
+You should see:
+
+- **Infrastructure group:** Traefik (with route/service counts), Uptime Kuma (with monitoring status)
+- **Apps group:** Vaultwarden
+- **Bookmarks section:** External links (GitHub, Cloudflare, Tailscale)
+
+If services are missing, they may need Homepage labels added to their docker-compose.yml.
+
+---
+
+## 13. Vaultwarden Setup
+
+### 13.1 Generate Admin Token
+
+```bash
+docker run --rm -it vaultwarden/server /vaultwarden hash
+```
+
+Enter a secure password when prompted. **Save both the password and the hash.**
+
+### 13.2 Create Environment File
+
+```bash
+cp apps/vaultwarden/.env.example apps/vaultwarden/.env
+nano apps/vaultwarden/.env
+```
+
+Paste the hash from step 13.1 (include the single quotes around the hash).
+
+### 13.3 Deploy Vaultwarden
+
+```bash
+docker compose -f apps/vaultwarden/docker-compose.yml up -d
+```
+
+### 13.4 Access Vaultwarden
+
+- Main interface: https://vault.ragnalab.xyz
+- Admin panel: https://vault.ragnalab.xyz/admin
+
+Use the password (not the hash) to access the admin panel.
+
+**Note:** Signups are disabled by default. Use the admin panel to invite users.
+
+---
+
+## 14. Adding New Applications
+
+Use the app template to deploy new services with automatic routing and dashboard integration.
+
+### 14.1 Copy Template
+
+```bash
+cp -r apps/_template apps/myapp
+```
+
+### 14.2 Configure
+
+Edit `apps/myapp/docker-compose.yml` and replace all `TODO` items:
+
+- Set the image
+- Choose a unique subdomain
+- Set the correct port
+- Configure Homepage labels
+
+### 14.3 Deploy
+
+```bash
+docker compose -f apps/myapp/docker-compose.yml up -d
+```
+
+### 14.4 Verify
+
+1. Check Traefik dashboard: https://traefik.ragnalab.xyz
+2. Check Homepage: https://home.ragnalab.xyz
+3. Test HTTPS access: https://myapp.ragnalab.xyz
+
+See `apps/_template/README.md` for the complete deployment checklist.
+
+---
+
 ## Quick Reference
 
 | Command | Description |
@@ -373,6 +467,8 @@ Follow prompts, then verify Uptime Kuma still has all monitors.
 |-----|---------|
 | https://traefik.ragnalab.xyz | Traefik Dashboard |
 | https://status.ragnalab.xyz | Uptime Kuma |
+| https://home.ragnalab.xyz | Homepage Dashboard |
+| https://vault.ragnalab.xyz | Vaultwarden |
 | https://whoami.ragnalab.xyz | Test Service |
 
 ---
@@ -405,4 +501,4 @@ tailscale status
 ---
 
 *Last updated: 2026-01-17*
-*Covers: Phase 1 (Foundation), Phase 2 (VPN), Phase 3 (Operational Infrastructure)*
+*Covers: Phase 1 (Foundation), Phase 2 (VPN), Phase 3 (Operational Infrastructure), Phase 4 (Applications & Templates)*
