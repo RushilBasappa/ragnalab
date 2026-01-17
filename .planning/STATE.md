@@ -10,23 +10,23 @@ See: .planning/PROJECT.md
 ## Current Position
 
 Phase: 1 of 4 (Foundation & Routing)
-Plan: 2 of 4 complete
+Plan: 3 of 4 complete
 Status: In progress
-Last activity: 2026-01-17 - Completed 01-02-PLAN.md
+Last activity: 2026-01-17 - Completed 01-03-PLAN.md
 
-Progress: [Phase 1] █████░░░░░ 50%
+Progress: [Phase 1] ███████░░░ 75%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
+- Total plans completed: 3
 - Average duration: ~1.5 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1 - Foundation & Routing | 2/4 | ~3 min | ~1.5 min |
+| 1 - Foundation & Routing | 3/4 | ~4.5 min | ~1.5 min |
 
 ## Accumulated Context
 
@@ -41,6 +41,9 @@ Progress: [Phase 1] █████░░░░░ 50%
 | 01-02 | Let's Encrypt staging server first | Avoid rate limits during testing |
 | 01-02 | Restrictive CSP default | Apps needing relaxed CSP define their own middleware |
 | 01-02 | Two rate limit tiers (100/s, 10/s) | Standard for most endpoints, strict for sensitive ones |
+| 01-03 | Socket proxy with POST=0 | Read-only Docker API access - Traefik can discover but not modify |
+| 01-03 | Traefik no-new-privileges | Prevents privilege escalation attacks in container |
+| 01-03 | traefik.docker.network=proxy label required | Critical for routing - tells Traefik which network to use |
 
 ### Pending Todos
 
@@ -53,5 +56,5 @@ Progress: [Phase 1] █████░░░░░ 50%
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Completed 01-02-PLAN.md
+Stopped at: Completed 01-03-PLAN.md
 Resume file: None
