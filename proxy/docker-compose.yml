@@ -1,0 +1,88 @@
+# RagnaLab Infrastructure - Traefik Reverse Proxy
+# Requires: docker network create proxy && docker network create socket_proxy_network
+
+services:
+  # Docker Socket Proxy - Security boundary for Docker API access
+  # Traefik connects here instead of raw Docker socket
+  socket-proxy:
+    image: tecnativa/docker-socket-proxy:latest
+    container_name: socket-proxy
+    restart: unless-stopped
+    privileged: true
+    environment:
+      # Read-only access for container discovery
+      - CONTAINERS=1
+      - NETWORKS=1
+      # Deny all write operations and sensitive endpoints
+      - SERVICES=0
+      - TASKS=0
+      - POST=0
+      - BUILD=0
+      - COMMIT=0
+      - CONFIGS=0
+      - SECRETS=0
+      - IMAGES=0
+      - VOLUMES=0
+      - AUTH=0
+      - EXEC=0
+      - PLUGINS=0
+      - SWARM=0
+      - SYSTEM=0
+      - LOG_LEVEL=info
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - socket_proxy_network
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Traefik Reverse Proxy
+  traefik:
+    image: traefik:v3.6
+    container_name: traefik
+    restart: unless-stopped
+    depends_on:
+      - socket-proxy
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - CF_API_EMAIL=${CF_API_EMAIL}
+      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
+      - ACME_EMAIL=${ACME_EMAIL:-${CF_API_EMAIL}}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # Static configuration
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      # Dynamic configuration (middlewares)
+      - ./traefik/dynamic:/etc/traefik/dynamic:ro
+      # Let's Encrypt certificates
+      - ./traefik/acme:/etc/traefik/acme
+    networks:
+      - socket_proxy_network
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      # Dashboard routing
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.ragnalab.xyz`)"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.dashboard.middlewares=security-headers@file"
+      - "traefik.docker.network=proxy"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  proxy:
+    external: true
+  socket_proxy_network:
+    external: true
