@@ -1,0 +1,18 @@
+# Widgets Configuration
+# https://gethomepage.dev/configs/widgets/
+
+# Top-of-page widgets can be added here.
+# Examples include: datetime, search, resources, openmeteo
+#
+# Example:
+# - datetime:
+#     text_size: xl
+#     format:
+#       dateStyle: short
+#       timeStyle: short
+#       hour12: false
+#
+# - resources:
+#     cpu: true
+#     memory: true
+#     disk: /

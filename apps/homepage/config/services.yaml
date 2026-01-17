@@ -1,0 +1,19 @@
+# Services Configuration
+# https://gethomepage.dev/configs/services/
+
+# Services are discovered automatically via Docker labels.
+# Add homepage.* labels to container definitions to appear here.
+#
+# Example labels for a service:
+#   - homepage.group=Infrastructure
+#   - homepage.name=Traefik
+#   - homepage.icon=traefik.png
+#   - homepage.href=https://traefik.ragnalab.xyz
+#   - homepage.description=Reverse Proxy
+#
+# For manual entries, use this format:
+# - Group Name:
+#     - Service Name:
+#         href: https://example.com
+#         icon: example.png
+#         description: Service description
