@@ -2,34 +2,40 @@
 # https://gethomepage.dev/configs/settings/
 
 title: RagnaLab
-favicon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/heimdall.png
 
-# Theme - slate for clean dark look
+# Modern dark theme with neutral tones
 theme: dark
-color: slate
+color: zinc
 
-# Card appearance
-cardBlur: md
+# Glassy card effect
+cardBlur: xl
+
+# Subtle animated gradient background
 background:
-  image: https://images.unsplash.com/photo-1639262498805-17c7dc422d37?w=1920
-  opacity: 15
+  image: https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920
+  opacity: 20
+  blur: sm
 
-# Header style
+# Clean header
 headerStyle: clean
 
-# Status indicator style
+# Ping-style status dots
 statusStyle: dot
 
-# Hide version number
+# Hide clutter
 hideVersion: true
+disableCollapse: true
 
-# Layout configuration
+# Show container stats for monitoring feel
+showStats: true
+
+# Tight layout
 layout:
   Infrastructure:
     style: row
     columns: 2
-    icon: mdi-server-network
+    header: false
   Apps:
     style: row
-    columns: 3
-    icon: mdi-apps
+    columns: 4
+    header: false
