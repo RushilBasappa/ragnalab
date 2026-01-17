@@ -3,9 +3,13 @@
 
 APPS := $(wildcard apps/*/docker-compose.yml)
 
-.PHONY: up down restart ps logs
+.PHONY: up down restart ps logs networks
 
-up:
+networks:
+	@docker network create proxy 2>/dev/null || true
+	@docker network create socket_proxy_network 2>/dev/null || true
+
+up: networks
 	@docker compose -f proxy/docker-compose.yml up -d
 	@for f in $(APPS); do docker compose -f $$f up -d; done
 	@echo "\nAll services started."
