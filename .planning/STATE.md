@@ -5,28 +5,29 @@
 See: .planning/PROJECT.md
 
 **Core value:** Secure, private-only access to self-hosted applications with professional-grade HTTPS, automatic service discovery, and dead-simple process for adding new apps.
-**Current focus:** Phase 2 - VPN & Production Readiness
+**Current focus:** Phase 3 - Operational Infrastructure
 
 ## Current Position
 
-Phase: 2 of 4 (VPN & Production Readiness)
+Phase: 3 of 4 (Operational Infrastructure)
 Plan: Not started
 Status: Ready to plan
-Last activity: 2026-01-17 - Completed Phase 1
+Last activity: 2026-01-17 - Completed Phase 2
 
-Progress: ████████░░░░░░░░░░░░ 25% (1/4 phases)
+Progress: ████████████████░░░░ 50% (2/4 phases)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: ~2 min
+- Total plans completed: 8
+- Average duration: ~2.25 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1 - Foundation & Routing | 4/4 ✓ | ~8 min | ~2 min |
+| 2 - VPN & Production Readiness | 4/4 ✓ | ~10 min | ~2.5 min |
 
 ## Accumulated Context
 
