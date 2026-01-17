@@ -1,18 +1,15 @@
 # Bookmarks Configuration
 # https://gethomepage.dev/configs/bookmarks/
 
-# External links and resources
-
-- Developer:
-    - GitHub:
-        - abbr: GH
-          href: https://github.com
-
-    - Cloudflare Dashboard:
-        - abbr: CF
+- Management:
+    - Cloudflare:
+        - icon: cloudflare.png
           href: https://dash.cloudflare.com
 
-- Resources:
-    - Tailscale Admin:
-        - abbr: TS
+    - Tailscale:
+        - icon: tailscale.png
           href: https://login.tailscale.com/admin/machines
+
+    - GitHub:
+        - icon: github.png
+          href: https://github.com

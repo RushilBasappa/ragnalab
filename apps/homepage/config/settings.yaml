@@ -2,25 +2,34 @@
 # https://gethomepage.dev/configs/settings/
 
 title: RagnaLab
+favicon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/heimdall.png
 
-# Theme configuration
+# Theme - slate for clean dark look
 theme: dark
-color: blue
+color: slate
+
+# Card appearance
+cardBlur: md
+background:
+  image: https://images.unsplash.com/photo-1639262498805-17c7dc422d37?w=1920
+  opacity: 15
 
 # Header style
-headerStyle: boxed
+headerStyle: clean
 
 # Status indicator style
 statusStyle: dot
 
-# Disable container stats (reduces Pi CPU usage)
-showStats: false
+# Hide version number
+hideVersion: true
 
-# Layout configuration - organize services into groups
+# Layout configuration
 layout:
   Infrastructure:
     style: row
-    columns: 3
+    columns: 2
+    icon: mdi-server-network
   Apps:
     style: row
     columns: 3
+    icon: mdi-apps
