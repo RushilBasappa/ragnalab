@@ -9,6 +9,13 @@ services:
     container_name: socket-proxy
     restart: unless-stopped
     privileged: true
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+          cpus: '0.1'
+        reservations:
+          memory: 32M
     environment:
       # Read-only access for container discovery
       - CONTAINERS=1
@@ -48,6 +55,13 @@ services:
       - socket-proxy
     security_opt:
       - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+        reservations:
+          memory: 128M
     environment:
       - CF_API_EMAIL=${CF_API_EMAIL}
       - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}

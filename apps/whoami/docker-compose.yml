@@ -6,6 +6,13 @@ services:
     image: traefik/whoami:latest
     container_name: whoami
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+          cpus: '0.25'
+        reservations:
+          memory: 32M
     labels:
       # Enable Traefik discovery
       - "traefik.enable=true"
