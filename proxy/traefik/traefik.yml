@@ -33,15 +33,16 @@ providers:
 certificatesResolvers:
   letsencrypt:
     acme:
-      email: "${ACME_EMAIL}"
+      email: "rushil.basappa@gmail.com"
       storage: /etc/traefik/acme/acme.json
       # STAGING SERVER - Switch to production after verification
       # Production: https://acme-v02.api.letsencrypt.org/directory
       caServer: https://acme-staging-v02.api.letsencrypt.org/directory
       dnsChallenge:
         provider: cloudflare
-        # Wait for DNS propagation before verification
-        delayBeforeCheck: 60
+        propagation:
+          # Wait for DNS propagation before verification
+          delayBeforeChecks: 60
         resolvers:
           - "1.1.1.1:53"
           - "8.8.8.8:53"
