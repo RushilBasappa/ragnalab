@@ -26,16 +26,18 @@ statusStyle: dot
 hideVersion: true
 disableCollapse: true
 
-# Show container stats for monitoring feel
-showStats: true
+# Hide container stats on cards
+showStats: false
 
-# Tight layout
+# Layout - columns on top, bookmarks at bottom
 layout:
   Infrastructure:
-    style: row
-    columns: 2
-    header: false
+    style: column
+    icon: mdi-server-network
   Apps:
+    style: column
+    icon: mdi-apps
+  Manage:
     style: row
     columns: 4
-    header: false
+    icon: mdi-link-variant
