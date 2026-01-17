@@ -17,3 +17,35 @@
 #         href: https://example.com
 #         icon: example.png
 #         description: Service description
+
+- System Stats:
+    - CPU:
+        widget:
+          type: glances
+          url: http://glances:61208
+          version: 4
+          metric: cpu
+    - Memory:
+        widget:
+          type: glances
+          url: http://glances:61208
+          version: 4
+          metric: memory
+    - Disk:
+        widget:
+          type: glances
+          url: http://glances:61208
+          version: 4
+          metric: fs:/rootfs
+    - Network:
+        widget:
+          type: glances
+          url: http://glances:61208
+          version: 4
+          metric: network:eth0
+    - Processes:
+        widget:
+          type: glances
+          url: http://glances:61208
+          version: 4
+          metric: process

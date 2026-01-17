@@ -31,6 +31,10 @@ showStats: false
 
 # Layout - columns on top, bookmarks at bottom
 layout:
+  System Stats:
+    style: row
+    columns: 5
+    icon: mdi-chart-line
   Infrastructure:
     style: column
     icon: mdi-server-network

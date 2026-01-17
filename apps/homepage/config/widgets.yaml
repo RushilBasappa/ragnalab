@@ -23,23 +23,7 @@
     units: imperial
     cache: 15
 
-# Row 2: System Resources
-- resources:
-    label: System
-    cpu: true
-    memory: true
-    refresh: 3000
-
-- resources:
-    label: Storage
-    disk: /
-
-- resources:
-    label: Network
-    network: eth0
-    refresh: 3000
-
-# Row 3: Search
+# Row 2: Search
 - search:
     provider: google
     target: _blank
