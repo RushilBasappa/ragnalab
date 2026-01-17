@@ -177,18 +177,18 @@ Which phases cover which requirements. Updated by create-roadmap.
 | SEC-04 | Phase 1 | ✓ Complete |
 | SEC-05 | Phase 1 | ✓ Complete |
 | SEC-06 | Phase 1 | ✓ Complete |
-| APP-01 | Phase 4 | Pending |
-| APP-02 | Phase 4 | Pending |
-| APP-03 | Phase 4 | Pending |
-| APP-04 | Phase 4 | Pending |
-| APP-05 | Phase 4 | Pending |
-| APP-06 | Phase 4 | Pending |
-| DX-01 | Phase 4 | Pending |
-| DX-02 | Phase 4 | Pending |
-| DX-03 | Phase 4 | Pending |
-| DX-04 | Phase 4 | Pending |
-| DX-05 | Phase 4 | Pending |
-| DX-06 | Phase 4 | Pending |
+| APP-01 | Phase 4 | ✓ Complete |
+| APP-02 | Phase 4 | ✓ Complete |
+| APP-03 | Phase 4 | ✓ Complete |
+| APP-04 | Phase 4 | ✓ Complete |
+| APP-05 | Phase 4 | ✓ Complete |
+| APP-06 | Phase 4 | ✓ Complete |
+| DX-01 | Phase 4 | ✓ Complete |
+| DX-02 | Phase 4 | ✓ Complete |
+| DX-03 | Phase 4 | ✓ Complete |
+| DX-04 | Phase 4 | ✓ Complete |
+| DX-05 | Phase 4 | ✓ Complete |
+| DX-06 | Phase 4 | ✓ Complete |
 | OPS-01 | Phase 3 | ✓ Complete |
 | OPS-02 | Phase 1 | ✓ Complete |
 | OPS-03 | Phase 2 | Pending |
