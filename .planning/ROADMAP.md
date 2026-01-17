@@ -2,11 +2,12 @@
 
 **Project:** RagnaLab
 **Created:** 2026-01-16
-**Phases:** 4
+**Current Milestone:** v2.0 Network Services
+**Phases:** 5 (4 complete, 1 active)
 
 ## Overview
 
-This roadmap follows a strict dependency order derived from the 47 v1 requirements: infrastructure foundation with security-first networking, VPN access with production SSL, operational infrastructure for reliability, and finally applications with developer templates. Each phase delivers a complete, verifiable capability that unblocks the next. The structure prevents the top homelab pitfalls: accidental public exposure, Let's Encrypt rate limits, SD card corruption, and missing backups.
+This roadmap follows a strict dependency order. Phases 1-4 (v1.0) established infrastructure foundation with security-first networking, VPN access with production SSL, operational infrastructure for reliability, and applications with developer templates. Phase 5 (v2.0) extends the homelab to provide network-wide services for the entire home network, starting with DNS-based ad blocking via Pi-hole.
 
 ## Phases
 
@@ -100,6 +101,29 @@ Plans:
 
 ---
 
+### Phase 5: Pi-hole Network-Wide Ad Blocking
+
+**Goal:** Network-wide DNS-based ad blocking with Pi-hole as DHCP server and automatic fallback for high availability
+**Depends on:** Phase 4 (existing infrastructure)
+**Milestone:** v2.0
+**Requirements:** DNS-01, DNS-02, DNS-03, DNS-04, DHCP-01, DHCP-02, DHCP-03, DHCP-04, HA-01, HA-02, HA-03, OBS-01, OBS-02, OBS-03, OPS-01, OPS-02, OPS-03
+
+**Success Criteria:**
+1. User's devices automatically get ad blocking without any client-side configuration
+2. Pi-hole admin UI accessible at pihole.ragnalab.xyz with valid SSL certificate
+3. All network devices receive Pi-hole as DNS via DHCP (visible in Pi-hole query log)
+4. Internet works for existing devices if Pi-hole/Pi is temporarily unavailable (fallback verified)
+5. Pi-hole statistics visible in Homepage dashboard widget
+
+**Plans:** TBD (run `/gsd:plan-phase 5` to create)
+
+Plans:
+- [ ] 05-01-PLAN.md — Pi-hole Docker deployment with Traefik integration
+- [ ] 05-02-PLAN.md — DHCP configuration and network cutover
+- [ ] 05-03-PLAN.md — Fallback strategy, monitoring, and verification
+
+---
+
 ## Progress
 
 | Phase | Status | Completed |
@@ -108,7 +132,8 @@ Plans:
 | 2 - VPN & Production Readiness | Complete | 2026-01-17 |
 | 3 - Operational Infrastructure | Complete | 2026-01-17 |
 | 4 - Applications & Templates | Complete | 2026-01-17 |
+| 5 - Pi-hole Network-Wide Ad Blocking | Pending | — |
 
 ---
 
-*Roadmap for milestone: v1.0*
+*Roadmap for milestones: v1.0 (complete), v2.0 (active)*
