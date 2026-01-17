@@ -8,6 +8,17 @@ A private, VPN-only homelab platform running on Raspberry Pi 5 that hosts multip
 
 Secure, private-only access to self-hosted applications with professional-grade HTTPS, automatic service discovery, and dead-simple process for adding new apps.
 
+## Current Milestone: v2.0 Network Services
+
+**Goal:** Network-wide DNS-based ad blocking with high availability fallback, extending the homelab to provide infrastructure services for the entire home network.
+
+**Target features:**
+- Pi-hole DNS sinkhole for network-wide ad blocking
+- Pi-hole as DHCP server (Xfinity gateway DNS settings locked)
+- Automatic fallback so internet works if Pi goes down
+- Uptime monitoring and quick recovery documentation
+- Homepage integration with blocked queries widget
+
 ## Requirements
 
 ### Validated (v1.0)
@@ -23,9 +34,14 @@ Secure, private-only access to self-hosted applications with professional-grade 
 - [x] Backup strategy for app data and configuration
 - [x] ARM64-compatible Docker images for all services
 
-### Active
+### Active (v2.0)
 
-(None — v1.0 complete)
+- [ ] Pi-hole deployed as Docker container with Traefik routing at pihole.ragnalab.xyz
+- [ ] Pi-hole configured as DHCP server for entire home network
+- [ ] Automatic DNS fallback when Pi is unavailable
+- [ ] Pi-hole config included in automated backup system
+- [ ] Uptime Kuma monitoring for Pi-hole service
+- [ ] Homepage widget showing Pi-hole statistics
 
 ### Out of Scope
 
@@ -58,6 +74,12 @@ Secure, private-only access to self-hosted applications with professional-grade 
 - Homepage dashboard at home.ragnalab.xyz
 - Vaultwarden password manager at vault.ragnalab.xyz
 
+**Home Network (v2.0 context):**
+- Xfinity internet with Xfinity gateway
+- Gateway DNS settings locked (cannot change DNS handed out via DHCP)
+- Pi-hole will need to run as DHCP server to provide DNS to all devices
+- Fallback strategy required for network resilience
+
 **User Experience Level:**
 - Expert with Docker and Traefik
 - Understands reverse proxy concepts
@@ -84,4 +106,4 @@ Secure, private-only access to self-hosted applications with professional-grade 
 | Dual access (local + VPN) | User prefers local network access; VPN for remote only | ✓ Validated v1.0 |
 
 ---
-*Last updated: 2026-01-17 after v1.0 milestone completion*
+*Last updated: 2026-01-17 after v2.0 milestone initialization*
