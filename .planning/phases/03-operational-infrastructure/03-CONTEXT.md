@@ -17,7 +17,7 @@ Platform has automated backups, health monitoring, and operational observability
 - Docker volumes only (not compose files or .planning/)
 - Weekly backup schedule
 - Per-service backups (each app's volumes backed up separately for granular restore)
-- Offsite via rclone to Google Drive
+- Local storage in a `backups/` folder (no offsite upload)
 - Alert via Uptime Kuma on backup failure, plus logging
 
 ### Monitoring Scope
