@@ -1,0 +1,6 @@
+# Backup archives
+*.tar.gz
+
+# Keep the directory structure
+!.gitkeep
+!.gitignore
