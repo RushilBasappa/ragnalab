@@ -151,13 +151,84 @@ Verify at `https://whoami.yourdomain.xyz`
 
 ---
 
+## 6. Uptime Kuma Setup
+
+Uptime Kuma requires one-time setup via its web UI (no config files).
+
+### 6.1 Initial Setup
+
+1. Access https://status.ragnalab.xyz
+2. Select **SQLite** as the database (simpler, lighter)
+3. Create admin account (username/password)
+
+### 6.2 Add Monitors
+
+**HTTP Monitors (for web services):**
+
+| Monitor | Type | URL | Interval |
+|---------|------|-----|----------|
+| Traefik Dashboard | HTTP(s) | https://traefik.ragnalab.xyz | 300s |
+| whoami | HTTP(s) | https://whoami.ragnalab.xyz | 300s |
+
+**Docker Container Monitors:**
+
+1. Go to Settings > Docker Hosts > Add
+2. Name: `Local Docker`
+3. Connection Type: `Socket`
+4. Path: `/var/run/docker.sock`
+
+Then add container monitors for: `traefik`, `socket-proxy`, `uptime-kuma`
+
+**Backup Push Monitor (for backup alerts):**
+
+1. Add New Monitor > Type: **Push**
+2. Name: `Daily Backup`
+3. Heartbeat Interval: `86400` (1 day)
+4. Retries: `0`
+5. Copy the Push URL token for backup configuration
+
+### 6.3 Organize (Optional)
+
+Create groups to organize monitors:
+- **Web Services** — HTTP monitors
+- **Containers** — Docker monitors
+- **Backups** — Push monitor
+
+---
+
 ## Structure
 
 ```
 ragnalab/
 ├── proxy/          # Traefik reverse proxy
 ├── apps/           # Application stacks
-│   └── whoami/     # Test service
+│   ├── whoami/     # Test service
+│   ├── uptime-kuma/# Monitoring dashboard
+│   └── backup/     # Automated backups
+├── backups/        # Backup archives (7-day retention)
 ├── Makefile        # Service management
 └── .planning/      # GSD planning docs (not needed for deployment)
 ```
+
+---
+
+## Backup & Restore
+
+**Trigger manual backup:**
+```bash
+make backup
+```
+
+**Restore a service:**
+```bash
+make restore SERVICE=uptime-kuma
+# Or with specific backup:
+make restore SERVICE=uptime-kuma BACKUP=backup-2026-01-17.tar.gz
+```
+
+**List available backups:**
+```bash
+ls -la backups/
+```
+
+See `.planning/phases/03-operational-infrastructure/RESTORE-PROCEDURE.md` for full disaster recovery guide.

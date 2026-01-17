@@ -1,9 +1,9 @@
 # RagnaLab Service Management
-# Usage: make up | make down | make ps | make logs
+# Usage: make up | make down | make ps | make logs | make backup | make restore SERVICE=name
 
 APPS := $(wildcard apps/*/docker-compose.yml)
 
-.PHONY: up down restart ps logs networks
+.PHONY: up down restart ps logs networks backup restore
 
 networks:
 	@docker network create proxy 2>/dev/null || true
@@ -26,3 +26,21 @@ ps:
 
 logs:
 	@docker compose -f proxy/docker-compose.yml logs -f
+
+backup:
+	@echo "Triggering manual backup..."
+	@docker kill --signal=SIGUSR1 backup
+	@sleep 10
+	@echo "\nBackup complete. Archives:"
+	@ls -lh backups/*.tar.gz 2>/dev/null | tail -3
+
+restore:
+ifndef SERVICE
+	@echo "Usage: make restore SERVICE=<service-name>"
+	@echo "\nAvailable services:"
+	@ls -1 apps/ | grep -v backup
+	@echo "\nAvailable backups:"
+	@ls -1 backups/*.tar.gz 2>/dev/null | xargs -n1 basename || echo "(none)"
+else
+	@./apps/backup/scripts/restore.sh $(SERVICE) $(BACKUP)
+endif
