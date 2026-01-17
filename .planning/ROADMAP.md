@@ -91,7 +91,12 @@ Plans:
 4. User can deploy new application by copying template, editing compose file, and running `docker compose up`
 5. New applications automatically appear in Traefik routing and Homepage dashboard
 
-**Plans:** (created by /gsd:plan-phase)
+**Plans:** 3 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Deploy Homepage dashboard with Docker label discovery
+- [ ] 04-02-PLAN.md — Deploy Vaultwarden password manager with backup integration
+- [ ] 04-03-PLAN.md — Create app template and add Homepage labels to infrastructure
 
 ---
 
@@ -99,9 +104,9 @@ Plans:
 
 | Phase | Status | Completed |
 |-------|--------|-----------|
-| 1 - Foundation & Routing | ✓ Complete | 2026-01-17 |
-| 2 - VPN & Production Readiness | ✓ Complete | 2026-01-17 |
-| 3 - Operational Infrastructure | ✓ Complete | 2026-01-17 |
+| 1 - Foundation & Routing | Complete | 2026-01-17 |
+| 2 - VPN & Production Readiness | Complete | 2026-01-17 |
+| 3 - Operational Infrastructure | Complete | 2026-01-17 |
 | 4 - Applications & Templates | Not started | — |
 
 ---
