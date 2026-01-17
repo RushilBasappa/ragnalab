@@ -141,13 +141,65 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (To be populated by roadmap creation) | | |
+| INFRA-01 | Phase 1 | Pending |
+| INFRA-02 | Phase 1 | Pending |
+| INFRA-03 | Phase 1 | Pending |
+| INFRA-04 | Phase 1 | Pending |
+| INFRA-05 | Phase 2 | Pending |
+| INFRA-06 | Phase 1 | Pending |
+| DNS-01 | Phase 1 | Pending |
+| DNS-02 | Phase 1 | Pending |
+| VPN-01 | Phase 2 | Pending |
+| VPN-02 | Phase 2 | Pending |
+| VPN-03 | Phase 2 | Pending |
+| ROUTE-01 | Phase 1 | Pending |
+| ROUTE-02 | Phase 2 | Pending |
+| ROUTE-03 | Phase 1 | Pending |
+| ROUTE-04 | Phase 1 | Pending |
+| ROUTE-05 | Phase 2 | Pending |
+| MON-01 | Phase 3 | Pending |
+| MON-02 | Phase 3 | Pending |
+| MON-03 | Phase 3 | Pending |
+| MON-04 | Phase 2 | Pending |
+| MON-05 | Phase 2 | Pending |
+| BACKUP-01 | Phase 3 | Pending |
+| BACKUP-02 | Phase 3 | Pending |
+| BACKUP-03 | Phase 3 | Pending |
+| BACKUP-04 | Phase 3 | Pending |
+| BACKUP-05 | Phase 3 | Pending |
+| STORAGE-01 | Phase 2 | Pending |
+| STORAGE-02 | Phase 1 | Pending |
+| STORAGE-03 | Phase 1 | Pending |
+| STORAGE-04 | Phase 1 | Pending |
+| SEC-01 | Phase 1 | Pending |
+| SEC-02 | Phase 1 | Pending |
+| SEC-03 | Phase 1 | Pending |
+| SEC-04 | Phase 1 | Pending |
+| SEC-05 | Phase 1 | Pending |
+| SEC-06 | Phase 1 | Pending |
+| APP-01 | Phase 4 | Pending |
+| APP-02 | Phase 4 | Pending |
+| APP-03 | Phase 4 | Pending |
+| APP-04 | Phase 4 | Pending |
+| APP-05 | Phase 4 | Pending |
+| APP-06 | Phase 4 | Pending |
+| DX-01 | Phase 4 | Pending |
+| DX-02 | Phase 4 | Pending |
+| DX-03 | Phase 4 | Pending |
+| DX-04 | Phase 4 | Pending |
+| DX-05 | Phase 4 | Pending |
+| DX-06 | Phase 4 | Pending |
+| OPS-01 | Phase 3 | Pending |
+| OPS-02 | Phase 1 | Pending |
+| OPS-03 | Phase 2 | Pending |
+| OPS-04 | Phase 2 | Pending |
+| OPS-05 | Phase 3 | Pending |
 
 **Coverage:**
 - v1 requirements: 47 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 47 ⚠️
+- Mapped to phases: 47
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-16*
-*Last updated: 2026-01-16 after initial definition*
+*Last updated: 2026-01-16 after roadmap creation*
