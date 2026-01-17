@@ -1,0 +1,10 @@
+# Never commit secrets
+.env
+secrets/
+
+# Let's Encrypt certificates (contain private keys)
+traefik/acme/acme.json
+
+# Logs
+traefik/logs/
+*.log
