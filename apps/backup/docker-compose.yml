@@ -1,0 +1,49 @@
+# Automated Docker Volume Backup
+# Backs up all volumes with backup labels weekly
+# Notifies Uptime Kuma push monitor on completion
+
+services:
+  backup:
+    image: offen/docker-volume-backup:v2
+    container_name: backup
+    restart: unless-stopped
+    environment:
+      # Weekly backup on Sunday at 3 AM
+      BACKUP_CRON_EXPRESSION: "0 3 * * 0"
+      # Filename with timestamp for versioning
+      BACKUP_FILENAME: "backup-%Y-%m-%dT%H-%M-%S.tar.gz"
+      # Keep 4 weeks of backups (28 days)
+      BACKUP_RETENTION_DAYS: "28"
+      # Only stop containers with this specific label value
+      BACKUP_STOP_DURING_BACKUP_LABEL: "uptime-kuma"
+      # Symlink to latest for easy restore reference
+      BACKUP_LATEST_SYMLINK: "backup-latest.tar.gz"
+      # Uptime Kuma push notification
+      NOTIFICATION_URLS: "${BACKUP_NOTIFICATION_URL}"
+      # Notify on both success and failure
+      NOTIFICATION_LEVEL: "info"
+    volumes:
+      # Docker socket for container stop/start during backup
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Mount volumes to backup (read-only for safety)
+      - uptime-kuma-data:/backup/uptime-kuma:ro
+      # Local backup destination
+      - /home/rushil/workspace/ragnalab/backups:/archive
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+        reservations:
+          memory: 64M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# Reference external volumes to backup
+volumes:
+  uptime-kuma-data:
+    external: true
+    name: uptime-kuma_uptime-kuma-data
