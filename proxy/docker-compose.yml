@@ -73,7 +73,7 @@ services:
       - "traefik.http.routers.dashboard.service=api@internal"
       - "traefik.http.routers.dashboard.tls=true"
       - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.dashboard.middlewares=security-headers@file"
+      # Note: security-headers@file omitted - CSP blocks dashboard's inline scripts
       - "traefik.docker.network=proxy"
     logging:
       driver: json-file
