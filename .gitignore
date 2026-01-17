@@ -4,3 +4,6 @@ apps/homepage/config/custom.css
 apps/homepage/config/custom.js
 apps/homepage/config/kubernetes.yaml
 apps/homepage/config/proxmox.yaml
+
+# ACME/Let's Encrypt certificate storage (contains private keys)
+proxy/traefik/acme/*.json
