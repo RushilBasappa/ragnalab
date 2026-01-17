@@ -1,0 +1,27 @@
+# RustDesk Server - Self-hosted Remote Desktop
+# Clients connect via Tailscale IP on ports 21115-21119
+# Not proxied through Traefik (uses custom protocol, not HTTP)
+
+services:
+  hbbs:
+    image: rustdesk/rustdesk-server:latest
+    container_name: rustdesk-hbbs
+    command: hbbs
+    restart: unless-stopped
+    volumes:
+      - rustdesk-data:/root
+    network_mode: host
+    depends_on:
+      - hbbr
+
+  hbbr:
+    image: rustdesk/rustdesk-server:latest
+    container_name: rustdesk-hbbr
+    command: hbbr
+    restart: unless-stopped
+    volumes:
+      - rustdesk-data:/root
+    network_mode: host
+
+volumes:
+  rustdesk-data:
