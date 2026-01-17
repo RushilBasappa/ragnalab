@@ -145,29 +145,29 @@ Which phases cover which requirements. Updated by create-roadmap.
 | INFRA-02 | Phase 1 | ✓ Complete |
 | INFRA-03 | Phase 1 | ✓ Complete |
 | INFRA-04 | Phase 1 | ✓ Complete |
-| INFRA-05 | Phase 2 | Pending |
+| INFRA-05 | Phase 2 | ✓ Complete |
 | INFRA-06 | Phase 1 | ✓ Complete |
 | DNS-01 | Phase 1 | ✓ Complete |
 | DNS-02 | Phase 1 | ✓ Complete |
-| VPN-01 | Phase 2 | Pending |
-| VPN-02 | Phase 2 | Pending |
-| VPN-03 | Phase 2 | Pending |
+| VPN-01 | Phase 2 | ✓ Complete |
+| VPN-02 | Phase 2 | ✓ Complete |
+| VPN-03 | Phase 2 | ✓ Complete |
 | ROUTE-01 | Phase 1 | ✓ Complete |
-| ROUTE-02 | Phase 2 | Pending |
+| ROUTE-02 | Phase 2 | ✓ Complete |
 | ROUTE-03 | Phase 1 | ✓ Complete |
 | ROUTE-04 | Phase 1 | ✓ Complete |
-| ROUTE-05 | Phase 2 | Pending |
+| ROUTE-05 | Phase 2 | ✓ Complete |
 | MON-01 | Phase 3 | ✓ Complete |
 | MON-02 | Phase 3 | ✓ Complete |
 | MON-03 | Phase 3 | ✓ Complete |
-| MON-04 | Phase 2 | Pending |
-| MON-05 | Phase 2 | Pending |
+| MON-04 | Phase 2 | ✓ Complete |
+| MON-05 | Phase 2 | ✓ Complete |
 | BACKUP-01 | Phase 3 | ✓ Complete |
 | BACKUP-02 | Phase 3 | ✓ Complete |
 | BACKUP-03 | Phase 3 | ✓ Complete |
 | BACKUP-04 | Phase 3 | ✓ Complete |
 | BACKUP-05 | Phase 3 | ✓ Complete |
-| STORAGE-01 | Phase 2 | Pending |
+| STORAGE-01 | Phase 2 | ✓ Complete |
 | STORAGE-02 | Phase 1 | ✓ Complete |
 | STORAGE-03 | Phase 1 | ✓ Complete |
 | STORAGE-04 | Phase 1 | ✓ Complete |
@@ -191,8 +191,8 @@ Which phases cover which requirements. Updated by create-roadmap.
 | DX-06 | Phase 4 | ✓ Complete |
 | OPS-01 | Phase 3 | ✓ Complete |
 | OPS-02 | Phase 1 | ✓ Complete |
-| OPS-03 | Phase 2 | Pending |
-| OPS-04 | Phase 2 | Pending |
+| OPS-03 | Phase 2 | ✓ Complete |
+| OPS-04 | Phase 2 | ✓ Complete |
 | OPS-05 | Phase 3 | ✓ Complete |
 
 **Coverage:**
