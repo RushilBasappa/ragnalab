@@ -1,0 +1,33 @@
+# Test Service - Validates Traefik routing and SSL
+# Access at: https://whoami.ragnalab.xyz
+
+services:
+  whoami:
+    image: traefik/whoami:latest
+    container_name: whoami
+    restart: unless-stopped
+    labels:
+      # Enable Traefik discovery
+      - "traefik.enable=true"
+      # Router configuration
+      - "traefik.http.routers.whoami.rule=Host(`whoami.ragnalab.xyz`)"
+      - "traefik.http.routers.whoami.entrypoints=websecure"
+      - "traefik.http.routers.whoami.tls=true"
+      - "traefik.http.routers.whoami.tls.certresolver=letsencrypt"
+      # Apply security middleware from file provider
+      - "traefik.http.routers.whoami.middlewares=security-headers@file,rate-limit@file"
+      # Service configuration
+      - "traefik.http.services.whoami.loadbalancer.server.port=80"
+      # CRITICAL: Specify which network Traefik should use
+      - "traefik.docker.network=proxy"
+    networks:
+      - proxy
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  proxy:
+    external: true
