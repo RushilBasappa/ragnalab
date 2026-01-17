@@ -64,6 +64,14 @@ Progress: ███████████████████░ 63% (10/1
 
 (None)
 
+### Documentation Rules
+
+| Rule | Description |
+|------|-------------|
+| INSTALL.md | Update with complete fresh-install steps for any new setup |
+| README.md | Update with manual setup steps, quick reference commands |
+| Human setup | Any manual/UI-based setup must be documented in both files |
+
 ## Session Continuity
 
 Last session: 2026-01-17
