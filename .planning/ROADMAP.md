@@ -49,10 +49,10 @@ Plans:
 **Plans:** 4 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Host system preparation (IP forwarding, cgroup memory, thermal check)
-- [ ] 02-02-PLAN.md — Tailscale host installation for remote VPN access
-- [ ] 02-03-PLAN.md — Production Let's Encrypt certificates and resource limits
-- [ ] 02-04-PLAN.md — End-to-end verification and storage validation
+- [x] 02-01-PLAN.md — Host system preparation (IP forwarding, cgroup memory, thermal check)
+- [x] 02-02-PLAN.md — Tailscale host installation for remote VPN access
+- [x] 02-03-PLAN.md — Production Let's Encrypt certificates and resource limits
+- [x] 02-04-PLAN.md — End-to-end verification and storage validation
 
 ---
 
@@ -95,7 +95,7 @@ Plans:
 | Phase | Status | Completed |
 |-------|--------|-----------|
 | 1 - Foundation & Routing | ✓ Complete | 2026-01-17 |
-| 2 - VPN & Production Readiness | In Progress | — |
+| 2 - VPN & Production Readiness | ✓ Complete | 2026-01-17 |
 | 3 - Operational Infrastructure | Not started | — |
 | 4 - Applications & Templates | Not started | — |
 
