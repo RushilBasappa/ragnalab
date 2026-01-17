@@ -60,6 +60,17 @@ Progress: ███████████████████░ 63% (10/1
 
 (None)
 
+### Deferred Improvements
+
+| Item | Priority | Notes |
+|------|----------|-------|
+| Notification channel for Uptime Kuma | Medium | Add Ntfy/Telegram/email alerts when services go down |
+| Backup encryption | Medium | docker-volume-backup supports encryption; protects against disk theft |
+| Template for new apps | Phase 4 | `apps/_template/` with starter docker-compose.yml |
+| Offsite backup | Low | 3-2-1 not complete; single disk failure = data loss |
+| Log viewer (Dozzle) | v2 | Web UI for viewing all container logs |
+| Postgres backup strategy | Future | Use pg_dump for databases, not volume snapshots |
+
 ### Blockers/Concerns
 
 (None)

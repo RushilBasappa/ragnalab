@@ -3,7 +3,7 @@
 
 APPS := $(wildcard apps/*/docker-compose.yml)
 
-.PHONY: up down restart ps logs networks backup restore
+.PHONY: up down restart ps logs networks backup restore status
 
 networks:
 	@docker network create proxy 2>/dev/null || true
@@ -44,3 +44,13 @@ ifndef SERVICE
 else
 	@./apps/backup/scripts/restore.sh $(SERVICE) $(BACKUP)
 endif
+
+status:
+	@echo "=== Containers ==="
+	@docker ps --format "table {{.Names}}\t{{.Status}}"
+	@echo ""
+	@echo "=== Recent Backups ==="
+	@ls -lht backups/*.tar.gz 2>/dev/null | head -3 || echo "(no backups)"
+	@echo ""
+	@echo "=== Disk Usage ==="
+	@df -h /home/rushil/workspace/ragnalab | tail -1 | awk '{print "Used: "$$3" / "$$2" ("$$5" full)"}'
