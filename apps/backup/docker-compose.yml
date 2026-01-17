@@ -14,19 +14,14 @@ services:
       BACKUP_FILENAME: "backup-%Y-%m-%dT%H-%M-%S.tar.gz"
       # Keep 7 days of backups
       BACKUP_RETENTION_DAYS: "7"
-      # Only stop containers with this specific label value
-      BACKUP_STOP_DURING_BACKUP_LABEL: "uptime-kuma"
       # Symlink to latest for easy restore reference
       BACKUP_LATEST_SYMLINK: "backup-latest.tar.gz"
-      # Uptime Kuma push notification
-      NOTIFICATION_URLS: "${BACKUP_NOTIFICATION_URL}"
-      # Notify on both success and failure
-      NOTIFICATION_LEVEL: "info"
+      # Uptime Kuma push notification on backup completion
+      NOTIFICATION_URLS: "generic+https://status.ragnalab.xyz/api/push/bNe5s2P11a34tSDz9f7lM4FF1Pcj72zf?status=up&msg=Backup+completed"
     volumes:
       # Docker socket for container stop/start during backup
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # Mount volumes to backup (read-only for safety)
-      - uptime-kuma-data:/backup/uptime-kuma:ro
       - vaultwarden-data:/backup/vaultwarden:ro
       # Local backup destination
       - /home/rushil/workspace/ragnalab/backups:/archive
@@ -45,9 +40,6 @@ services:
 
 # Reference external volumes to backup
 volumes:
-  uptime-kuma-data:
-    external: true
-    name: uptime-kuma_uptime-kuma-data
   vaultwarden-data:
     external: true
     name: vaultwarden_vaultwarden-data

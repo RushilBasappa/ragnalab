@@ -29,8 +29,7 @@ logs:
 
 backup:
 	@echo "Triggering manual backup..."
-	@docker kill --signal=SIGUSR1 backup
-	@sleep 10
+	@docker exec backup backup 2>&1 | grep -E "(INFO|ERROR)" || true
 	@echo "\nBackup complete. Archives:"
 	@ls -lh backups/*.tar.gz 2>/dev/null | tail -3
 

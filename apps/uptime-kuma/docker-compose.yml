@@ -31,8 +31,6 @@ services:
       - "homepage.widget.url=http://uptime-kuma:3001"
       - "homepage.widget.slug=status-page"
       - "homepage.server=my-docker"
-      # Backup label for stopping during backup
-      - "docker-volume-backup.stop-during-backup=uptime-kuma"
     deploy:
       resources:
         limits:

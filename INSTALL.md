@@ -430,36 +430,49 @@ Use the password (not the hash) to access the admin panel.
 
 ## 14. Adding New Applications
 
-Use the app template to deploy new services with automatic routing and dashboard integration.
-
-### 14.1 Copy Template
+Create a new app folder with a docker-compose.yml:
 
 ```bash
-cp -r apps/_template apps/myapp
+mkdir apps/myapp
 ```
 
-### 14.2 Configure
+Create `apps/myapp/docker-compose.yml`:
 
-Edit `apps/myapp/docker-compose.yml` and replace all `TODO` items:
+```yaml
+services:
+  myapp:
+    image: your-image:tag
+    container_name: myapp
+    restart: unless-stopped
+    networks:
+      - proxy
+    labels:
+      # Traefik routing
+      - "traefik.enable=true"
+      - "traefik.http.routers.myapp.rule=Host(`myapp.ragnalab.xyz`)"
+      - "traefik.http.routers.myapp.entrypoints=websecure"
+      - "traefik.http.routers.myapp.tls.certresolver=letsencrypt"
+      - "traefik.http.services.myapp.loadbalancer.server.port=8080"
+      - "traefik.docker.network=proxy"
+      # Homepage dashboard
+      - "homepage.group=Applications"
+      - "homepage.name=My App"
+      - "homepage.icon=myapp.png"
+      - "homepage.href=https://myapp.ragnalab.xyz"
+      - "homepage.description=App description"
 
-- Set the image
-- Choose a unique subdomain
-- Set the correct port
-- Configure Homepage labels
+networks:
+  proxy:
+    external: true
+```
 
-### 14.3 Deploy
+Deploy and verify:
 
 ```bash
 docker compose -f apps/myapp/docker-compose.yml up -d
 ```
 
-### 14.4 Verify
-
-1. Check Traefik dashboard: https://traefik.ragnalab.xyz
-2. Check Homepage: https://home.ragnalab.xyz
-3. Test HTTPS access: https://myapp.ragnalab.xyz
-
-See `apps/_template/README.md` for the complete deployment checklist.
+The app will automatically appear in Traefik and Homepage.
 
 ---
 
