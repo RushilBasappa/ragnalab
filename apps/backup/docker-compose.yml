@@ -16,8 +16,11 @@ services:
       BACKUP_RETENTION_DAYS: "7"
       # Symlink to latest for easy restore reference
       BACKUP_LATEST_SYMLINK: "backup-latest.tar.gz"
-      # Uptime Kuma push notification on backup completion
-      NOTIFICATION_URLS: "generic+https://status.ragnalab.xyz/api/push/bNe5s2P11a34tSDz9f7lM4FF1Pcj72zf?status=up&msg=Backup+completed"
+      # Uptime Kuma push URL (from .env)
+      BACKUP_PUSH_URL: "${BACKUP_PUSH_URL}"
+    labels:
+      # Uptime Kuma push notification after backup completes
+      - "docker-volume-backup.copy-post=/bin/sh -c 'wget -q -O /dev/null $${BACKUP_PUSH_URL}'"
     volumes:
       # Docker socket for container stop/start during backup
       - /var/run/docker.sock:/var/run/docker.sock:ro
