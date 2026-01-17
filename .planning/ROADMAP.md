@@ -94,9 +94,9 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Deploy Homepage dashboard with Docker label discovery
-- [ ] 04-02-PLAN.md — Deploy Vaultwarden password manager with backup integration
-- [ ] 04-03-PLAN.md — Create app template and add Homepage labels to infrastructure
+- [x] 04-01-PLAN.md — Deploy Homepage dashboard with Docker label discovery
+- [x] 04-02-PLAN.md — Deploy Vaultwarden password manager with backup integration
+- [x] 04-03-PLAN.md — Create app template and add Homepage labels to infrastructure
 
 ---
 
@@ -107,7 +107,7 @@ Plans:
 | 1 - Foundation & Routing | Complete | 2026-01-17 |
 | 2 - VPN & Production Readiness | Complete | 2026-01-17 |
 | 3 - Operational Infrastructure | Complete | 2026-01-17 |
-| 4 - Applications & Templates | Not started | — |
+| 4 - Applications & Templates | Complete | 2026-01-17 |
 
 ---
 
