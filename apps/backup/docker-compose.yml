@@ -27,6 +27,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # Mount volumes to backup (read-only for safety)
       - uptime-kuma-data:/backup/uptime-kuma:ro
+      - vaultwarden-data:/backup/vaultwarden:ro
       # Local backup destination
       - /home/rushil/workspace/ragnalab/backups:/archive
     deploy:
@@ -47,3 +48,6 @@ volumes:
   uptime-kuma-data:
     external: true
     name: uptime-kuma_uptime-kuma-data
+  vaultwarden-data:
+    external: true
+    name: vaultwarden_vaultwarden-data
