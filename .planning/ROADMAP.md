@@ -69,7 +69,12 @@ Plans:
 4. Traefik dashboard shows active routes, middleware, and service health
 5. All infrastructure configs (Traefik, compose files) committed to git with version control
 
-**Plans:** (created by /gsd:plan-phase)
+**Plans:** 3 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Deploy Uptime Kuma monitoring dashboard
+- [ ] 03-02-PLAN.md — Configure monitors and deploy backup infrastructure
+- [ ] 03-03-PLAN.md — Create restore script, test procedure, verify phase complete
 
 ---
 
