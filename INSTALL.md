@@ -325,6 +325,17 @@ Create groups for better organization:
 - **Containers** — Docker container monitors
 - **Backups** — Push monitor
 
+### 10.8 Create Status Page (Required for Homepage Widget)
+
+1. Go to **Status Pages** in the sidebar
+2. Click **New Status Page**
+3. Name: `RagnaLab Status`
+4. Slug: `status-page` (must be exactly this for Homepage widget)
+5. Add your monitors to the status page
+6. Save
+
+This status page is used by the Homepage dashboard widget to display service status.
+
 ---
 
 ## 11. Verify Installation
