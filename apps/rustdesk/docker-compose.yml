@@ -13,6 +13,13 @@ services:
     network_mode: host
     depends_on:
       - hbbr
+    labels:
+      # Homepage dashboard
+      - "homepage.group=Apps"
+      - "homepage.name=RustDesk"
+      - "homepage.icon=rustdesk.png"
+      - "homepage.description=Remote Desktop (100.75.173.7)"
+      - "homepage.server=my-docker"
 
   hbbr:
     image: rustdesk/rustdesk-server:latest
