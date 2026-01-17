@@ -57,7 +57,7 @@ Platform has automated backups, health monitoring, and operational observability
 <deferred>
 ## Deferred Ideas
 
-None — discussion stayed within phase scope
+- **Postgres backup strategy** — When adding Postgres databases, use pg_dump-based logical backups (e.g., prodrigestivill/postgres-backup-local) instead of volume snapshots. Logical backups allow no-downtime backups and portable restores. Current volume backup approach works for file-based services but isn't ideal for databases.
 
 </deferred>
 
