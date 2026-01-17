@@ -89,6 +89,14 @@ services:
       - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
       # Note: security-headers@file omitted - CSP blocks dashboard's inline scripts
       - "traefik.docker.network=proxy"
+      # --- Homepage labels ---
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Traefik"
+      - "homepage.icon=traefik.png"
+      - "homepage.href=https://traefik.ragnalab.xyz"
+      - "homepage.description=Reverse Proxy"
+      - "homepage.widget.type=traefik"
+      - "homepage.widget.url=http://traefik:8080"
     logging:
       driver: json-file
       options:

@@ -21,6 +21,15 @@ services:
       - "traefik.http.routers.uptime-kuma.tls.certresolver=letsencrypt"
       - "traefik.http.services.uptime-kuma.loadbalancer.server.port=3001"
       - "traefik.docker.network=proxy"
+      # --- Homepage labels ---
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Uptime Kuma"
+      - "homepage.icon=uptime-kuma.png"
+      - "homepage.href=https://status.ragnalab.xyz"
+      - "homepage.description=Service Monitoring"
+      - "homepage.widget.type=uptimekuma"
+      - "homepage.widget.url=http://uptime-kuma:3001"
+      - "homepage.widget.slug=ragnalab"
       # Backup label for stopping during backup
       - "docker-volume-backup.stop-during-backup=uptime-kuma"
     deploy:
