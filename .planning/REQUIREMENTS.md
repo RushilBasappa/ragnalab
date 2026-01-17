@@ -157,16 +157,16 @@ Which phases cover which requirements. Updated by create-roadmap.
 | ROUTE-03 | Phase 1 | ✓ Complete |
 | ROUTE-04 | Phase 1 | ✓ Complete |
 | ROUTE-05 | Phase 2 | Pending |
-| MON-01 | Phase 3 | Pending |
-| MON-02 | Phase 3 | Pending |
-| MON-03 | Phase 3 | Pending |
+| MON-01 | Phase 3 | ✓ Complete |
+| MON-02 | Phase 3 | ✓ Complete |
+| MON-03 | Phase 3 | ✓ Complete |
 | MON-04 | Phase 2 | Pending |
 | MON-05 | Phase 2 | Pending |
-| BACKUP-01 | Phase 3 | Pending |
-| BACKUP-02 | Phase 3 | Pending |
-| BACKUP-03 | Phase 3 | Pending |
-| BACKUP-04 | Phase 3 | Pending |
-| BACKUP-05 | Phase 3 | Pending |
+| BACKUP-01 | Phase 3 | ✓ Complete |
+| BACKUP-02 | Phase 3 | ✓ Complete |
+| BACKUP-03 | Phase 3 | ✓ Complete |
+| BACKUP-04 | Phase 3 | ✓ Complete |
+| BACKUP-05 | Phase 3 | ✓ Complete |
 | STORAGE-01 | Phase 2 | Pending |
 | STORAGE-02 | Phase 1 | ✓ Complete |
 | STORAGE-03 | Phase 1 | ✓ Complete |
@@ -189,11 +189,11 @@ Which phases cover which requirements. Updated by create-roadmap.
 | DX-04 | Phase 4 | Pending |
 | DX-05 | Phase 4 | Pending |
 | DX-06 | Phase 4 | Pending |
-| OPS-01 | Phase 3 | Pending |
+| OPS-01 | Phase 3 | ✓ Complete |
 | OPS-02 | Phase 1 | ✓ Complete |
 | OPS-03 | Phase 2 | Pending |
 | OPS-04 | Phase 2 | Pending |
-| OPS-05 | Phase 3 | Pending |
+| OPS-05 | Phase 3 | ✓ Complete |
 
 **Coverage:**
 - v1 requirements: 47 total
