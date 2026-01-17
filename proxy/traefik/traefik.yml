@@ -35,9 +35,8 @@ certificatesResolvers:
     acme:
       email: "rushil.basappa@gmail.com"
       storage: /etc/traefik/acme/acme.json
-      # STAGING SERVER - Switch to production after verification
-      # Production: https://acme-v02.api.letsencrypt.org/directory
-      caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+      # PRODUCTION - caServer omitted defaults to production
+      # Staging: https://acme-staging-v02.api.letsencrypt.org/directory
       dnsChallenge:
         provider: cloudflare
         propagation:
