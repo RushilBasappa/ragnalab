@@ -22,7 +22,8 @@ Complete setup guide for installing RagnaLab on a fresh Raspberry Pi 5.
 11. [Verify Installation](#11-verify-installation)
 12. [Homepage Setup](#12-homepage-setup)
 13. [Vaultwarden Setup](#13-vaultwarden-setup)
-14. [Adding New Applications](#14-adding-new-applications)
+14. [Pi-hole Setup](#14-pi-hole-setup)
+15. [Adding New Applications](#15-adding-new-applications)
 
 ---
 
@@ -270,6 +271,7 @@ Add these monitors (Type: HTTP(s), Interval: 300s):
 | Traefik Dashboard | https://traefik.ragnalab.xyz |
 | whoami | https://whoami.ragnalab.xyz |
 | Status Page | https://status.ragnalab.xyz |
+| Pi-hole Web UI | http://pihole:80/admin |
 
 ### 10.3 Add Docker Host
 
@@ -289,8 +291,23 @@ Add these monitors (Type: Docker Container, Docker Host: Local Docker, Interval:
 | socket-proxy (container) | socket-proxy |
 | uptime-kuma (container) | uptime-kuma |
 | backup (container) | backup |
+| pihole (container) | pihole |
 
-### 10.5 Create Backup Push Monitor
+### 10.5 Add DNS Monitor (Pi-hole)
+
+Add this monitor (Type: DNS, Interval: 60s, Retries: 2):
+
+| Setting | Value |
+|---------|-------|
+| Friendly Name | Pi-hole DNS |
+| Hostname | `google.com` |
+| Resolver Server | `10.0.0.200` |
+| Port | `53` |
+| Record Type | A |
+
+This verifies Pi-hole is resolving DNS queries.
+
+### 10.6 Create Backup Push Monitor
 
 1. **Add New Monitor**
 2. Monitor Type: **Push**
@@ -301,7 +318,7 @@ Add these monitors (Type: Docker Container, Docker Host: Local Docker, Interval:
 
 The URL looks like: `https://status.ragnalab.xyz/api/push/XXXXXXXX?status=up&msg=OK&ping=`
 
-### 10.6 Configure Backup Notification
+### 10.7 Configure Backup Notification
 
 Add the push URL to backup config:
 
@@ -318,14 +335,15 @@ Restart backup service:
 docker compose -f apps/backup/docker-compose.yml up -d
 ```
 
-### 10.7 Organize Monitors (Optional)
+### 10.8 Organize Monitors (Optional)
 
 Create groups for better organization:
 - **Web Services** — HTTP monitors
 - **Containers** — Docker container monitors
+- **Network** — DNS monitors
 - **Backups** — Push monitor
 
-### 10.8 Create Status Page (Required for Homepage Widget)
+### 10.9 Create Status Page (Required for Homepage Widget)
 
 1. Go to **Status Pages** in the sidebar
 2. Click **New Status Page**
@@ -428,7 +446,100 @@ Use the password (not the hash) to access the admin panel.
 
 ---
 
-## 14. Adding New Applications
+## 14. Pi-hole Setup
+
+Pi-hole provides network-wide DNS-based ad blocking.
+
+### 14.1 Install Macvlan Service
+
+Pi-hole requires a macvlan network for its own LAN IP. Install the systemd service:
+
+```bash
+# Create the macvlan script
+sudo tee /usr/local/bin/pihole-macvlan.sh << 'EOF'
+#!/bin/bash
+INTERFACE="eth0"
+SHIM_NAME="macvlan-shim"
+SHIM_IP="10.0.0.201"
+PIHOLE_IP="10.0.0.200"
+
+case "$1" in
+  up)
+    ip link add ${SHIM_NAME} link ${INTERFACE} type macvlan mode bridge
+    ip addr add ${SHIM_IP}/32 dev ${SHIM_NAME}
+    ip link set ${SHIM_NAME} up
+    ip route add ${PIHOLE_IP}/32 dev ${SHIM_NAME}
+    ;;
+  down)
+    ip link del ${SHIM_NAME}
+    ;;
+esac
+EOF
+
+sudo chmod +x /usr/local/bin/pihole-macvlan.sh
+
+# Create systemd service
+sudo tee /etc/systemd/system/pihole-macvlan.service << 'EOF'
+[Unit]
+Description=Pi-hole macvlan host communication bridge
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/pihole-macvlan.sh up
+ExecStop=/usr/local/bin/pihole-macvlan.sh down
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable and start
+sudo systemctl daemon-reload
+sudo systemctl enable pihole-macvlan.service
+sudo systemctl start pihole-macvlan.service
+```
+
+### 14.2 Configure Environment
+
+```bash
+cp apps/pihole/.env.example apps/pihole/.env
+nano apps/pihole/.env
+```
+
+Set `PIHOLE_PASSWORD` and `PIHOLE_API_KEY` (can be the same value).
+
+### 14.3 Deploy Pi-hole
+
+```bash
+docker compose -f apps/pihole/docker-compose.yml up -d
+```
+
+### 14.4 Verify
+
+```bash
+# Check DNS resolution
+dig @10.0.0.200 google.com +short
+
+# Check ad blocking
+dig @10.0.0.200 doubleclick.net +short
+# Should return 0.0.0.0
+```
+
+Access web UI: https://pihole.ragnalab.xyz
+
+### 14.5 Configure Devices
+
+Pi-hole runs in DNS-only mode. Configure devices to use `10.0.0.200` as their DNS server:
+
+- **iPhone/iPad:** Settings > Wi-Fi > (network) > Configure DNS > Manual > 10.0.0.200
+- **Mac:** System Settings > Network > Wi-Fi > Details > DNS > 10.0.0.200
+- **Windows:** Network settings > Change adapter options > IPv4 > DNS: 10.0.0.200
+
+---
+
+## 15. Adding New Applications
 
 Create a new app folder with a docker-compose.yml:
 
@@ -493,6 +604,7 @@ The app will automatically appear in Traefik and Homepage.
 | https://status.ragnalab.xyz | Uptime Kuma |
 | https://home.ragnalab.xyz | Homepage Dashboard |
 | https://vault.ragnalab.xyz | Vaultwarden |
+| https://pihole.ragnalab.xyz | Pi-hole Admin |
 | https://whoami.ragnalab.xyz | Test Service |
 
 ---
@@ -524,5 +636,5 @@ tailscale status
 
 ---
 
-*Last updated: 2026-01-17*
-*Covers: Phase 1 (Foundation), Phase 2 (VPN), Phase 3 (Operational Infrastructure), Phase 4 (Applications & Templates)*
+*Last updated: 2026-01-18*
+*Covers: Phase 1-4 (v1.0), Phase 5 (Pi-hole)*
