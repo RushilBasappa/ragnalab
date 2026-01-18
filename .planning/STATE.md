@@ -11,10 +11,10 @@ See: .planning/PROJECT.md
 
 Milestone: v2.0 Network Services
 Phase: 6 of 6 (Media Automation Stack) - IN PROGRESS
-Plan: 6 of 8 complete in phase
-Status: Plan 06-06 complete, ready for 06-07
+Plan: 7 of 8 complete in phase
+Status: Plan 06-07 complete, ready for 06-08
 
-Progress: [Phase 6] ██████░░ 6/8 plans | [v2.0] ████████░░░ 9/11 plans (82%)
+Progress: [Phase 6] ███████░ 7/8 plans | [v2.0] █████████░░ 10/11 plans (91%)
 
 ## v2.0 Scope
 
@@ -30,7 +30,7 @@ Progress: [Phase 6] ██████░░ 6/8 plans | [v2.0] █████�
 - [x] Sonarr + Radarr media automation (06-04)
 - [x] Bazarr subtitles + Unpackerr extraction (06-05)
 - [x] Jellyfin media server (06-06)
-- [ ] Jellyseerr request management (06-07)
+- [x] Jellyseerr request management (06-07)
 - [ ] Homepage integration (06-08)
 - Grouped structure: `apps/media/*`
 - Storage: `/media/` local, future external migration
@@ -54,6 +54,7 @@ Progress: [Phase 6] ██████░░ 6/8 plans | [v2.0] █████�
 | **Bazarr** | **bazarr.ragnalab.xyz** | **v2.0 (NEW)** |
 | **Unpackerr** | (headless, no UI) | **v2.0 (NEW)** |
 | **Jellyfin** | **jellyfin.ragnalab.xyz** | **v2.0 (NEW)** |
+| **Jellyseerr** | **requests.ragnalab.xyz** | **v2.0 (NEW)** |
 
 ## Key Decisions (v2.0)
 
@@ -78,6 +79,8 @@ Progress: [Phase 6] ██████░░ 6/8 plans | [v2.0] █████�
 | golift/unpackerr image | hotio/unpackerr doesn't exist; golift is the original maintainer | Implemented (06-05) |
 | Config file modification for Bazarr | API settings weren't persisting; direct config.yaml modification required | Implemented (06-05) |
 | OpenSubtitles.com as default | Works without account for limited use; most popular subtitle source | Implemented (06-05) |
+| Jellyfin auth for Jellyseerr | Users authenticate with existing Jellyfin accounts, no separate credentials | Implemented (06-07) |
+| Backup volume aggregation | All 8 media volumes added to nightly backup for disaster recovery | Implemented (06-07) |
 
 ## Previous Milestone
 
@@ -97,6 +100,6 @@ Progress: [Phase 6] ██████░░ 6/8 plans | [v2.0] █████�
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Completed 06-06-PLAN.md (Jellyfin media server)
-Resume file: .planning/phases/06-media-automation-stack/06-07-PLAN.md
-Next action: Execute 06-07 (Jellyseerr request management)
+Stopped at: Completed 06-07-PLAN.md (Jellyseerr request management)
+Resume file: .planning/phases/06-media-automation-stack/06-08-PLAN.md
+Next action: Execute 06-08 (Homepage integration finalization)
