@@ -11,10 +11,10 @@ See: .planning/PROJECT.md
 
 Milestone: v2.0 Network Services
 Phase: 6 of 6 (Media Automation Stack) - IN PROGRESS
-Plan: 1 of 8 complete in phase
-Status: Plan 06-01 complete, ready for 06-02
+Plan: 2 of 8 complete in phase
+Status: Plan 06-02 complete, ready for 06-03
 
-Progress: [Phase 6] █░░░░░░░ 1/8 plans | [v2.0] ████░░░░░░░ 4/11 plans (36%)
+Progress: [Phase 6] ██░░░░░░ 2/8 plans | [v2.0] █████░░░░░░ 5/11 plans (45%)
 
 ## v2.0 Scope
 
@@ -25,7 +25,7 @@ Progress: [Phase 6] █░░░░░░░ 1/8 plans | [v2.0] ████░�
 
 **Phase 6: Media Automation Stack** (IN PROGRESS)
 - [x] Directory structure + Gluetun VPN (06-01)
-- [ ] qBittorrent torrent client (06-02)
+- [x] qBittorrent torrent client (06-02)
 - [ ] Prowlarr indexer manager (06-03)
 - [ ] Sonarr + Radarr media automation (06-04)
 - [ ] Bazarr subtitles + Unpackerr extraction (06-05)
@@ -47,6 +47,7 @@ Progress: [Phase 6] █░░░░░░░ 1/8 plans | [v2.0] ████░�
 | Vaultwarden | vault.ragnalab.xyz | v1.0 |
 | **Pi-hole** | **pihole.ragnalab.xyz** | **v2.0 (NEW)** |
 | **Gluetun** | (VPN tunnel, no UI) | **v2.0 (NEW)** |
+| **qBittorrent** | localhost:8080 (via VPN) | **v2.0 (NEW)** |
 
 ## Key Decisions (v2.0)
 
@@ -60,6 +61,7 @@ Progress: [Phase 6] █░░░░░░░ 1/8 plans | [v2.0] ████░�
 | ProtonVPN for torrent privacy | User-selected VPN provider with WireGuard support | Implemented (06-01) |
 | WireGuard over OpenVPN | Better performance on Raspberry Pi, lower resource usage | Implemented (06-01) |
 | Credentials in .env file | apps/media/.env excluded from git, .env.example provides template | Implemented (06-01) |
+| network_mode over depends_on | Cross-compose depends_on doesn't work; network_mode: container:gluetun enforces dependency | Implemented (06-02) |
 
 ## Previous Milestone
 
@@ -79,6 +81,6 @@ Progress: [Phase 6] █░░░░░░░ 1/8 plans | [v2.0] ████░�
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Completed 06-01-PLAN.md (Directory structure and Gluetun VPN)
-Resume file: .planning/phases/06-media-automation-stack/06-02-PLAN.md
-Next action: Execute 06-02 (qBittorrent deployment using Gluetun network)
+Stopped at: Completed 06-02-PLAN.md (qBittorrent download client)
+Resume file: .planning/phases/06-media-automation-stack/06-03-PLAN.md
+Next action: Execute 06-03 (Prowlarr indexer manager)
