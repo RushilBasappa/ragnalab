@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md
 
 **Core value:** Secure, private-only access to self-hosted applications with professional-grade HTTPS, automatic service discovery, and dead-simple process for adding new apps.
-**Current focus:** v2.0 Network Services — Pi-hole with network-wide ad blocking
+**Current focus:** v2.0 Network Services — Media Automation Stack
 
 ## Current Position
 
 Milestone: v2.0 Network Services
-Phase: 5 of 6 (Pi-hole Network-Wide Ad Blocking)
-Plan: 2 of 3 complete in phase
-Status: In progress
+Phase: 5 of 6 (Pi-hole Network-Wide Ad Blocking) - COMPLETE
+Plan: 3 of 3 complete in phase
+Status: Phase complete, ready for Phase 6
 
-Progress: [Phase 5] ████░░ 2/3 plans | [v2.0] ██░░░░░░░░░ 2/11 plans (18%)
+Progress: [Phase 5] ██████ 3/3 plans | [v2.0] ███░░░░░░░░ 3/11 plans (27%)
 
 ## v2.0 Scope
 
-**Phase 5: Pi-hole Network-Wide Ad Blocking** (IN PROGRESS)
+**Phase 5: Pi-hole Network-Wide Ad Blocking** (COMPLETE)
 - [x] Pi-hole Docker deployment with Traefik integration (05-01)
 - [x] DHCP server configuration (05-02) - *DNS-only mode due to locked gateway*
-- [ ] Blocklist and monitoring setup (05-03)
+- [x] Blocklist and monitoring setup (05-03)
 
 **Phase 6: Media Automation Stack** (PENDING)
 - Gluetun VPN + qBittorrent (torrent privacy)
@@ -71,6 +71,6 @@ Progress: [Phase 5] ████░░ 2/3 plans | [v2.0] ██░░░░░�
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Completed 05-02-PLAN.md (DHCP configuration - DNS-only mode)
-Resume file: .planning/phases/05-pihole-network-adblocking/05-03-PLAN.md
-Next action: Execute plan 05-03 (Blocklist and monitoring setup)
+Stopped at: Completed Phase 5 (Pi-hole Network-Wide Ad Blocking)
+Resume file: .planning/phases/06-media-automation-stack/06-01-PLAN.md
+Next action: Begin Phase 6 (Media Automation Stack) with 06-01 (Directory structure and Gluetun VPN)

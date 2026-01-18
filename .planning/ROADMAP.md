@@ -118,9 +118,9 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Pi-hole Docker deployment with macvlan network and Traefik integration
-- [ ] 05-02-PLAN.md — DHCP configuration and network cutover from Xfinity gateway
-- [ ] 05-03-PLAN.md — Monitoring, Homepage widget, backup, and full verification
+- [x] 05-01-PLAN.md — Pi-hole Docker deployment with macvlan network and Traefik integration
+- [x] 05-02-PLAN.md — DHCP configuration and network cutover from Xfinity gateway (*DNS-only mode - gateway locked*)
+- [x] 05-03-PLAN.md — Monitoring, Homepage widget, backup, and full verification
 
 ---
 
@@ -167,7 +167,7 @@ Plans:
 | 2 - VPN & Production Readiness | Complete | 2026-01-17 |
 | 3 - Operational Infrastructure | Complete | 2026-01-17 |
 | 4 - Applications & Templates | Complete | 2026-01-17 |
-| 5 - Pi-hole Network-Wide Ad Blocking | Planned | — |
+| 5 - Pi-hole Network-Wide Ad Blocking | Complete | 2026-01-18 |
 | 6 - Media Automation Stack | Planned | — |
 
 ---
