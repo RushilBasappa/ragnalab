@@ -1,0 +1,61 @@
+# Bazarr - Subtitle Automation
+# Access at: https://bazarr.ragnalab.xyz
+# Manages subtitles for media in Sonarr and Radarr libraries
+
+services:
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    restart: unless-stopped
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: America/Los_Angeles
+    volumes:
+      - bazarr-config:/config
+      - /media:/media  # Access to library folders for subtitle placement
+    networks:
+      - proxy
+      - media
+    labels:
+      # Traefik routing
+      - "traefik.enable=true"
+      - "traefik.http.routers.bazarr.rule=Host(`bazarr.ragnalab.xyz`)"
+      - "traefik.http.routers.bazarr.entrypoints=websecure"
+      - "traefik.http.routers.bazarr.tls=true"
+      - "traefik.http.routers.bazarr.tls.certresolver=letsencrypt"
+      - "traefik.http.services.bazarr.loadbalancer.server.port=6767"
+      - "traefik.docker.network=proxy"
+      # Homepage dashboard
+      - "homepage.group=Media"
+      - "homepage.name=Bazarr"
+      - "homepage.icon=bazarr.png"
+      - "homepage.href=https://bazarr.ragnalab.xyz"
+      - "homepage.description=Subtitles"
+      - "homepage.widget.type=bazarr"
+      - "homepage.widget.url=http://bazarr:6767"
+      - "homepage.widget.key=${BAZARR_API_KEY}"
+      - "homepage.server=my-docker"
+      # Backup - stop during backup for SQLite consistency
+      - "docker-volume-backup.stop-during-backup=bazarr"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.25'
+        reservations:
+          memory: 128M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  bazarr-config:
+
+networks:
+  proxy:
+    external: true
+  media:
+    external: true
