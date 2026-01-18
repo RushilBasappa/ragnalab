@@ -8,6 +8,7 @@ include:
   - path: uptime-kuma/docker-compose.yml
   - path: homepage/docker-compose.yml
   - path: backup/docker-compose.yml
+  - path: autokuma/docker-compose.yml
 
 # Networks defined in root docker-compose.yml
 # Service composes reference them as external: true
