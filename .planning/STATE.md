@@ -10,26 +10,47 @@ See: .planning/PROJECT.md
 ## Current Position
 
 Milestone: v2.0 Network Services
-Phases: 1/1 pending (Phase 5)
-Plans: 0/3 complete
-Status: Ready to plan
+Phase: 5 of 6 (Pi-hole Network-Wide Ad Blocking)
+Plan: 1 of 3 complete in phase
+Status: In progress
 
-Progress: ░░░░░░░░░░░░░░░░░░░░ 0%
+Progress: [Phase 5] ██░░░░ 1/3 plans | [v2.0] █░░░░░░░░░░ 1/11 plans (9%)
 
 ## v2.0 Scope
 
-**Phase 5: Pi-hole Network-Wide Ad Blocking**
-- Pi-hole Docker deployment with Traefik integration
-- DHCP server configuration (Xfinity gateway DNS locked)
-- Automatic fallback for high availability
-- Homepage widget and Uptime Kuma monitoring
+**Phase 5: Pi-hole Network-Wide Ad Blocking** (IN PROGRESS)
+- [x] Pi-hole Docker deployment with Traefik integration (05-01)
+- [ ] DHCP server configuration (05-02)
+- [ ] Blocklist and monitoring setup (05-03)
 
-**Requirements:** 17 total
-- DNS & Ad Blocking: 4
-- DHCP: 4
-- High Availability: 3
-- Observability: 3
-- Operations: 3
+**Phase 6: Media Automation Stack** (PENDING)
+- Gluetun VPN + qBittorrent (torrent privacy)
+- Prowlarr, Sonarr, Radarr (media automation)
+- Bazarr, Unpackerr (subtitles, extraction)
+- Jellyfin media server + Jellyseerr requests
+- Grouped structure: `apps/media/*`
+- Storage: `/media/` local, future external migration
+
+**Plans:** 3 (Phase 5) + 8 (Phase 6) = 11 total
+
+## Services Deployed
+
+| Service | URL | Status |
+|---------|-----|--------|
+| Traefik | traefik.ragnalab.xyz | v1.0 |
+| Uptime Kuma | status.ragnalab.xyz | v1.0 |
+| Homepage | home.ragnalab.xyz | v1.0 |
+| Vaultwarden | vault.ragnalab.xyz | v1.0 |
+| **Pi-hole** | **pihole.ragnalab.xyz** | **v2.0 (NEW)** |
+
+## Key Decisions (v2.0)
+
+| Decision | Rationale | Outcome |
+|----------|-----------|---------|
+| Pi-hole as DHCP server | Xfinity gateway DNS settings locked; only way to provide DNS to all devices | Pending (05-02) |
+| Fallback DNS strategy | Network must work if Pi goes down; automatic failover required | Pending (05-02) |
+| Macvlan networking for Pi-hole | Dedicated LAN IP (10.0.0.200) avoids port conflicts, enables DHCP | Implemented (05-01) |
+| Macvlan-shim at 10.0.0.201 | Linux kernel limitation requires shim for host-to-container communication | Implemented (05-01) |
 
 ## Previous Milestone
 
@@ -42,21 +63,13 @@ Progress: ░░░░░░░░░░░░░░░░░░░░ 0%
 - Vaultwarden password manager
 - App template for future deployments
 
-**Services deployed:**
-- traefik.ragnalab.xyz (reverse proxy dashboard)
-- status.ragnalab.xyz (Uptime Kuma monitoring)
-- home.ragnalab.xyz (Homepage dashboard)
-- vault.ragnalab.xyz (Vaultwarden password manager)
+## Roadmap Evolution
 
-## Key Decisions (v2.0)
-
-| Decision | Rationale | Outcome |
-|----------|-----------|---------|
-| Pi-hole as DHCP server | Xfinity gateway DNS settings locked; only way to provide DNS to all devices | — Pending |
-| Fallback DNS strategy | Network must work if Pi goes down; automatic failover required | — Pending |
+- Phase 6 added: Media Automation Stack (arr suite + Jellyfin)
 
 ## Session Continuity
 
-Last session: 2026-01-17
-Status: v2.0 milestone initialized, ready to plan Phase 5
-Next action: `/gsd:plan-phase 5` to create detailed execution plans
+Last session: 2026-01-18
+Stopped at: Completed 05-01-PLAN.md (Pi-hole Docker deployment)
+Resume file: .planning/phases/05-pihole-network-adblocking/05-02-PLAN.md
+Next action: Execute plan 05-02 (DHCP configuration)
