@@ -164,7 +164,7 @@ Plans:
 **Goal:** Restructure compose files into stack/ folder with nested includes, complete backup coverage, eliminate direct Docker socket exposure, and automate monitoring with Autokuma
 **Depends on:** Phase 6
 **Milestone:** v2.0
-**Plans:** 0 plans
+**Plans:** 8 plans
 
 **Success Criteria:**
 1. All services organized under `stack/` with nested include pattern (stack/infra/traefik/, etc.)
@@ -176,10 +176,17 @@ Plans:
 7. All existing services automatically monitored (HTTP + Docker container checks)
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 7 to break down)
+- [ ] 07-01-PLAN.md — Create stack/ structure and migrate infrastructure services
+- [ ] 07-02-PLAN.md — Migrate media services to stack/media/
+- [ ] 07-03-PLAN.md — Migrate apps to stack/apps/ and simplify Makefile
+- [ ] 07-04-PLAN.md — Socket-proxy migration for Uptime Kuma and Homepage
+- [ ] 07-05-PLAN.md — Expand backup coverage with missing volumes
+- [ ] 07-06-PLAN.md — Deploy Autokuma and add kuma labels to infrastructure
+- [ ] 07-07-PLAN.md — Add kuma labels to media and app services
+- [ ] 07-08-PLAN.md — Final verification checkpoint
 
 **Scope:**
-- Restructure into `stack/` folder with nested includes (root → category → service composes)
+- Restructure into `stack/` folder with nested includes (root -> category -> service composes)
 - Migrate existing services from proxy/, apps/*, media/ into stack/{category}/{service}/
 - Audit all apps for backup requirements
 - Add missing volumes to backup system
@@ -241,7 +248,7 @@ Plans:
 | 4 - Applications & Templates | Complete | 2026-01-17 |
 | 5 - Pi-hole Network-Wide Ad Blocking | Complete | 2026-01-18 |
 | 6 - Media Automation Stack | Complete | 2026-01-18 |
-| 7 - Operational Hardening | Pending | — |
+| 7 - Operational Hardening | Planned | — |
 | 8 - Application Expansion | Pending | — |
 
 ---
