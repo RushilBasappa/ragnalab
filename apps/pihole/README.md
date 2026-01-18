@@ -103,6 +103,25 @@ ip link show macvlan-shim
 ip route | grep 10.0.0.200
 ```
 
+## Uptime Kuma Monitors
+
+Create these monitors in Uptime Kuma (https://status.ragnalab.xyz):
+
+### Pi-hole Web UI
+- **Type:** HTTP(s)
+- **URL:** `http://pihole:80/admin`
+- **Heartbeat Interval:** 60 seconds
+- **Retries:** 3
+
+### Pi-hole DNS
+- **Type:** DNS
+- **Hostname:** `google.com`
+- **Resolver Server:** `10.0.0.200`
+- **Port:** 53
+- **Record Type:** A
+- **Heartbeat Interval:** 60 seconds
+- **Retries:** 2
+
 ## API Key for Homepage Widget
 
 After Pi-hole is running, get the API key:
