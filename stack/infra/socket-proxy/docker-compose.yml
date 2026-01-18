@@ -39,6 +39,12 @@ services:
       - SWARM=0
       - SYSTEM=0
       - LOG_LEVEL=info
+    labels:
+      # --- Autokuma monitoring labels (container only - no HTTP endpoint) ---
+      - "kuma.socket-proxy-container.docker.name=Socket Proxy Container"
+      - "kuma.socket-proxy-container.docker.docker_container=socket-proxy"
+      - "kuma.socket-proxy-container.docker.docker_host_name=my-docker"
+      - "kuma.socket-proxy-container.docker.parent_name=containers-group"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:

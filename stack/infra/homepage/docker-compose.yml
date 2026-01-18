@@ -26,6 +26,14 @@ services:
       - "traefik.http.routers.homepage.tls.certresolver=letsencrypt"
       - "traefik.http.services.homepage.loadbalancer.server.port=3000"
       - "traefik.docker.network=proxy"
+      # --- Autokuma monitoring labels ---
+      - "kuma.homepage.http.name=Homepage"
+      - "kuma.homepage.http.url=https://home.ragnalab.xyz"
+      - "kuma.homepage.http.parent_name=infra-group"
+      - "kuma.homepage-container.docker.name=Homepage Container"
+      - "kuma.homepage-container.docker.docker_container=homepage"
+      - "kuma.homepage-container.docker.docker_host_name=my-docker"
+      - "kuma.homepage-container.docker.parent_name=containers-group"
     deploy:
       resources:
         limits:

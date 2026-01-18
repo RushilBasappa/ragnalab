@@ -20,6 +20,14 @@ services:
       - "traefik.http.routers.uptime-kuma.tls.certresolver=letsencrypt"
       - "traefik.http.services.uptime-kuma.loadbalancer.server.port=3001"
       - "traefik.docker.network=proxy"
+      # --- Autokuma monitoring labels ---
+      - "kuma.uptime-kuma.http.name=Uptime Kuma"
+      - "kuma.uptime-kuma.http.url=https://status.ragnalab.xyz"
+      - "kuma.uptime-kuma.http.parent_name=infra-group"
+      - "kuma.uptime-kuma-container.docker.name=Uptime Kuma Container"
+      - "kuma.uptime-kuma-container.docker.docker_container=uptime-kuma"
+      - "kuma.uptime-kuma-container.docker.docker_host_name=my-docker"
+      - "kuma.uptime-kuma-container.docker.parent_name=containers-group"
       # --- Homepage labels ---
       - "homepage.group=Infrastructure"
       - "homepage.name=Uptime Kuma"
