@@ -115,12 +115,12 @@ Plans:
 4. Internet works for existing devices if Pi-hole/Pi is temporarily unavailable (fallback verified)
 5. Pi-hole statistics visible in Homepage dashboard widget
 
-**Plans:** TBD (run `/gsd:plan-phase 5` to create)
+**Plans:** 3 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Pi-hole Docker deployment with Traefik integration
-- [ ] 05-02-PLAN.md — DHCP configuration and network cutover
-- [ ] 05-03-PLAN.md — Fallback strategy, monitoring, and verification
+- [ ] 05-01-PLAN.md — Pi-hole Docker deployment with macvlan network and Traefik integration
+- [ ] 05-02-PLAN.md — DHCP configuration and network cutover from Xfinity gateway
+- [ ] 05-03-PLAN.md — Monitoring, Homepage widget, backup, and full verification
 
 ---
 
@@ -167,7 +167,7 @@ Plans:
 | 2 - VPN & Production Readiness | Complete | 2026-01-17 |
 | 3 - Operational Infrastructure | Complete | 2026-01-17 |
 | 4 - Applications & Templates | Complete | 2026-01-17 |
-| 5 - Pi-hole Network-Wide Ad Blocking | Pending | — |
+| 5 - Pi-hole Network-Wide Ad Blocking | Planned | — |
 | 6 - Media Automation Stack | Planned | — |
 
 ---
