@@ -35,6 +35,10 @@ layout:
     style: row
     columns: 5
     icon: mdi-chart-line
+  Local Access:
+    style: row
+    columns: 3
+    icon: mdi-lan
   Infrastructure:
     style: column
     icon: mdi-server-network

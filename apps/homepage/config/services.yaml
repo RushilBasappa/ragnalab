@@ -49,3 +49,16 @@
           url: http://glances:61208
           version: 4
           metric: process
+
+# Network info and VPN-only services (not exposed via Traefik)
+- Local Access:
+    - Local IP:
+        icon: mdi-ip-network
+        description: "10.0.0.245"
+    - Tailscale IP:
+        icon: si-tailscale
+        description: "100.75.173.7"
+    - qBittorrent:
+        icon: qbittorrent
+        href: http://100.75.173.7:8080
+        description: Torrent client (VPN only)
