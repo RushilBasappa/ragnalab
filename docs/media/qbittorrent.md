@@ -8,7 +8,7 @@ Torrent download client with VPN protection.
 
 ## Prerequisites
 
-- Gluetun running and healthy (see [gluetun/INSTALL.md](../gluetun/INSTALL.md))
+- Gluetun running and healthy (see [Gluetun](gluetun.md))
 
 ---
 

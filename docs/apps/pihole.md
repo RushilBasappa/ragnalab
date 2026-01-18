@@ -9,7 +9,7 @@ Network-wide DNS-based ad blocking.
 
 ## Prerequisites
 
-- Traefik running (see [proxy/INSTALL.md](../../proxy/INSTALL.md))
+- Traefik running (see [Traefik](../infrastructure/traefik.md))
 - Network interface: `eth0` (adjust if using WiFi)
 
 ---

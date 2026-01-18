@@ -8,8 +8,8 @@ Movie automation - monitors, downloads, and organizes movies.
 
 ## Prerequisites
 
-- qBittorrent running (see [qbittorrent/INSTALL.md](../qbittorrent/INSTALL.md))
-- Prowlarr running (see [prowlarr/INSTALL.md](../prowlarr/INSTALL.md))
+- qBittorrent running (see [qBittorrent](qbittorrent.md))
+- Prowlarr running (see [Prowlarr](prowlarr.md))
 
 ---
 

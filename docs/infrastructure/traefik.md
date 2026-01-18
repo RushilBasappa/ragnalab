@@ -8,7 +8,7 @@ Traefik provides HTTPS routing with automatic Let's Encrypt certificates for all
 
 ## Prerequisites
 
-- Cloudflare API token (see main [INSTALL.md](../INSTALL.md))
+- Cloudflare API token (see [Cloudflare Setup](../getting-started/cloudflare.md))
 - Docker networks created
 
 ---

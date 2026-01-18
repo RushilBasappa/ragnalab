@@ -8,8 +8,8 @@ Automatic archive extraction for downloaded media.
 
 ## Prerequisites
 
-- Sonarr running (see [sonarr/INSTALL.md](../sonarr/INSTALL.md))
-- Radarr running (see [radarr/INSTALL.md](../radarr/INSTALL.md))
+- Sonarr running (see [Sonarr](sonarr.md))
+- Radarr running (see [Radarr](radarr.md))
 
 ---
 

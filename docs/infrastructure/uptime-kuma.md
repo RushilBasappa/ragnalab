@@ -8,7 +8,7 @@ Service health monitoring dashboard with alerts.
 
 ## Prerequisites
 
-- Traefik running (see [proxy/INSTALL.md](../../proxy/INSTALL.md))
+- Traefik running (see [Traefik](traefik.md))
 
 ---
 
@@ -84,7 +84,7 @@ Uptime Kuma requires one-time browser configuration.
 4. Heartbeat Interval: `86400` (1 day in seconds)
 5. Save and **copy the Push URL**
 
-Use this URL in [apps/backup/INSTALL.md](../backup/INSTALL.md).
+Use this URL in [Backup Setup](backup.md).
 
 ---
 

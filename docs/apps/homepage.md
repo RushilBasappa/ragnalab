@@ -8,8 +8,8 @@ Service dashboard with auto-discovery via Docker labels.
 
 ## Prerequisites
 
-- Traefik running (see [proxy/INSTALL.md](../../proxy/INSTALL.md))
-- Uptime Kuma running with status page created (see [apps/uptime-kuma/INSTALL.md](../uptime-kuma/INSTALL.md))
+- Traefik running (see [Traefik](../infrastructure/traefik.md))
+- Uptime Kuma running with status page created (see [Uptime Kuma](../infrastructure/uptime-kuma.md))
 
 ---
 

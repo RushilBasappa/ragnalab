@@ -8,7 +8,7 @@ Self-hosted Bitwarden-compatible password manager.
 
 ## Prerequisites
 
-- Traefik running (see [proxy/INSTALL.md](../../proxy/INSTALL.md))
+- Traefik running (see [Traefik](../infrastructure/traefik.md))
 
 ---
 

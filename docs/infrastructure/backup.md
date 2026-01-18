@@ -6,8 +6,8 @@ Automated Docker volume backups with offsite sync.
 
 ## Prerequisites
 
-- Traefik running (see [proxy/INSTALL.md](../../proxy/INSTALL.md))
-- Uptime Kuma with Push monitor created (see [apps/uptime-kuma/INSTALL.md](../uptime-kuma/INSTALL.md))
+- Traefik running (see [Traefik](traefik.md))
+- Uptime Kuma with Push monitor created (see [Uptime Kuma](uptime-kuma.md))
 
 ---
 

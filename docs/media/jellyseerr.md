@@ -8,9 +8,9 @@ Media request management - users request shows/movies, automatically sent to Son
 
 ## Prerequisites
 
-- Jellyfin running (see [jellyfin/INSTALL.md](../jellyfin/INSTALL.md))
-- Sonarr running (see [sonarr/INSTALL.md](../sonarr/INSTALL.md))
-- Radarr running (see [radarr/INSTALL.md](../radarr/INSTALL.md))
+- Jellyfin running (see [Jellyfin](jellyfin.md))
+- Sonarr running (see [Sonarr](sonarr.md))
+- Radarr running (see [Radarr](radarr.md))
 
 ---
 

@@ -34,7 +34,7 @@ Complete media automation system: request → download → organize → watch.
 
 ## Prerequisites
 
-- Traefik running (see [proxy/INSTALL.md](../../proxy/INSTALL.md))
+- Traefik running (see [Traefik](../infrastructure/traefik.md))
 - **VPN account with WireGuard support** (ProtonVPN, Mullvad, etc.)
 
 ---
@@ -91,15 +91,15 @@ SERVER_COUNTRIES=United States
 
 | Order | Service | Install Guide | Depends On |
 |-------|---------|---------------|------------|
-| 1 | Gluetun | [gluetun/INSTALL.md](gluetun/INSTALL.md) | VPN credentials |
-| 2 | qBittorrent | [qbittorrent/INSTALL.md](qbittorrent/INSTALL.md) | Gluetun |
-| 3 | Prowlarr | [prowlarr/INSTALL.md](prowlarr/INSTALL.md) | — |
-| 4 | Sonarr | [sonarr/INSTALL.md](sonarr/INSTALL.md) | qBittorrent, Prowlarr |
-| 5 | Radarr | [radarr/INSTALL.md](radarr/INSTALL.md) | qBittorrent, Prowlarr |
-| 6 | Bazarr | [bazarr/INSTALL.md](bazarr/INSTALL.md) | Sonarr, Radarr |
-| 7 | Unpackerr | [unpackerr/INSTALL.md](unpackerr/INSTALL.md) | Sonarr, Radarr |
-| 8 | Jellyfin | [jellyfin/INSTALL.md](jellyfin/INSTALL.md) | — |
-| 9 | Jellyseerr | [jellyseerr/INSTALL.md](jellyseerr/INSTALL.md) | Jellyfin, Sonarr, Radarr |
+| 1 | Gluetun | [Gluetun](gluetun.md) | VPN credentials |
+| 2 | qBittorrent | [qBittorrent](qbittorrent.md) | Gluetun |
+| 3 | Prowlarr | [Prowlarr](prowlarr.md) | — |
+| 4 | Sonarr | [Sonarr](sonarr.md) | qBittorrent, Prowlarr |
+| 5 | Radarr | [Radarr](radarr.md) | qBittorrent, Prowlarr |
+| 6 | Bazarr | [Bazarr](bazarr.md) | Sonarr, Radarr |
+| 7 | Unpackerr | [Unpackerr](unpackerr.md) | Sonarr, Radarr |
+| 8 | Jellyfin | [Jellyfin](jellyfin.md) | — |
+| 9 | Jellyseerr | [Jellyseerr](jellyseerr.md) | Jellyfin, Sonarr, Radarr |
 
 ### Step 3: Manual Configuration Required
 
@@ -111,7 +111,7 @@ After deployment, these services need browser setup:
 | **Jellyfin** | Complete setup wizard, create admin account |
 | **Jellyseerr** | Connect to Jellyfin, Sonarr, Radarr |
 
-See individual INSTALL.md files for detailed steps.
+See individual service docs for detailed steps.
 
 ---
 
@@ -268,4 +268,4 @@ docker inspect sonarr --format='{{json .Mounts}}' | jq '.[] | select(.Destinatio
 
 ---
 
-*See individual service INSTALL.md files for detailed configuration.*
+*See individual service docs for detailed configuration.*
