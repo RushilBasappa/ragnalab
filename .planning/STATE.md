@@ -11,10 +11,10 @@ See: .planning/PROJECT.md
 
 Milestone: v2.0 Network Services
 Phase: 6 of 6 (Media Automation Stack) - IN PROGRESS
-Plan: 4 of 8 complete in phase
-Status: Plan 06-04 complete, ready for 06-05
+Plan: 6 of 8 complete in phase
+Status: Plan 06-06 complete, ready for 06-07
 
-Progress: [Phase 6] ████░░░░ 4/8 plans | [v2.0] ██████░░░░░ 7/11 plans (64%)
+Progress: [Phase 6] ██████░░ 6/8 plans | [v2.0] ████████░░░ 9/11 plans (82%)
 
 ## v2.0 Scope
 
@@ -28,8 +28,8 @@ Progress: [Phase 6] ████░░░░ 4/8 plans | [v2.0] █████�
 - [x] qBittorrent torrent client (06-02)
 - [x] Prowlarr indexer manager (06-03)
 - [x] Sonarr + Radarr media automation (06-04)
-- [ ] Bazarr subtitles + Unpackerr extraction (06-05)
-- [ ] Jellyfin media server (06-06)
+- [x] Bazarr subtitles + Unpackerr extraction (06-05)
+- [x] Jellyfin media server (06-06)
 - [ ] Jellyseerr request management (06-07)
 - [ ] Homepage integration (06-08)
 - Grouped structure: `apps/media/*`
@@ -51,6 +51,8 @@ Progress: [Phase 6] ████░░░░ 4/8 plans | [v2.0] █████�
 | **Prowlarr** | **prowlarr.ragnalab.xyz** | **v2.0 (NEW)** |
 | **Sonarr** | **sonarr.ragnalab.xyz** | **v2.0 (NEW)** |
 | **Radarr** | **radarr.ragnalab.xyz** | **v2.0 (NEW)** |
+| **Bazarr** | **bazarr.ragnalab.xyz** | **v2.0 (NEW)** |
+| **Jellyfin** | **jellyfin.ragnalab.xyz** | **v2.0 (NEW)** |
 
 ## Key Decisions (v2.0)
 
@@ -69,6 +71,9 @@ Progress: [Phase 6] ████░░░░ 4/8 plans | [v2.0] █████�
 | Media group in Homepage | Added layout group for arr services auto-discovery | Implemented (06-03) |
 | Multi-network for arr apps | Sonarr/Radarr need proxy (Traefik) + media (qBittorrent) networks | Implemented (06-04) |
 | API-based arr configuration | Auth, download clients, root folders configured via API during deployment | Implemented (06-04) |
+| Read-only media mount for Jellyfin | Jellyfin reads from library but cannot modify - Sonarr/Radarr own the files | Implemented (06-06) |
+| Direct-play only (no transcoding) | Pi 5 lacks hardware encoding; clients must support direct-play | Implemented (06-06) |
+| API-based Jellyfin setup | Setup wizard, libraries, and transcoding config completed via API | Implemented (06-06) |
 
 ## Previous Milestone
 
@@ -88,6 +93,6 @@ Progress: [Phase 6] ████░░░░ 4/8 plans | [v2.0] █████�
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Completed 06-04-PLAN.md (Sonarr + Radarr media automation)
-Resume file: .planning/phases/06-media-automation-stack/06-05-PLAN.md
-Next action: Execute 06-05 (Bazarr subtitles + Unpackerr extraction)
+Stopped at: Completed 06-06-PLAN.md (Jellyfin media server)
+Resume file: .planning/phases/06-media-automation-stack/06-07-PLAN.md
+Next action: Execute 06-07 (Jellyseerr request management)
