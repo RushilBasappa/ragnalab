@@ -51,12 +51,13 @@
           metric: process
 
 # Network info and VPN-only services (not exposed via Traefik)
+# Uses host.docker.internal to reach ip-info service on host network
 - Local Access:
     - Local IP:
         icon: mdi-ip-network
         widget:
           type: customapi
-          url: http://localhost:3099
+          url: http://host.docker.internal:3099
           refreshInterval: 60000
           mappings:
             - field: local_ip
@@ -65,12 +66,12 @@
         icon: si-tailscale
         widget:
           type: customapi
-          url: http://localhost:3099
+          url: http://host.docker.internal:3099
           refreshInterval: 60000
           mappings:
             - field: tailscale_ip
               label: Tailscale
     - qBittorrent:
         icon: qbittorrent
-        href: http://100.75.173.7:8080
+        href: http://host.docker.internal:8080
         description: Torrent client (VPN only)

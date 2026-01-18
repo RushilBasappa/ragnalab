@@ -11,6 +11,8 @@ services:
       - PUID=1000
       # PGID=123 is the docker group - required for socket access
       - PGID=123
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       # Config files in version control
       - ./config:/app/config
