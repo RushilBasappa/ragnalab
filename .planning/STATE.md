@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md
 
 **Core value:** Secure, private-only access to self-hosted applications with professional-grade HTTPS, automatic service discovery, and dead-simple process for adding new apps.
-**Current focus:** v2.0 Network Services COMPLETE
+**Current focus:** Phase 7 - Operational Hardening
 
 ## Current Position
 
-Milestone: v2.0 Network Services - COMPLETE
-Phase: 6 of 6 (Media Automation Stack) - COMPLETE
-Plan: 8 of 8 complete in phase
-Status: v2.0 milestone complete
+Milestone: v2.0 Network Services - IN PROGRESS
+Phase: 7 of 7 (Operational Hardening) - NOT PLANNED
+Plan: 0 of 0 in phase
+Status: Phase added, awaiting planning
 
-Progress: [Phase 6] ████████ 8/8 plans | [v2.0] ███████████ 11/11 plans (100%)
+Progress: [Phase 7] ░░░░░░░░ 0/0 plans | [v2.0] ███████████░ 11/11+ plans
 
 ## v2.0 Scope
 
@@ -35,7 +35,14 @@ Progress: [Phase 6] ████████ 8/8 plans | [v2.0] █████�
 - Grouped structure: `apps/media/*`
 - Storage: `/media/` local, future external migration
 
-**Plans:** 3 (Phase 5) + 8 (Phase 6) = 11 total - ALL COMPLETE
+**Phase 7: Operational Hardening** (NOT PLANNED)
+- [ ] Audit all apps for backup requirements
+- [ ] Add missing volumes to backup system
+- [ ] Configure socket-proxy for Uptime Kuma
+- [ ] Configure socket-proxy for Homepage
+- [ ] Reduce Glances privileges
+
+**Plans:** 3 (Phase 5) + 8 (Phase 6) + TBD (Phase 7) = 11+ total
 
 ## Services Deployed
 
@@ -113,11 +120,11 @@ Progress: [Phase 6] ████████ 8/8 plans | [v2.0] █████�
 ## Roadmap Evolution
 
 - Phase 6 added: Media Automation Stack (arr suite + Jellyfin)
-- v2.0 complete: Ready for future milestones
+- Phase 7 added: Operational Hardening (backup coverage + socket-proxy migration)
 
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Completed v2.0 milestone (all 11 plans)
+Stopped at: Added Phase 7 (Operational Hardening)
 Resume file: None
-Next action: Plan v2.1 or v3.0 when ready
+Next action: /gsd:plan-phase 7

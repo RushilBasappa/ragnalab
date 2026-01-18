@@ -3,7 +3,7 @@
 **Project:** RagnaLab
 **Created:** 2026-01-16
 **Current Milestone:** v2.0 Network Services
-**Phases:** 6 (6 complete, 0 pending)
+**Phases:** 7 (6 complete, 1 pending)
 
 ## Overview
 
@@ -159,6 +159,33 @@ Plans:
 
 ---
 
+### Phase 7: Operational Hardening
+
+**Goal:** Complete backup coverage for all services and eliminate direct Docker socket exposure by migrating to socket-proxy
+**Depends on:** Phase 6
+**Milestone:** v2.0
+**Plans:** 0 plans
+
+**Success Criteria:**
+1. All services with persistent data are included in automated backup system
+2. No containers mount /var/run/docker.sock directly (except socket-proxy)
+3. Uptime Kuma and Homepage use socket-proxy for Docker API access
+4. Backup restore procedure verified for newly added volumes
+5. Glances reconfigured without privileged mode where possible
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 7 to break down)
+
+**Scope:**
+- Audit all apps for backup requirements
+- Add missing volumes to backup system
+- Configure socket-proxy access for Uptime Kuma
+- Configure socket-proxy access for Homepage
+- Reduce Glances privileges
+- Verify backup/restore works for all services
+
+---
+
 ## Progress
 
 | Phase | Status | Completed |
@@ -169,7 +196,8 @@ Plans:
 | 4 - Applications & Templates | Complete | 2026-01-17 |
 | 5 - Pi-hole Network-Wide Ad Blocking | Complete | 2026-01-18 |
 | 6 - Media Automation Stack | Complete | 2026-01-18 |
+| 7 - Operational Hardening | Pending | — |
 
 ---
 
-*Roadmap for milestones: v1.0 (complete), v2.0 (complete)*
+*Roadmap for milestones: v1.0 (complete), v2.0 (in progress)*
