@@ -11,16 +11,16 @@ See: .planning/PROJECT.md
 
 Milestone: v2.0 Network Services
 Phase: 5 of 6 (Pi-hole Network-Wide Ad Blocking)
-Plan: 1 of 3 complete in phase
+Plan: 2 of 3 complete in phase
 Status: In progress
 
-Progress: [Phase 5] ██░░░░ 1/3 plans | [v2.0] █░░░░░░░░░░ 1/11 plans (9%)
+Progress: [Phase 5] ████░░ 2/3 plans | [v2.0] ██░░░░░░░░░ 2/11 plans (18%)
 
 ## v2.0 Scope
 
 **Phase 5: Pi-hole Network-Wide Ad Blocking** (IN PROGRESS)
 - [x] Pi-hole Docker deployment with Traefik integration (05-01)
-- [ ] DHCP server configuration (05-02)
+- [x] DHCP server configuration (05-02) - *DNS-only mode due to locked gateway*
 - [ ] Blocklist and monitoring setup (05-03)
 
 **Phase 6: Media Automation Stack** (PENDING)
@@ -47,8 +47,9 @@ Progress: [Phase 5] ██░░░░ 1/3 plans | [v2.0] █░░░░░░�
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Pi-hole as DHCP server | Xfinity gateway DNS settings locked; only way to provide DNS to all devices | Pending (05-02) |
-| Fallback DNS strategy | Network must work if Pi goes down; automatic failover required | Pending (05-02) |
+| DNS-only mode for Pi-hole | Xfinity XB8 gateway DHCP settings locked and cannot be disabled | Implemented (05-02) |
+| Manual device DNS config | Users set DNS to 10.0.0.200 on devices they want ad blocking for | Implemented (05-02) |
+| DHCP config preserved | Commented config kept for future if gateway replaced or bridge mode enabled | Documented (05-02) |
 | Macvlan networking for Pi-hole | Dedicated LAN IP (10.0.0.200) avoids port conflicts, enables DHCP | Implemented (05-01) |
 | Macvlan-shim at 10.0.0.201 | Linux kernel limitation requires shim for host-to-container communication | Implemented (05-01) |
 
@@ -70,6 +71,6 @@ Progress: [Phase 5] ██░░░░ 1/3 plans | [v2.0] █░░░░░░�
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Completed 05-01-PLAN.md (Pi-hole Docker deployment)
-Resume file: .planning/phases/05-pihole-network-adblocking/05-02-PLAN.md
-Next action: Execute plan 05-02 (DHCP configuration)
+Stopped at: Completed 05-02-PLAN.md (DHCP configuration - DNS-only mode)
+Resume file: .planning/phases/05-pihole-network-adblocking/05-03-PLAN.md
+Next action: Execute plan 05-03 (Blocklist and monitoring setup)
