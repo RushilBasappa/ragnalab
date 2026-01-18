@@ -1,55 +1,44 @@
-# RagnaLab Service Management
-# Usage: make up | make down | make ps | make logs | make backup | make restore SERVICE=name
+# RagnaLab Operations
+# Services managed via: docker compose --profile {infra|media|apps} up -d
 
-APPS := $(wildcard apps/*/docker-compose.yml)
+.PHONY: backup restore status
 
-.PHONY: up down restart ps logs networks backup restore status
-
-networks:
-	@docker network create proxy 2>/dev/null || true
-	@docker network create socket_proxy_network 2>/dev/null || true
-
-up: networks
-	@docker compose -f proxy/docker-compose.yml up -d
-	@for f in $(APPS); do docker compose -f $$f up -d; done
-	@echo "\nAll services started."
-
-down:
-	@for f in $(APPS); do docker compose -f $$f down; done
-	@docker compose -f proxy/docker-compose.yml down
-	@echo "\nAll services stopped."
-
-restart: down up
-
-ps:
-	@docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
-
-logs:
-	@docker compose -f proxy/docker-compose.yml logs -f
-
+# Trigger manual backup
 backup:
 	@echo "Triggering manual backup..."
 	@docker exec backup backup 2>&1 | grep -E "(INFO|ERROR)" || true
-	@echo "\nBackup complete. Archives:"
-	@ls -lh backups/*.tar.gz 2>/dev/null | tail -3
+	@echo "\nBackup complete. Recent archives:"
+	@ls -lht backups/*.tar.gz 2>/dev/null | head -3
 
+# Restore from backup
 restore:
 ifndef SERVICE
-	@echo "Usage: make restore SERVICE=<service-name>"
-	@echo "\nAvailable services:"
-	@ls -1 apps/ | grep -v backup
+	@echo "Usage: make restore SERVICE=<service-name> [BACKUP=<filename>]"
+	@echo "\nAvailable services to restore:"
+	@echo "  vaultwarden, uptime-kuma, prowlarr, sonarr, radarr, bazarr"
+	@echo "  jellyfin, jellyseerr, qbittorrent, gluetun, pihole, rustdesk, traefik"
 	@echo "\nAvailable backups:"
-	@ls -1 backups/*.tar.gz 2>/dev/null | xargs -n1 basename || echo "(none)"
+	@ls -1 backups/*.tar.gz 2>/dev/null | xargs -n1 basename | head -10 || echo "(none)"
 else
-	@./apps/backup/scripts/restore.sh $(SERVICE) $(BACKUP)
+	@./stack/infra/backup/scripts/restore.sh $(SERVICE) $(BACKUP)
 endif
 
+# Status overview
 status:
-	@echo "=== Containers ==="
-	@docker ps --format "table {{.Names}}\t{{.Status}}"
+ifdef SERVICE
+	@echo "=== $(SERVICE) Status ==="
+	@docker ps --filter "name=$(SERVICE)" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+	@echo ""
+	@docker logs --tail 20 $(SERVICE) 2>/dev/null || echo "(no logs)"
+else
+	@echo "=== Container Status ==="
+	@docker ps --format "table {{.Names}}\t{{.Status}}" | head -20
 	@echo ""
 	@echo "=== Recent Backups ==="
 	@ls -lht backups/*.tar.gz 2>/dev/null | head -3 || echo "(no backups)"
 	@echo ""
 	@echo "=== Disk Usage ==="
 	@df -h /home/rushil/workspace/ragnalab | tail -1 | awk '{print "Used: "$$3" / "$$2" ("$$5" full)"}'
+	@echo ""
+	@echo "Tip: make status SERVICE=<name> for detailed view"
+endif
