@@ -11,11 +11,11 @@ See: .planning/PROJECT.md
 
 Milestone: v2.0 Network Services - IN PROGRESS
 Phase: 7 of 8 (Operational Hardening) - IN PROGRESS
-Plan: 1 of TBD in phase
-Status: Completed 07-01-PLAN.md (stack directory structure)
-Last activity: 2026-01-18 - Completed 07-01-PLAN.md
+Plan: 2 of 8 in phase
+Status: Completed 07-02-PLAN.md (media stack migration)
+Last activity: 2026-01-18 - Completed 07-02-PLAN.md
 
-Progress: [Phase 7] ██░░░░░░ 1/TBD plans | [v2.0] ████████████ 12/12+ plans
+Progress: [Phase 7] ██░░░░░░ 2/8 plans | [v2.0] ████████████ 13/13+ plans
 
 ## v2.0 Scope
 
@@ -38,12 +38,13 @@ Progress: [Phase 7] ██░░░░░░ 1/TBD plans | [v2.0] ████�
 
 **Phase 7: Operational Hardening** (IN PROGRESS)
 - [x] Restructure to stack/ folder with nested includes (07-01)
-- [ ] Configure socket-proxy for Uptime Kuma and Homepage (07-02)
-- [ ] Audit all apps for backup requirements
-- [ ] Add missing volumes to backup system
-- [ ] Deploy Autokuma for automated monitoring
-- [ ] Delete existing manual monitors (clean slate)
-- [ ] Add kuma labels to all docker-compose files
+- [x] Migrate media stack to stack/media/ (07-02)
+- [ ] Migrate apps to stack/apps/ (07-03)
+- [ ] Archive old directories (07-04)
+- [ ] Socket-proxy migration for Uptime Kuma/Homepage (07-05)
+- [ ] Backup audit and volume coverage (07-06)
+- [ ] Autokuma automated monitoring (07-07)
+- [ ] Makefile operational targets (07-08)
 
 **Phase 8: Application Expansion** (NOT PLANNED)
 - [ ] Immich (photos)
@@ -113,6 +114,8 @@ Progress: [Phase 7] ██░░░░░░ 1/TBD plans | [v2.0] ████�
 | Nested includes pattern | stack/ → category → service composes for modular management | Implemented (07-01) |
 | Networks as external | Pre-existing networks (proxy, socket_proxy_network, media) marked external | Implemented (07-01) |
 | Extended socket-proxy permissions | IMAGES=1, INFO=1, EVENTS=1 for Homepage/Uptime Kuma | Implemented (07-01) |
+| External volume naming | Use project_volumename format to match existing Docker volumes | Implemented (07-02) |
+| Gluetun include order | Must be first in media includes (qbittorrent uses network_mode: container:gluetun) | Implemented (07-02) |
 
 ## Completed Milestones
 
@@ -148,12 +151,13 @@ Progress: [Phase 7] ██░░░░░░ 1/TBD plans | [v2.0] ████�
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Completed 07-01-PLAN.md
+Stopped at: Completed 07-02-PLAN.md
 Resume file: None
-Next action: Execute 07-02-PLAN.md (socket-proxy migration)
+Next action: Execute 07-03-PLAN.md (apps migration)
 
 **Architecture implemented (2026-01-18):**
 - `stack/` parent folder for all services
 - Nested includes: root → category → service composes
 - Each service has own folder with own docker-compose.yml
 - Infrastructure services operational from stack/infra/
+- Media services operational from stack/media/ (07-02)
