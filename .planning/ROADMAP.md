@@ -3,7 +3,7 @@
 **Project:** RagnaLab
 **Created:** 2026-01-16
 **Current Milestone:** v2.0 Network Services
-**Phases:** 7 (6 complete, 1 pending)
+**Phases:** 8 (6 complete, 2 pending)
 
 ## Overview
 
@@ -161,7 +161,7 @@ Plans:
 
 ### Phase 7: Operational Hardening
 
-**Goal:** Complete backup coverage for all services and eliminate direct Docker socket exposure by migrating to socket-proxy
+**Goal:** Complete backup coverage, eliminate direct Docker socket exposure, and automate monitoring with Autokuma
 **Depends on:** Phase 6
 **Milestone:** v2.0
 **Plans:** 0 plans
@@ -171,7 +171,8 @@ Plans:
 2. No containers mount /var/run/docker.sock directly (except socket-proxy)
 3. Uptime Kuma and Homepage use socket-proxy for Docker API access
 4. Backup restore procedure verified for newly added volumes
-5. Glances reconfigured without privileged mode where possible
+5. Autokuma deployed and all services have monitoring labels
+6. All existing services automatically monitored (HTTP + Docker container checks)
 
 Plans:
 - [ ] TBD (run /gsd:plan-phase 7 to break down)
@@ -179,10 +180,51 @@ Plans:
 **Scope:**
 - Audit all apps for backup requirements
 - Add missing volumes to backup system
+- Verify backup/restore works for all services
 - Configure socket-proxy access for Uptime Kuma
 - Configure socket-proxy access for Homepage
-- Reduce Glances privileges
-- Verify backup/restore works for all services
+- Deploy Autokuma container alongside Uptime Kuma
+- Delete existing manual monitors from Uptime Kuma (clean slate)
+- Add kuma labels to all existing docker-compose files
+- Monitors auto-created for: HTTP endpoints, Docker containers, TCP ports (RustDesk)
+
+---
+
+### Phase 8: Application Expansion
+
+**Goal:** Deploy 14 new applications to expand homelab capabilities across productivity, media, and personal management
+**Depends on:** Phase 7
+**Milestone:** v2.0
+**Plans:** 0 plans
+
+**Success Criteria:**
+1. All 14 apps accessible via HTTPS at ragnalab.xyz subdomains
+2. All apps with persistent data included in backup system
+3. All apps appear in Homepage dashboard with appropriate widgets
+4. Plex and Jellyfin both functional pointing to same media library
+5. Syncthing successfully syncing test folder between devices
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 8 to break down)
+
+**Apps to deploy (14):**
+
+| # | App | Purpose | Subdomain |
+|---|-----|---------|-----------|
+| 1 | Immich | Photo backup | photos.ragnalab.xyz |
+| 2 | Paperless-ngx | Document management | docs.ragnalab.xyz |
+| 3 | Tandoor Recipes | Recipe manager | recipes.ragnalab.xyz |
+| 4 | ntfy | Push notifications | ntfy.ragnalab.xyz |
+| 5 | Dozzle | Log viewer | logs.ragnalab.xyz |
+| 6 | IT-Tools | Developer utilities | tools.ragnalab.xyz |
+| 7 | Stirling-PDF | PDF tools | pdf.ragnalab.xyz |
+| 8 | Actual Budget | Budgeting | budget.ragnalab.xyz |
+| 9 | Recyclarr | Arr quality sync | (no UI - scheduled job) |
+| 10 | Kavita | Manga/comics reader | manga.ragnalab.xyz |
+| 11 | Plex | Media server | plex.ragnalab.xyz |
+| 12 | Linkding | Bookmark manager | links.ragnalab.xyz |
+| 13 | Memos | Quick notes | memos.ragnalab.xyz |
+| 14 | Syncthing | File sync | sync.ragnalab.xyz |
 
 ---
 
@@ -197,6 +239,7 @@ Plans:
 | 5 - Pi-hole Network-Wide Ad Blocking | Complete | 2026-01-18 |
 | 6 - Media Automation Stack | Complete | 2026-01-18 |
 | 7 - Operational Hardening | Pending | — |
+| 8 - Application Expansion | Pending | — |
 
 ---
 

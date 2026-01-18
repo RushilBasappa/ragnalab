@@ -10,7 +10,7 @@ See: .planning/PROJECT.md
 ## Current Position
 
 Milestone: v2.0 Network Services - IN PROGRESS
-Phase: 7 of 7 (Operational Hardening) - NOT PLANNED
+Phase: 7 of 8 (Operational Hardening) - NOT PLANNED
 Plan: 0 of 0 in phase
 Status: Phase added, awaiting planning
 
@@ -40,9 +40,27 @@ Progress: [Phase 7] ░░░░░░░░ 0/0 plans | [v2.0] █████�
 - [ ] Add missing volumes to backup system
 - [ ] Configure socket-proxy for Uptime Kuma
 - [ ] Configure socket-proxy for Homepage
-- [ ] Reduce Glances privileges
+- [ ] Deploy Autokuma for automated monitoring
+- [ ] Delete existing manual monitors (clean slate)
+- [ ] Add kuma labels to all docker-compose files
 
-**Plans:** 3 (Phase 5) + 8 (Phase 6) + TBD (Phase 7) = 11+ total
+**Phase 8: Application Expansion** (NOT PLANNED)
+- [ ] Immich (photos)
+- [ ] Paperless-ngx (documents)
+- [ ] Tandoor Recipes (recipes)
+- [ ] ntfy (notifications)
+- [ ] Dozzle (logs)
+- [ ] IT-Tools (dev utilities)
+- [ ] Stirling-PDF (PDF tools)
+- [ ] Actual Budget (budgeting)
+- [ ] Recyclarr (arr sync)
+- [ ] Kavita (manga/comics)
+- [ ] Plex (media server)
+- [ ] Linkding (bookmarks)
+- [ ] Memos (quick notes)
+- [ ] Syncthing (file sync)
+
+**Plans:** 3 (Phase 5) + 8 (Phase 6) + TBD (Phase 7) + TBD (Phase 8) = 11+ total
 
 ## Services Deployed
 
@@ -121,10 +139,11 @@ Progress: [Phase 7] ░░░░░░░░ 0/0 plans | [v2.0] █████�
 
 - Phase 6 added: Media Automation Stack (arr suite + Jellyfin)
 - Phase 7 added: Operational Hardening (backup coverage + socket-proxy migration)
+- Phase 8 added: Application Expansion (14 new apps)
 
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Added Phase 7 (Operational Hardening)
+Stopped at: Added Phase 8 (Application Expansion)
 Resume file: None
 Next action: /gsd:plan-phase 7
