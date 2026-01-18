@@ -3,7 +3,7 @@
 **Project:** RagnaLab
 **Created:** 2026-01-16
 **Current Milestone:** v2.0 Network Services
-**Phases:** 6 (4 complete, 2 pending)
+**Phases:** 6 (6 complete, 0 pending)
 
 ## Overview
 
@@ -139,14 +139,14 @@ Plans:
 5. All service data included in automated backup system
 
 Plans:
-- [ ] 06-01-PLAN.md — Media directory structure and Gluetun VPN setup
-- [ ] 06-02-PLAN.md — qBittorrent download client with VPN routing
-- [ ] 06-03-PLAN.md — Prowlarr indexer manager
-- [ ] 06-04-PLAN.md — Sonarr (TV) and Radarr (Movies) automation
-- [ ] 06-05-PLAN.md — Bazarr subtitles and Unpackerr extraction
-- [ ] 06-06-PLAN.md — Jellyfin media server (direct-play only)
-- [ ] 06-07-PLAN.md — Jellyseerr requests and backup integration
-- [ ] 06-08-PLAN.md — End-to-end verification and indexer configuration
+- [x] 06-01-PLAN.md — Media directory structure and Gluetun VPN setup
+- [x] 06-02-PLAN.md — qBittorrent download client with VPN routing
+- [x] 06-03-PLAN.md — Prowlarr indexer manager
+- [x] 06-04-PLAN.md — Sonarr (TV) and Radarr (Movies) automation
+- [x] 06-05-PLAN.md — Bazarr subtitles and Unpackerr extraction
+- [x] 06-06-PLAN.md — Jellyfin media server (direct-play only)
+- [x] 06-07-PLAN.md — Jellyseerr requests and backup integration
+- [x] 06-08-PLAN.md — End-to-end verification and indexer configuration
 
 **Services deployed:**
 - gluetun.ragnalab.xyz (VPN status - internal only)
@@ -168,8 +168,8 @@ Plans:
 | 3 - Operational Infrastructure | Complete | 2026-01-17 |
 | 4 - Applications & Templates | Complete | 2026-01-17 |
 | 5 - Pi-hole Network-Wide Ad Blocking | Complete | 2026-01-18 |
-| 6 - Media Automation Stack | Planned | — |
+| 6 - Media Automation Stack | Complete | 2026-01-18 |
 
 ---
 
-*Roadmap for milestones: v1.0 (complete), v2.0 (active)*
+*Roadmap for milestones: v1.0 (complete), v2.0 (complete)*
