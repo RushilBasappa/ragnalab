@@ -35,7 +35,7 @@ services:
       # Mount volumes to backup (read-only for safety)
       - vaultwarden-data:/backup/vaultwarden:ro
       # Pi-hole config (bind mount, not Docker volume)
-      - /home/rushil/workspace/ragnalab/stack/apps/pihole/etc-pihole:/backup/pihole:ro
+      - /home/rushil/workspace/ragnalab/stack/infra/pihole/etc-pihole:/backup/pihole:ro
       # Uptime Kuma (SQLite database - stop during backup)
       - uptime-kuma-data:/backup/uptime-kuma:ro
       # RustDesk server keys (safe for hot backup)

@@ -1,14 +1,12 @@
 # RagnaLab Applications
 # Profile: apps
-# Services: vaultwarden, pihole, rustdesk, glances
+# Services: vaultwarden, rustdesk
 #
 # Usage: docker compose --profile apps up -d
 
 include:
   - path: vaultwarden/docker-compose.yml
-  - path: pihole/docker-compose.yml
   - path: rustdesk/docker-compose.yml
-  - path: glances/docker-compose.yml
 
 # Networks defined in root docker-compose.yml
 # Service composes reference them as external: true

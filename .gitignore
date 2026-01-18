@@ -20,5 +20,5 @@ site/
 archive/
 
 # Pi-hole data directories (not version controlled)
-stack/apps/pihole/etc-pihole/
-stack/apps/pihole/etc-dnsmasq.d/
+stack/infra/pihole/etc-pihole/
+stack/infra/pihole/etc-dnsmasq.d/

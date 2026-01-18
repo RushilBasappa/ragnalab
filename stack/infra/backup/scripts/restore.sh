@@ -39,19 +39,19 @@ get_service_config() {
             # Special case: bind mount restore
             echo "BIND_MOUNT:${STACK_DIR}/infra/traefik/config/acme:traefik-acme"
             ;;
+        pihole)
+            # Special case: bind mount restore
+            echo "BIND_MOUNT:${STACK_DIR}/infra/pihole/etc-pihole:pihole"
+            ;;
+        glances)
+            echo "stack/infra/glances/docker-compose.yml:NONE:glances"
+            ;;
         # App services
         vaultwarden)
             echo "stack/apps/vaultwarden/docker-compose.yml:vaultwarden_vaultwarden-data:vaultwarden"
             ;;
-        pihole)
-            # Special case: bind mount restore
-            echo "BIND_MOUNT:${STACK_DIR}/apps/pihole/etc-pihole:pihole"
-            ;;
         rustdesk)
             echo "stack/apps/rustdesk/docker-compose.yml:rustdesk_rustdesk-data:rustdesk"
-            ;;
-        glances)
-            echo "stack/apps/glances/docker-compose.yml:NONE:glances"
             ;;
         # Media services
         prowlarr)
@@ -92,8 +92,8 @@ show_usage() {
     echo "  backup-filename Optional specific backup file (defaults to latest)"
     echo ""
     echo "Available services:"
-    echo "  Infrastructure: uptime-kuma, homepage, traefik-acme"
-    echo "  Apps:           vaultwarden, pihole, rustdesk"
+    echo "  Infrastructure: uptime-kuma, homepage, traefik-acme, pihole, glances"
+    echo "  Apps:           vaultwarden, rustdesk"
     echo "  Media:          prowlarr, sonarr, radarr, bazarr, jellyfin, jellyseerr, qbittorrent, gluetun"
     echo ""
     echo "Available backups:"

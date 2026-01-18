@@ -1,6 +1,6 @@
 # RagnaLab Infrastructure Services
 # Profile: infra
-# Services: traefik, socket-proxy, uptime-kuma, homepage, backup
+# Services: traefik, socket-proxy, uptime-kuma, homepage, backup, glances, pihole
 
 include:
   - path: traefik/docker-compose.yml
@@ -9,6 +9,8 @@ include:
   - path: homepage/docker-compose.yml
   - path: backup/docker-compose.yml
   - path: autokuma/docker-compose.yml
+  - path: glances/docker-compose.yml
+  - path: pihole/docker-compose.yml
 
 # Networks defined in root docker-compose.yml
 # Service composes reference them as external: true
