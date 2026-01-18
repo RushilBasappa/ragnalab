@@ -1,14 +1,24 @@
 # RagnaLab Operations
 # Services managed via: docker compose --profile {infra|media|apps} up -d
 
-.PHONY: init networks volumes volumes-delete backup restore status
+.PHONY: init networks volumes media-dirs volumes-delete backup restore status bootstrap
 
 # === Setup Targets ===
 
-# First-time setup: create networks and volumes
-init: networks volumes
+# First-time setup: create networks, volumes, and directories
+init: networks volumes media-dirs
 	@echo "RagnaLab initialized. Ready to deploy with:"
 	@echo "  docker compose --profile infra --profile media --profile apps up -d"
+
+# Create media directory structure
+media-dirs:
+	@echo "Creating media directories..."
+	@sudo mkdir -p /media/downloads/torrents/movies
+	@sudo mkdir -p /media/downloads/torrents/tv
+	@sudo mkdir -p /media/library/movies
+	@sudo mkdir -p /media/library/tv
+	@sudo chown -R 1000:1000 /media
+	@echo "Media directories ready."
 
 # Create required Docker networks
 networks:
@@ -34,24 +44,40 @@ volumes:
 	@docker volume create ragnalab_gluetun-data 2>/dev/null || echo "  ragnalab_gluetun-data (exists)"
 	@echo "Volumes ready."
 
-# Delete all external volumes (WARNING: destroys all data)
+# Bootstrap media stack (configure apps after fresh deploy)
+bootstrap:
+	@./stack/media/bootstrap.sh
+
+# Volume groups by profile
+VOLUMES_INFRA := ragnalab_uptime-kuma-data ragnalab_autokuma-data
+VOLUMES_MEDIA := ragnalab_prowlarr-config ragnalab_sonarr-config ragnalab_radarr-config ragnalab_bazarr-config ragnalab_jellyfin-config ragnalab_jellyseerr-config ragnalab_qbittorrent-config ragnalab_gluetun-data
+VOLUMES_APPS := ragnalab_vaultwarden-data ragnalab_rustdesk-data
+
+# Delete volumes (WARNING: destroys data)
+# Usage: make volumes-delete [profile=infra|media|apps]
 volumes-delete:
+ifeq ($(profile),media)
+	@echo "WARNING: This will delete media volumes!"
+	@echo "Press Ctrl+C to cancel, or wait 5 seconds..."
+	@sleep 5
+	@for vol in $(VOLUMES_MEDIA); do docker volume rm $$vol 2>/dev/null && echo "  $$vol (deleted)" || echo "  $$vol (not found)"; done
+else ifeq ($(profile),apps)
+	@echo "WARNING: This will delete apps volumes!"
+	@echo "Press Ctrl+C to cancel, or wait 5 seconds..."
+	@sleep 5
+	@for vol in $(VOLUMES_APPS); do docker volume rm $$vol 2>/dev/null && echo "  $$vol (deleted)" || echo "  $$vol (not found)"; done
+else ifeq ($(profile),infra)
+	@echo "WARNING: This will delete infra volumes!"
+	@echo "Press Ctrl+C to cancel, or wait 5 seconds..."
+	@sleep 5
+	@for vol in $(VOLUMES_INFRA); do docker volume rm $$vol 2>/dev/null && echo "  $$vol (deleted)" || echo "  $$vol (not found)"; done
+else
 	@echo "WARNING: This will delete ALL service data!"
 	@echo "Press Ctrl+C to cancel, or wait 5 seconds..."
 	@sleep 5
-	@echo "Deleting volumes..."
-	@docker volume rm ragnalab_uptime-kuma-data 2>/dev/null || echo "  ragnalab_uptime-kuma-data (not found)"
-	@docker volume rm ragnalab_vaultwarden-data 2>/dev/null || echo "  ragnalab_vaultwarden-data (not found)"
-	@docker volume rm ragnalab_rustdesk-data 2>/dev/null || echo "  ragnalab_rustdesk-data (not found)"
-	@docker volume rm ragnalab_prowlarr-config 2>/dev/null || echo "  ragnalab_prowlarr-config (not found)"
-	@docker volume rm ragnalab_sonarr-config 2>/dev/null || echo "  ragnalab_sonarr-config (not found)"
-	@docker volume rm ragnalab_radarr-config 2>/dev/null || echo "  ragnalab_radarr-config (not found)"
-	@docker volume rm ragnalab_bazarr-config 2>/dev/null || echo "  ragnalab_bazarr-config (not found)"
-	@docker volume rm ragnalab_jellyfin-config 2>/dev/null || echo "  ragnalab_jellyfin-config (not found)"
-	@docker volume rm ragnalab_jellyseerr-config 2>/dev/null || echo "  ragnalab_jellyseerr-config (not found)"
-	@docker volume rm ragnalab_qbittorrent-config 2>/dev/null || echo "  ragnalab_qbittorrent-config (not found)"
-	@docker volume rm ragnalab_gluetun-data 2>/dev/null || echo "  ragnalab_gluetun-data (not found)"
-	@echo "Volumes deleted."
+	@for vol in $(VOLUMES_INFRA) $(VOLUMES_MEDIA) $(VOLUMES_APPS); do docker volume rm $$vol 2>/dev/null && echo "  $$vol (deleted)" || echo "  $$vol (not found)"; done
+endif
+	@echo "Done."
 
 # === Operations Targets ===
 
