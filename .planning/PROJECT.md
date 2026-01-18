@@ -8,20 +8,21 @@ A private, VPN-only homelab platform running on Raspberry Pi 5 that hosts multip
 
 Secure, private-only access to self-hosted applications with professional-grade HTTPS, automatic service discovery, and dead-simple process for adding new apps.
 
-## Current Milestone: v2.0 Network Services
+## Current Milestone: v3.0 SSO & Access Control
 
-**Goal:** Network-wide DNS-based ad blocking with high availability fallback, extending the homelab to provide infrastructure services for the entire home network.
+**Goal:** Unified single sign-on with passkey support and per-user access control, enabling family and guests to access specific apps without managing individual app credentials.
 
 **Target features:**
-- Pi-hole DNS sinkhole for network-wide ad blocking
-- Pi-hole as DHCP server (Xfinity gateway DNS settings locked)
-- Automatic fallback so internet works if Pi goes down
-- Uptime monitoring and quick recovery documentation
-- Homepage integration with blocked queries widget
+- Authelia SSO with Traefik forward auth integration
+- Passkey/fingerprint authentication (WebAuthn)
+- Username/password fallback authentication
+- Per-user and per-group access control rules
+- Four access levels: Admin, Power Users, Family, Guests
+- Apps configured to trust external auth (disable built-in login)
 
 ## Requirements
 
-### Validated (v1.0)
+### Validated (v1.0 + v2.0)
 
 - [x] Traefik reverse proxy infrastructure with Let's Encrypt DNS-01 via Cloudflare
 - [x] Wildcard DNS (`*.ragnalab.xyz`) pointing to Tailscale IP with automatic subdomain routing
@@ -33,23 +34,34 @@ Secure, private-only access to self-hosted applications with professional-grade 
 - [x] Template and documentation for adding new apps with single compose file
 - [x] Backup strategy for app data and configuration
 - [x] ARM64-compatible Docker images for all services
+- [x] Pi-hole DNS-based ad blocking at pihole.ragnalab.xyz
+- [x] Complete media automation stack (Gluetun, qBittorrent, Prowlarr, Sonarr, Radarr, Bazarr, Unpackerr)
+- [x] Jellyfin media server at jellyfin.ragnalab.xyz
+- [x] Jellyseerr request portal at requests.ragnalab.xyz
 
-### Active (v2.0)
+### Active (v3.0)
 
-- [ ] Pi-hole deployed as Docker container with Traefik routing at pihole.ragnalab.xyz
-- [ ] Pi-hole configured as DHCP server for entire home network
-- [ ] Automatic DNS fallback when Pi is unavailable
-- [ ] Pi-hole config included in automated backup system
-- [ ] Uptime Kuma monitoring for Pi-hole service
-- [ ] Homepage widget showing Pi-hole statistics
+- [ ] Authelia deployed with Traefik forward auth middleware
+- [ ] Passkey/WebAuthn authentication enabled
+- [ ] Username/password authentication as fallback
+- [ ] Access control rules for four user groups (admin, powerusers, family, guests)
+- [ ] Admin group: full access to all services
+- [ ] Power users group: access to Sonarr, Radarr, Prowlarr, qBittorrent
+- [ ] Family group: access to Jellyfin, Jellyseerr
+- [ ] Guests group: access to Jellyfin only
+- [ ] Arr apps configured with "External" authentication (trust Authelia)
+- [ ] Jellyfin configured to trust proxy authentication
+- [ ] Authelia config included in automated backup system
+- [ ] User management documentation for adding/removing users
 
 ### Out of Scope
 
 - Public internet exposure — explicitly designed to be unreachable without Tailscale
 - Individual DNS records per app — using wildcard DNS for simplicity
-- Complex authentication layer beyond app-level auth — Tailscale provides network-level security
 - High availability / clustering — single Pi deployment
 - Port forwarding or dynamic DNS — Tailscale handles networking
+- LDAP/Active Directory integration — overkill for home use
+- OAuth providers (Google, GitHub login) — users are known, not public
 
 ## Context
 
@@ -68,17 +80,22 @@ Secure, private-only access to self-hosted applications with professional-grade 
 - DNS managed in Cloudflare
 - Cloudflare API access available for Let's Encrypt DNS-01 challenges
 
-**Deployed Services (v1.0):**
+**Deployed Services (v2.0):**
 - Traefik reverse proxy at traefik.ragnalab.xyz
 - Uptime Kuma monitoring at status.ragnalab.xyz
 - Homepage dashboard at home.ragnalab.xyz
 - Vaultwarden password manager at vault.ragnalab.xyz
+- Pi-hole DNS at pihole.ragnalab.xyz
+- Glances system monitoring at glances.ragnalab.xyz
+- Documentation at docs.ragnalab.xyz
+- Media stack: Prowlarr, Sonarr, Radarr, Bazarr, Jellyfin, Jellyseerr
+- VPN-only: qBittorrent (via Gluetun), Unpackerr
 
-**Home Network (v2.0 context):**
-- Xfinity internet with Xfinity gateway
-- Gateway DNS settings locked (cannot change DNS handed out via DHCP)
-- Pi-hole will need to run as DHCP server to provide DNS to all devices
-- Fallback strategy required for network resilience
+**Users (v3.0 context):**
+- Admin (owner): Full access to everything
+- Power users: Media management (arr apps)
+- Family: Media consumption (Jellyfin + requests)
+- Guests: View-only media access (Jellyfin only)
 
 **User Experience Level:**
 - Expert with Docker and Traefik
@@ -91,6 +108,7 @@ Secure, private-only access to self-hosted applications with professional-grade 
 - **Network**: Tailscale VPN only, no public exposure — all access must route through Tailnet
 - **DNS**: Cloudflare-managed ragnalab.xyz — requires API token for Let's Encrypt DNS-01
 - **Architecture**: ARM64 only — all Docker images must support aarch64/arm64
+- **Auth complexity**: Must remain simple — no LDAP, no external OAuth providers
 
 ## Key Decisions
 
@@ -104,6 +122,8 @@ Secure, private-only access to self-hosted applications with professional-grade 
 | Docker label-based service discovery | Zero manual routing config, apps self-register with Traefik | ✓ Validated v1.0 |
 | Host-level Tailscale (not container) | Simpler, more robust; Tailscale is infrastructure like OS | ✓ Validated v1.0 |
 | Dual access (local + VPN) | User prefers local network access; VPN for remote only | ✓ Validated v1.0 |
+| Authelia over Authentik | Lightweight (~30MB), config-file based, better for Pi resources | — Pending v3.0 |
+| Passkeys + password fallback | Modern auth with backup option for compatibility | — Pending v3.0 |
 
 ---
-*Last updated: 2026-01-17 after v2.0 milestone initialization*
+*Last updated: 2026-01-18 after v3.0 milestone initialization*
