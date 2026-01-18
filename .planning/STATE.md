@@ -11,10 +11,10 @@ See: .planning/PROJECT.md
 
 Milestone: v2.0 Network Services
 Phase: 6 of 6 (Media Automation Stack) - IN PROGRESS
-Plan: 2 of 8 complete in phase
-Status: Plan 06-02 complete, ready for 06-03
+Plan: 3 of 8 complete in phase
+Status: Plan 06-03 complete, ready for 06-04
 
-Progress: [Phase 6] ██░░░░░░ 2/8 plans | [v2.0] █████░░░░░░ 5/11 plans (45%)
+Progress: [Phase 6] ███░░░░░ 3/8 plans | [v2.0] █████░░░░░░ 6/11 plans (55%)
 
 ## v2.0 Scope
 
@@ -26,7 +26,7 @@ Progress: [Phase 6] ██░░░░░░ 2/8 plans | [v2.0] █████�
 **Phase 6: Media Automation Stack** (IN PROGRESS)
 - [x] Directory structure + Gluetun VPN (06-01)
 - [x] qBittorrent torrent client (06-02)
-- [ ] Prowlarr indexer manager (06-03)
+- [x] Prowlarr indexer manager (06-03)
 - [ ] Sonarr + Radarr media automation (06-04)
 - [ ] Bazarr subtitles + Unpackerr extraction (06-05)
 - [ ] Jellyfin media server (06-06)
@@ -48,6 +48,7 @@ Progress: [Phase 6] ██░░░░░░ 2/8 plans | [v2.0] █████�
 | **Pi-hole** | **pihole.ragnalab.xyz** | **v2.0 (NEW)** |
 | **Gluetun** | (VPN tunnel, no UI) | **v2.0 (NEW)** |
 | **qBittorrent** | localhost:8080 (via VPN) | **v2.0 (NEW)** |
+| **Prowlarr** | **prowlarr.ragnalab.xyz** | **v2.0 (NEW)** |
 
 ## Key Decisions (v2.0)
 
@@ -62,6 +63,8 @@ Progress: [Phase 6] ██░░░░░░ 2/8 plans | [v2.0] █████�
 | WireGuard over OpenVPN | Better performance on Raspberry Pi, lower resource usage | Implemented (06-01) |
 | Credentials in .env file | apps/media/.env excluded from git, .env.example provides template | Implemented (06-01) |
 | network_mode over depends_on | Cross-compose depends_on doesn't work; network_mode: container:gluetun enforces dependency | Implemented (06-02) |
+| Forms auth via API | Prowlarr auth configured programmatically during deployment | Implemented (06-03) |
+| Media group in Homepage | Added layout group for arr services auto-discovery | Implemented (06-03) |
 
 ## Previous Milestone
 
@@ -81,6 +84,6 @@ Progress: [Phase 6] ██░░░░░░ 2/8 plans | [v2.0] █████�
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Completed 06-02-PLAN.md (qBittorrent download client)
-Resume file: .planning/phases/06-media-automation-stack/06-03-PLAN.md
-Next action: Execute 06-03 (Prowlarr indexer manager)
+Stopped at: Completed 06-03-PLAN.md (Prowlarr indexer manager)
+Resume file: .planning/phases/06-media-automation-stack/06-04-PLAN.md
+Next action: Execute 06-04 (Sonarr + Radarr media automation)
