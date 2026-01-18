@@ -39,6 +39,14 @@ services:
       - "homepage.server=my-docker"
       # Backup - stop container during backup for consistent state
       - "docker-volume-backup.stop-during-backup=jellyfin"
+      # Autokuma monitoring - HTTP and container
+      - "kuma.jellyfin.http.name=Jellyfin"
+      - "kuma.jellyfin.http.url=https://jellyfin.ragnalab.xyz"
+      - "kuma.jellyfin.http.parent_name=Media"
+      - "kuma.jellyfin-container.docker.name=Jellyfin Container"
+      - "kuma.jellyfin-container.docker.docker_container=jellyfin"
+      - "kuma.jellyfin-container.docker.docker_host=my-docker"
+      - "kuma.jellyfin-container.docker.parent_name=Containers"
     deploy:
       resources:
         limits:

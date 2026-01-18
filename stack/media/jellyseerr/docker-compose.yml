@@ -37,6 +37,14 @@ services:
       - homepage.server=my-docker
       # Backup coordination
       - docker-volume-backup.stop-during-backup=jellyseerr
+      # Autokuma monitoring - HTTP and container
+      - kuma.jellyseerr.http.name=Jellyseerr
+      - kuma.jellyseerr.http.url=https://requests.ragnalab.xyz
+      - kuma.jellyseerr.http.parent_name=Media
+      - kuma.jellyseerr-container.docker.name=Jellyseerr Container
+      - kuma.jellyseerr-container.docker.docker_container=jellyseerr
+      - kuma.jellyseerr-container.docker.docker_host=my-docker
+      - kuma.jellyseerr-container.docker.parent_name=Containers
     deploy:
       resources:
         limits:

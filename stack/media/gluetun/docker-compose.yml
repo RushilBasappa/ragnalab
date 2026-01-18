@@ -43,6 +43,12 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+    labels:
+      # Autokuma monitoring - container only (no HTTP endpoint)
+      - "kuma.gluetun.docker.name=Gluetun VPN"
+      - "kuma.gluetun.docker.docker_container=gluetun"
+      - "kuma.gluetun.docker.docker_host=my-docker"
+      - "kuma.gluetun.docker.parent_name=Containers"
 
 volumes:
   gluetun_gluetun-data:

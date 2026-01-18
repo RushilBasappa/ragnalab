@@ -37,6 +37,14 @@ services:
       - "homepage.server=my-docker"
       # Backup - stop container during backup for consistent state
       - "docker-volume-backup.stop-during-backup=prowlarr"
+      # Autokuma monitoring - HTTP and container
+      - "kuma.prowlarr.http.name=Prowlarr"
+      - "kuma.prowlarr.http.url=https://prowlarr.ragnalab.xyz"
+      - "kuma.prowlarr.http.parent_name=Media"
+      - "kuma.prowlarr-container.docker.name=Prowlarr Container"
+      - "kuma.prowlarr-container.docker.docker_container=prowlarr"
+      - "kuma.prowlarr-container.docker.docker_host=my-docker"
+      - "kuma.prowlarr-container.docker.parent_name=Containers"
     deploy:
       resources:
         limits:

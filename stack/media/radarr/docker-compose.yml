@@ -39,6 +39,14 @@ services:
       - "homepage.server=my-docker"
       # Backup - stop during backup for SQLite consistency
       - "docker-volume-backup.stop-during-backup=radarr"
+      # Autokuma monitoring - HTTP and container
+      - "kuma.radarr.http.name=Radarr"
+      - "kuma.radarr.http.url=https://radarr.ragnalab.xyz"
+      - "kuma.radarr.http.parent_name=Media"
+      - "kuma.radarr-container.docker.name=Radarr Container"
+      - "kuma.radarr-container.docker.docker_container=radarr"
+      - "kuma.radarr-container.docker.docker_host=my-docker"
+      - "kuma.radarr-container.docker.parent_name=Containers"
     deploy:
       resources:
         limits:

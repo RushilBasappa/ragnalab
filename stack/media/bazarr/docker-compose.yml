@@ -39,6 +39,14 @@ services:
       - "homepage.server=my-docker"
       # Backup - stop during backup for SQLite consistency
       - "docker-volume-backup.stop-during-backup=bazarr"
+      # Autokuma monitoring - HTTP and container
+      - "kuma.bazarr.http.name=Bazarr"
+      - "kuma.bazarr.http.url=https://bazarr.ragnalab.xyz"
+      - "kuma.bazarr.http.parent_name=Media"
+      - "kuma.bazarr-container.docker.name=Bazarr Container"
+      - "kuma.bazarr-container.docker.docker_container=bazarr"
+      - "kuma.bazarr-container.docker.docker_host=my-docker"
+      - "kuma.bazarr-container.docker.parent_name=Containers"
     deploy:
       resources:
         limits:

@@ -33,6 +33,12 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+    labels:
+      # Autokuma monitoring - container only (headless, no UI)
+      - "kuma.unpackerr.docker.name=Unpackerr"
+      - "kuma.unpackerr.docker.docker_container=unpackerr"
+      - "kuma.unpackerr.docker.docker_host=my-docker"
+      - "kuma.unpackerr.docker.parent_name=Containers"
 
 networks:
   media:

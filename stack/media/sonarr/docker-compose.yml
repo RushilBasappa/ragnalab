@@ -39,6 +39,14 @@ services:
       - "homepage.server=my-docker"
       # Backup - stop during backup for SQLite consistency
       - "docker-volume-backup.stop-during-backup=sonarr"
+      # Autokuma monitoring - HTTP and container
+      - "kuma.sonarr.http.name=Sonarr"
+      - "kuma.sonarr.http.url=https://sonarr.ragnalab.xyz"
+      - "kuma.sonarr.http.parent_name=Media"
+      - "kuma.sonarr-container.docker.name=Sonarr Container"
+      - "kuma.sonarr-container.docker.docker_container=sonarr"
+      - "kuma.sonarr-container.docker.docker_host=my-docker"
+      - "kuma.sonarr-container.docker.parent_name=Containers"
     deploy:
       resources:
         limits:
