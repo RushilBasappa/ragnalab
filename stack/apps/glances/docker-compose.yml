@@ -32,7 +32,7 @@ services:
       - "homepage.icon=glances.png"
       - "homepage.href=https://glances.ragnalab.xyz"
       - "homepage.description=System Monitor"
-      - "homepage.server=my-docker"
+      - "homepage.server=ragnalab-docker"
       # Autokuma monitoring - HTTP only
       - "kuma.glances.http.name=Glances"
       - "kuma.glances.http.url=https://glances.ragnalab.xyz"

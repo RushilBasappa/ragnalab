@@ -37,7 +37,7 @@ services:
       # Autokuma monitoring - container only (headless, no UI)
       - "kuma.unpackerr-container.docker.name=Unpackerr"
       - "kuma.unpackerr-container.docker.docker_container=unpackerr"
-      - "kuma.unpackerr-container.docker.docker_host_name=my-docker"
+      - "kuma.unpackerr-container.docker.docker_host_name=ragnalab-docker"
       - "kuma.unpackerr-container.docker.parent_name=media-group"
 
 networks:

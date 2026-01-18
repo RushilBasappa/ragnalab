@@ -33,7 +33,7 @@ services:
       - "homepage.widget.type=uptimekuma"
       - "homepage.widget.url=http://uptime-kuma:3001"
       - "homepage.widget.slug=status-page"
-      - "homepage.server=my-docker"
+      - "homepage.server=ragnalab-docker"
       # --- Backup labels ---
       - "docker-volume-backup.stop-during-backup=uptime-kuma"
     deploy:

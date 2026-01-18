@@ -27,7 +27,7 @@ services:
       # --- Autokuma monitoring labels (container only - no HTTP endpoint) ---
       - "kuma.backup-container.docker.name=Backup Container"
       - "kuma.backup-container.docker.docker_container=backup"
-      - "kuma.backup-container.docker.docker_host_name=my-docker"
+      - "kuma.backup-container.docker.docker_host_name=ragnalab-docker"
       - "kuma.backup-container.docker.parent_name=infra-group"
     volumes:
       # Docker socket for container stop/start during backup
@@ -71,31 +71,31 @@ services:
 volumes:
   vaultwarden-data:
     external: true
-    name: vaultwarden_vaultwarden-data
+    name: ragnalab_vaultwarden-data
   rustdesk-data:
     external: true
-    name: rustdesk_rustdesk-data
+    name: ragnalab_rustdesk-data
   prowlarr-config:
     external: true
-    name: prowlarr_prowlarr-config
+    name: ragnalab_prowlarr-config
   sonarr-config:
     external: true
-    name: sonarr_sonarr-config
+    name: ragnalab_sonarr-config
   radarr-config:
     external: true
-    name: radarr_radarr-config
+    name: ragnalab_radarr-config
   bazarr-config:
     external: true
-    name: bazarr_bazarr-config
+    name: ragnalab_bazarr-config
   jellyfin-config:
     external: true
-    name: jellyfin_jellyfin-config
+    name: ragnalab_jellyfin-config
   jellyseerr-config:
     external: true
-    name: jellyseerr_jellyseerr-config
+    name: ragnalab_jellyseerr-config
   qbittorrent-config:
     external: true
-    name: qbittorrent_qbittorrent-config
+    name: ragnalab_qbittorrent-config
   gluetun-data:
     external: true
-    name: gluetun_gluetun-data
+    name: ragnalab_gluetun-data

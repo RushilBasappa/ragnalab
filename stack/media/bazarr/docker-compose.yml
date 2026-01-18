@@ -13,7 +13,7 @@ services:
       PGID: 1000
       TZ: America/Los_Angeles
     volumes:
-      - bazarr_bazarr-config:/config
+      - bazarr-config:/config
       - /media:/media  # Access to library folders for subtitle placement
     networks:
       - proxy
@@ -36,7 +36,7 @@ services:
       - "homepage.widget.type=bazarr"
       - "homepage.widget.url=http://bazarr:6767"
       - "homepage.widget.key=${BAZARR_API_KEY}"
-      - "homepage.server=my-docker"
+      - "homepage.server=ragnalab-docker"
       # Backup - stop during backup for SQLite consistency
       - "docker-volume-backup.stop-during-backup=bazarr"
       # Autokuma monitoring - HTTP only
@@ -57,8 +57,9 @@ services:
         max-file: "3"
 
 volumes:
-  bazarr_bazarr-config:
+  bazarr-config:
     external: true
+    name: ragnalab_bazarr-config
 
 networks:
   proxy:

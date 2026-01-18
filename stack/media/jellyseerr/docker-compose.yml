@@ -13,7 +13,7 @@ services:
       - TZ=America/Los_Angeles
       - LOG_LEVEL=info
     volumes:
-      - jellyseerr_jellyseerr-config:/app/config
+      - jellyseerr-config:/app/config
     networks:
       - proxy
     labels:
@@ -34,7 +34,7 @@ services:
       - homepage.widget.type=jellyseerr
       - homepage.widget.url=http://jellyseerr:5055
       - homepage.widget.key=${JELLYSEERR_API_KEY}
-      - homepage.server=my-docker
+      - homepage.server=ragnalab-docker
       # Backup coordination
       - docker-volume-backup.stop-during-backup=jellyseerr
       # Autokuma monitoring - HTTP only
@@ -55,8 +55,9 @@ services:
         max-file: "3"
 
 volumes:
-  jellyseerr_jellyseerr-config:
+  jellyseerr-config:
     external: true
+    name: ragnalab_jellyseerr-config
 
 networks:
   proxy:

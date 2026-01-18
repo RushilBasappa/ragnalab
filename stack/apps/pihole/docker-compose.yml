@@ -50,7 +50,7 @@ services:
       - "homepage.widget.url=http://pihole:80"
       - "homepage.widget.version=6"
       - "homepage.widget.key=${PIHOLE_API_KEY}"
-      - "homepage.server=my-docker"
+      - "homepage.server=ragnalab-docker"
       # Autokuma monitoring - HTTP only
       - "kuma.pihole.http.name=Pi-hole"
       - "kuma.pihole.http.url=https://pihole.ragnalab.xyz/admin/"

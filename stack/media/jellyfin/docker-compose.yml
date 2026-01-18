@@ -14,7 +14,7 @@ services:
       - TZ=America/Los_Angeles
       - JELLYFIN_PublishedServerUrl=https://jellyfin.ragnalab.xyz
     volumes:
-      - jellyfin_jellyfin-config:/config
+      - jellyfin-config:/config
       - /media/library:/data/media:ro
     networks:
       - proxy
@@ -36,7 +36,7 @@ services:
       - "homepage.widget.type=jellyfin"
       - "homepage.widget.url=http://jellyfin:8096"
       - "homepage.widget.key=${JELLYFIN_API_KEY}"
-      - "homepage.server=my-docker"
+      - "homepage.server=ragnalab-docker"
       # Backup - stop container during backup for consistent state
       - "docker-volume-backup.stop-during-backup=jellyfin"
       # Autokuma monitoring - HTTP only
@@ -57,8 +57,9 @@ services:
         max-file: "3"
 
 volumes:
-  jellyfin_jellyfin-config:
+  jellyfin-config:
     external: true
+    name: ragnalab_jellyfin-config
 
 networks:
   proxy:

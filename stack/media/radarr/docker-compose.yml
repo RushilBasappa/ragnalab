@@ -13,7 +13,7 @@ services:
       PGID: 1000
       TZ: America/Los_Angeles
     volumes:
-      - radarr_radarr-config:/config
+      - radarr-config:/config
       - /media:/media  # CRITICAL: Same path for hardlinks to work
     networks:
       - proxy
@@ -36,7 +36,7 @@ services:
       - "homepage.widget.type=radarr"
       - "homepage.widget.url=http://radarr:7878"
       - "homepage.widget.key=${RADARR_API_KEY}"
-      - "homepage.server=my-docker"
+      - "homepage.server=ragnalab-docker"
       # Backup - stop during backup for SQLite consistency
       - "docker-volume-backup.stop-during-backup=radarr"
       # Autokuma monitoring - HTTP only
@@ -57,8 +57,9 @@ services:
         max-file: "3"
 
 volumes:
-  radarr_radarr-config:
+  radarr-config:
     external: true
+    name: ragnalab_radarr-config
 
 networks:
   proxy:

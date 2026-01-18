@@ -3,6 +3,6 @@
 
 # Main Docker host - used for container discovery via labels
 # Uses TCP connection to socket-proxy for security (no direct socket mount)
-my-docker:
+ragnalab-docker:
   host: socket-proxy
   port: 2375

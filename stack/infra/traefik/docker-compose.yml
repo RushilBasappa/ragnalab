@@ -48,11 +48,10 @@ services:
       # --- Autokuma monitoring labels ---
       # Define parent groups (only needed once, placed here)
       - "kuma.infra-group.group.name=Infrastructure"
-      - "kuma.containers-group.group.name=Containers"
       # Define Docker Host for container monitoring (socket-proxy)
-      - "kuma.my-docker.docker_host.name=Docker Socket Proxy"
-      - "kuma.my-docker.docker_host.docker_type=tcp"
-      - "kuma.my-docker.docker_host.docker_daemon=tcp://socket-proxy:2375"
+      - "kuma.ragnalab-docker.docker_host.name=Ragnalab Docker"
+      - "kuma.ragnalab-docker.docker_host.connection_type=tcp"
+      - "kuma.ragnalab-docker.docker_host.host=tcp://socket-proxy:2375"
       # Traefik HTTP monitor
       - "kuma.traefik.http.name=Traefik"
       - "kuma.traefik.http.url=https://traefik.ragnalab.xyz"
@@ -65,7 +64,7 @@ services:
       - "homepage.description=Reverse Proxy"
       - "homepage.widget.type=traefik"
       - "homepage.widget.url=http://traefik:8080"
-      - "homepage.server=my-docker"
+      - "homepage.server=ragnalab-docker"
     logging:
       driver: json-file
       options:

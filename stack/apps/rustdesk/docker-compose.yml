@@ -20,7 +20,7 @@ services:
       - "homepage.name=RustDesk"
       - "homepage.icon=rustdesk.png"
       - "homepage.description=Remote Desktop (100.75.173.7)"
-      - "homepage.server=my-docker"
+      - "homepage.server=ragnalab-docker"
       # Autokuma monitoring - TCP and container for ID server
       - "kuma.rustdesk-hbbs.port.name=RustDesk ID Server"
       - "kuma.rustdesk-hbbs.port.hostname=100.75.173.7"
@@ -28,7 +28,7 @@ services:
       - "kuma.rustdesk-hbbs.port.parent_name=apps-group"
       - "kuma.rustdesk-hbbs-container.docker.name=RustDesk HBBS Container"
       - "kuma.rustdesk-hbbs-container.docker.docker_container=rustdesk-hbbs"
-      - "kuma.rustdesk-hbbs-container.docker.docker_host_name=my-docker"
+      - "kuma.rustdesk-hbbs-container.docker.docker_host_name=ragnalab-docker"
       - "kuma.rustdesk-hbbs-container.docker.parent_name=apps-group"
 
   hbbr:
@@ -48,10 +48,10 @@ services:
       - "kuma.rustdesk-hbbr.port.parent_name=apps-group"
       - "kuma.rustdesk-hbbr-container.docker.name=RustDesk HBBR Container"
       - "kuma.rustdesk-hbbr-container.docker.docker_container=rustdesk-hbbr"
-      - "kuma.rustdesk-hbbr-container.docker.docker_host_name=my-docker"
+      - "kuma.rustdesk-hbbr-container.docker.docker_host_name=ragnalab-docker"
       - "kuma.rustdesk-hbbr-container.docker.parent_name=apps-group"
 
 volumes:
   rustdesk-data:
     external: true
-    name: rustdesk_rustdesk-data
+    name: ragnalab_rustdesk-data

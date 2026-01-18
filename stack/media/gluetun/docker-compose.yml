@@ -27,7 +27,7 @@ services:
       # qBittorrent WebUI (exposed through gluetun for VPN routing)
       - "8080:8080"
     volumes:
-      - gluetun_gluetun-data:/gluetun
+      - gluetun-data:/gluetun
     networks:
       - media
     # Note: Gluetun has built-in healthcheck at http://127.0.0.1:9999/
@@ -47,12 +47,13 @@ services:
       # Autokuma monitoring - container only (no HTTP endpoint)
       - "kuma.gluetun-container.docker.name=Gluetun VPN"
       - "kuma.gluetun-container.docker.docker_container=gluetun"
-      - "kuma.gluetun-container.docker.docker_host_name=my-docker"
+      - "kuma.gluetun-container.docker.docker_host_name=ragnalab-docker"
       - "kuma.gluetun-container.docker.parent_name=media-group"
 
 volumes:
-  gluetun_gluetun-data:
+  gluetun-data:
     external: true
+    name: ragnalab_gluetun-data
 
 networks:
   media:

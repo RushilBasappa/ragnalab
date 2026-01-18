@@ -13,7 +13,7 @@ services:
       PGID: 1000
       TZ: America/Los_Angeles
     volumes:
-      - sonarr_sonarr-config:/config
+      - sonarr-config:/config
       - /media:/media  # CRITICAL: Same path for hardlinks to work
     networks:
       - proxy
@@ -36,7 +36,7 @@ services:
       - "homepage.widget.type=sonarr"
       - "homepage.widget.url=http://sonarr:8989"
       - "homepage.widget.key=${SONARR_API_KEY}"
-      - "homepage.server=my-docker"
+      - "homepage.server=ragnalab-docker"
       # Backup - stop during backup for SQLite consistency
       - "docker-volume-backup.stop-during-backup=sonarr"
       # Autokuma monitoring - HTTP only
@@ -57,8 +57,9 @@ services:
         max-file: "3"
 
 volumes:
-  sonarr_sonarr-config:
+  sonarr-config:
     external: true
+    name: ragnalab_sonarr-config
 
 networks:
   proxy:

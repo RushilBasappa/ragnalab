@@ -18,7 +18,7 @@ services:
       - TZ=America/Los_Angeles
       - WEBUI_PORT=8080
     volumes:
-      - qbittorrent_qbittorrent-config:/config
+      - qbittorrent-config:/config
       # Media paths - MUST match all arr apps for hardlinks to work
       - /media:/media
     deploy:
@@ -38,12 +38,13 @@ services:
       # Autokuma monitoring - container only (no HTTP endpoint via Traefik)
       - "kuma.qbittorrent-container.docker.name=qBittorrent"
       - "kuma.qbittorrent-container.docker.docker_container=qbittorrent"
-      - "kuma.qbittorrent-container.docker.docker_host_name=my-docker"
+      - "kuma.qbittorrent-container.docker.docker_host_name=ragnalab-docker"
       - "kuma.qbittorrent-container.docker.parent_name=media-group"
 
 volumes:
-  qbittorrent_qbittorrent-config:
+  qbittorrent-config:
     external: true
+    name: ragnalab_qbittorrent-config
 
 # Note: No ports section - ports are exposed on gluetun container
 # Note: No networks section - uses gluetun's network stack
