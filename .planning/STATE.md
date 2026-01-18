@@ -11,11 +11,11 @@ See: .planning/PROJECT.md
 
 Milestone: v2.0 Network Services - IN PROGRESS
 Phase: 7 of 8 (Operational Hardening) - IN PROGRESS
-Plan: 5 of 8 in phase
-Status: Completed 07-05-PLAN.md (backup audit and volume coverage)
-Last activity: 2026-01-18 - Completed 07-05-PLAN.md
+Plan: 7 of 8 in phase
+Status: Completed 07-07-PLAN.md (kuma labels for media and app services)
+Last activity: 2026-01-18 - Completed 07-07-PLAN.md
 
-Progress: [Phase 7] █████░░░ 5/8 plans | [v2.0] ████████████ 14/14+ plans
+Progress: [Phase 7] ███████░ 7/8 plans | [v2.0] ████████████ 14/14+ plans
 
 ## v2.0 Scope
 
@@ -42,7 +42,9 @@ Progress: [Phase 7] █████░░░ 5/8 plans | [v2.0] █████�
 - [x] Migrate apps to stack/apps/ + simplify Makefile (07-03)
 - [x] Socket-proxy migration for Uptime Kuma/Homepage (07-04)
 - [x] Backup audit and volume coverage (07-05)
-- [ ] Autokuma automated monitoring (07-07)
+- [x] Autokuma deployment and configuration (07-06) - *in parallel*
+- [x] Kuma labels for media and app services (07-07)
+- [ ] Final verification and phase summary (07-08)
 
 **Phase 8: Application Expansion** (NOT PLANNED)
 - [ ] Immich (photos)
@@ -124,6 +126,10 @@ Progress: [Phase 7] █████░░░ 5/8 plans | [v2.0] █████�
 | Traefik ACME bind mount backup | Certificates backed up via bind mount (config dir, not Docker volume) | Implemented (07-05) |
 | RustDesk hot backup | Keys only, no database - safe for backup without stopping | Implemented (07-05) |
 | Uptime Kuma stop during backup | SQLite database requires consistent state via stop label | Implemented (07-05) |
+| HTTP monitors under service category | Easier to find service status by category (Media, Apps) | Implemented (07-07) |
+| Container monitors under Containers | Single location for container health across all services | Implemented (07-07) |
+| TCP port monitors for RustDesk | RustDesk uses custom protocol, not HTTP - TCP port check appropriate | Implemented (07-07) |
+| Container-only for headless services | Gluetun, qBittorrent, Unpackerr have no web UI to monitor | Implemented (07-07) |
 
 ## Completed Milestones
 
@@ -159,9 +165,9 @@ Progress: [Phase 7] █████░░░ 5/8 plans | [v2.0] █████�
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Completed 07-05-PLAN.md
+Stopped at: Completed 07-07-PLAN.md
 Resume file: None
-Next action: Execute 07-07-PLAN.md (Autokuma automated monitoring)
+Next action: Wait for 07-06-PLAN.md (Autokuma deployment) then 07-08-PLAN.md (verification)
 
 **Architecture completed (2026-01-18):**
 - `stack/` parent folder for all services
@@ -183,3 +189,11 @@ Next action: Execute 07-07-PLAN.md (Autokuma automated monitoring)
 - Added: Uptime Kuma (SQLite), RustDesk (keys), Traefik ACME (certificates)
 - Restore script rewritten for stack/ directory structure
 - Bind mount restore support for pihole and traefik-acme
+
+**Autokuma monitoring labels (2026-01-18):**
+- All 9 media services have kuma labels for automatic monitoring
+- All 5 app containers have kuma labels (4 services, RustDesk has 2 containers)
+- HTTP monitors grouped under Media and Apps parent groups
+- Container monitors all under Containers parent group
+- TCP port monitors for RustDesk non-HTTP services
+- Total: 25 monitors from media/app labels (11 HTTP/TCP + 14 container)
