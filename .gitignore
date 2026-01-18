@@ -7,3 +7,8 @@ apps/homepage/config/proxmox.yaml
 
 # ACME/Let's Encrypt certificate storage (contains private keys)
 proxy/traefik/acme/*.json
+
+# Environment files with credentials (use .env.example as template)
+.env
+*.env
+!*.env.example
