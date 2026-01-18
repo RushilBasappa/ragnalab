@@ -10,11 +10,12 @@ See: .planning/PROJECT.md
 ## Current Position
 
 Milestone: v2.0 Network Services - IN PROGRESS
-Phase: 7 of 8 (Operational Hardening) - NOT PLANNED
-Plan: 0 of 0 in phase
-Status: Phase added, awaiting planning
+Phase: 7 of 8 (Operational Hardening) - IN PROGRESS
+Plan: 1 of TBD in phase
+Status: Completed 07-01-PLAN.md (stack directory structure)
+Last activity: 2026-01-18 - Completed 07-01-PLAN.md
 
-Progress: [Phase 7] ░░░░░░░░ 0/0 plans | [v2.0] ███████████░ 11/11+ plans
+Progress: [Phase 7] ██░░░░░░ 1/TBD plans | [v2.0] ████████████ 12/12+ plans
 
 ## v2.0 Scope
 
@@ -35,11 +36,11 @@ Progress: [Phase 7] ░░░░░░░░ 0/0 plans | [v2.0] █████�
 - Grouped structure: `apps/media/*`
 - Storage: `/media/` local, future external migration
 
-**Phase 7: Operational Hardening** (NOT PLANNED)
+**Phase 7: Operational Hardening** (IN PROGRESS)
+- [x] Restructure to stack/ folder with nested includes (07-01)
+- [ ] Configure socket-proxy for Uptime Kuma and Homepage (07-02)
 - [ ] Audit all apps for backup requirements
 - [ ] Add missing volumes to backup system
-- [ ] Configure socket-proxy for Uptime Kuma
-- [ ] Configure socket-proxy for Homepage
 - [ ] Deploy Autokuma for automated monitoring
 - [ ] Delete existing manual monitors (clean slate)
 - [ ] Add kuma labels to all docker-compose files
@@ -109,6 +110,9 @@ Progress: [Phase 7] ░░░░░░░░ 0/0 plans | [v2.0] █████�
 | Jellyfin auth for Jellyseerr | Users authenticate with existing Jellyfin accounts, no separate credentials | Implemented (06-07) |
 | Backup volume aggregation | All 8 media volumes added to nightly backup for disaster recovery | Implemented (06-07) |
 | User-configured indexers | Prowlarr indexers require manual setup due to personal tracker preferences | Implemented (06-08) |
+| Nested includes pattern | stack/ → category → service composes for modular management | Implemented (07-01) |
+| Networks as external | Pre-existing networks (proxy, socket_proxy_network, media) marked external | Implemented (07-01) |
+| Extended socket-proxy permissions | IMAGES=1, INFO=1, EVENTS=1 for Homepage/Uptime Kuma | Implemented (07-01) |
 
 ## Completed Milestones
 
@@ -144,12 +148,12 @@ Progress: [Phase 7] ░░░░░░░░ 0/0 plans | [v2.0] █████�
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Reverted 07-01/07-02 execution, replanning with new architecture
+Stopped at: Completed 07-01-PLAN.md
 Resume file: None
-Next action: /gsd:plan-phase 7
+Next action: Execute 07-02-PLAN.md (socket-proxy migration)
 
-**Architecture revision (2026-01-18):**
-Plans 07-01 through 07-07 deleted. Replanning with:
+**Architecture implemented (2026-01-18):**
 - `stack/` parent folder for all services
 - Nested includes: root → category → service composes
 - Each service has own folder with own docker-compose.yml
+- Infrastructure services operational from stack/infra/
