@@ -20,7 +20,7 @@ services:
       # Uptime Kuma push URL (from .env)
       BACKUP_PUSH_URL: "${BACKUP_PUSH_URL}"
       # Stop containers with this label during backup
-      BACKUP_STOP_DURING_BACKUP_LABEL: "vaultwarden,prowlarr,sonarr,radarr,bazarr,jellyfin,jellyseerr,qbittorrent"
+      BACKUP_STOP_DURING_BACKUP_LABEL: "vaultwarden,prowlarr,sonarr,radarr,bazarr,jellyfin,jellyseerr,qbittorrent,uptime-kuma"
     labels:
       # Uptime Kuma push notification after backup completes
       - "docker-volume-backup.copy-post=/bin/sh -c 'wget -q -O /dev/null $${BACKUP_PUSH_URL}'"
@@ -30,7 +30,13 @@ services:
       # Mount volumes to backup (read-only for safety)
       - vaultwarden-data:/backup/vaultwarden:ro
       # Pi-hole config (bind mount, not Docker volume)
-      - /home/rushil/workspace/ragnalab/apps/pihole/etc-pihole:/backup/pihole:ro
+      - /home/rushil/workspace/ragnalab/stack/apps/pihole/etc-pihole:/backup/pihole:ro
+      # Uptime Kuma (SQLite database - stop during backup)
+      - uptime-kuma-data:/backup/uptime-kuma:ro
+      # RustDesk server keys (safe for hot backup)
+      - rustdesk-data:/backup/rustdesk:ro
+      # Traefik ACME certificates (bind mount, safe for hot backup)
+      - /home/rushil/workspace/ragnalab/stack/infra/traefik/config/acme:/backup/traefik-acme:ro
       # Media stack volumes
       - prowlarr-config:/backup/prowlarr:ro
       - sonarr-config:/backup/sonarr:ro
@@ -60,6 +66,12 @@ volumes:
   vaultwarden-data:
     external: true
     name: vaultwarden_vaultwarden-data
+  uptime-kuma-data:
+    external: true
+    name: uptime-kuma_uptime-kuma-data
+  rustdesk-data:
+    external: true
+    name: rustdesk_rustdesk-data
   prowlarr-config:
     external: true
     name: prowlarr_prowlarr-config
