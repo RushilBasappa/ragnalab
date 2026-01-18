@@ -50,6 +50,14 @@ services:
       - "homepage.widget.version=6"
       - "homepage.widget.key=${PIHOLE_API_KEY}"
       - "homepage.server=my-docker"
+      # Autokuma monitoring - HTTP and container
+      - "kuma.pihole.http.name=Pi-hole"
+      - "kuma.pihole.http.url=https://pihole.ragnalab.xyz"
+      - "kuma.pihole.http.parent_name=Apps"
+      - "kuma.pihole-container.docker.name=Pi-hole Container"
+      - "kuma.pihole-container.docker.docker_container=pihole"
+      - "kuma.pihole-container.docker.docker_host=my-docker"
+      - "kuma.pihole-container.docker.parent_name=Containers"
     deploy:
       resources:
         limits:

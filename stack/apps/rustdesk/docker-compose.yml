@@ -21,6 +21,15 @@ services:
       - "homepage.icon=rustdesk.png"
       - "homepage.description=Remote Desktop (100.75.173.7)"
       - "homepage.server=my-docker"
+      # Autokuma monitoring - TCP and container for ID server
+      - "kuma.rustdesk-hbbs.port.name=RustDesk ID Server"
+      - "kuma.rustdesk-hbbs.port.hostname=100.75.173.7"
+      - "kuma.rustdesk-hbbs.port.port=21116"
+      - "kuma.rustdesk-hbbs.port.parent_name=Apps"
+      - "kuma.rustdesk-hbbs-container.docker.name=RustDesk HBBS Container"
+      - "kuma.rustdesk-hbbs-container.docker.docker_container=rustdesk-hbbs"
+      - "kuma.rustdesk-hbbs-container.docker.docker_host=my-docker"
+      - "kuma.rustdesk-hbbs-container.docker.parent_name=Containers"
 
   hbbr:
     image: rustdesk/rustdesk-server:latest
@@ -31,6 +40,16 @@ services:
     volumes:
       - rustdesk-data:/root
     network_mode: host
+    labels:
+      # Autokuma monitoring - TCP and container for relay server
+      - "kuma.rustdesk-hbbr.port.name=RustDesk Relay Server"
+      - "kuma.rustdesk-hbbr.port.hostname=100.75.173.7"
+      - "kuma.rustdesk-hbbr.port.port=21117"
+      - "kuma.rustdesk-hbbr.port.parent_name=Apps"
+      - "kuma.rustdesk-hbbr-container.docker.name=RustDesk HBBR Container"
+      - "kuma.rustdesk-hbbr-container.docker.docker_container=rustdesk-hbbr"
+      - "kuma.rustdesk-hbbr-container.docker.docker_host=my-docker"
+      - "kuma.rustdesk-hbbr-container.docker.parent_name=Containers"
 
 volumes:
   rustdesk-data:

@@ -45,6 +45,14 @@ services:
       - "homepage.server=my-docker"
       # Backup - stop container during backup for consistent SQLite state
       - "docker-volume-backup.stop-during-backup=vaultwarden"
+      # Autokuma monitoring - HTTP and container
+      - "kuma.vaultwarden.http.name=Vaultwarden"
+      - "kuma.vaultwarden.http.url=https://vault.ragnalab.xyz"
+      - "kuma.vaultwarden.http.parent_name=Apps"
+      - "kuma.vaultwarden-container.docker.name=Vaultwarden Container"
+      - "kuma.vaultwarden-container.docker.docker_container=vaultwarden"
+      - "kuma.vaultwarden-container.docker.docker_host=my-docker"
+      - "kuma.vaultwarden-container.docker.parent_name=Containers"
     deploy:
       resources:
         limits:
