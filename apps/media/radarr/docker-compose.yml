@@ -16,6 +16,7 @@ services:
       - /media:/media  # CRITICAL: Same path for hardlinks to work
     networks:
       - proxy
+      - media
     labels:
       # Traefik routing
       - "traefik.enable=true"
@@ -55,4 +56,6 @@ volumes:
 
 networks:
   proxy:
+    external: true
+  media:
     external: true
