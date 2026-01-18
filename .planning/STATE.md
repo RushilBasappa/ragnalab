@@ -144,6 +144,12 @@ Progress: [Phase 7] ░░░░░░░░ 0/0 plans | [v2.0] █████�
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Added Phase 8 (Application Expansion)
+Stopped at: Reverted 07-01/07-02 execution, replanning with new architecture
 Resume file: None
 Next action: /gsd:plan-phase 7
+
+**Architecture revision (2026-01-18):**
+Plans 07-01 through 07-07 deleted. Replanning with:
+- `stack/` parent folder for all services
+- Nested includes: root → category → service composes
+- Each service has own folder with own docker-compose.yml

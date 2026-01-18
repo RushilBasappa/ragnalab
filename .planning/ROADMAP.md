@@ -161,23 +161,26 @@ Plans:
 
 ### Phase 7: Operational Hardening
 
-**Goal:** Complete backup coverage, eliminate direct Docker socket exposure, and automate monitoring with Autokuma
+**Goal:** Restructure compose files into stack/ folder with nested includes, complete backup coverage, eliminate direct Docker socket exposure, and automate monitoring with Autokuma
 **Depends on:** Phase 6
 **Milestone:** v2.0
 **Plans:** 0 plans
 
 **Success Criteria:**
-1. All services with persistent data are included in automated backup system
-2. No containers mount /var/run/docker.sock directly (except socket-proxy)
-3. Uptime Kuma and Homepage use socket-proxy for Docker API access
-4. Backup restore procedure verified for newly added volumes
-5. Autokuma deployed and all services have monitoring labels
-6. All existing services automatically monitored (HTTP + Docker container checks)
+1. All services organized under `stack/` with nested include pattern (stack/infra/traefik/, etc.)
+2. All services with persistent data are included in automated backup system
+3. No containers mount /var/run/docker.sock directly (except socket-proxy)
+4. Uptime Kuma and Homepage use socket-proxy for Docker API access
+5. Backup restore procedure verified for newly added volumes
+6. Autokuma deployed and all services have monitoring labels
+7. All existing services automatically monitored (HTTP + Docker container checks)
 
 Plans:
 - [ ] TBD (run /gsd:plan-phase 7 to break down)
 
 **Scope:**
+- Restructure into `stack/` folder with nested includes (root → category → service composes)
+- Migrate existing services from proxy/, apps/*, media/ into stack/{category}/{service}/
 - Audit all apps for backup requirements
 - Add missing volumes to backup system
 - Verify backup/restore works for all services

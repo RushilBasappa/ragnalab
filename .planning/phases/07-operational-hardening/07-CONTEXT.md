@@ -18,12 +18,28 @@ Complete backup coverage, eliminate direct Docker socket exposure, automate moni
 <decisions>
 ## Implementation Decisions
 
-### Compose Restructuring
-- Group services by category: `infra/`, `media/`, `apps/` — each has its own compose that includes its services
+### Compose Restructuring (REVISED 2026-01-18)
+- **Parent folder:** All stack services live under `stack/` to separate from operational files (backups/, scripts/, docs/)
+- **Nested includes pattern:** Each service has its own folder with its own `docker-compose.yml`
+- **Three-level hierarchy:**
+  ```
+  docker-compose.yml (root)
+  └── include: stack/infra/docker-compose.yml
+      └── include: stack/infra/traefik/docker-compose.yml
+      └── include: stack/infra/homepage/docker-compose.yml
+      └── include: stack/infra/uptime-kuma/docker-compose.yml
+      └── ...
+  └── include: stack/media/docker-compose.yml
+      └── include: stack/media/jellyfin/docker-compose.yml
+      └── ...
+  └── include: stack/apps/docker-compose.yml
+      └── include: stack/apps/vaultwarden/docker-compose.yml
+      └── ...
+  ```
+- **Why nested includes:** Matches v1.0 "dead-simple add new app" pattern — copy service folder, it works. Cleaner git diffs. More modular.
 - Use Docker Compose profiles: `infra`, `media`, `apps` — matches directory categories
 - Profiles required to bring up services: `docker compose --profile media up`
-- Shared resources (networks, common volumes) defined in `infra/docker-compose.yml`, referenced by other composes
-- Root-level `docker-compose.yml` uses `include` directive to pull in category composes
+- Shared resources (networks) defined in root `docker-compose.yml`, referenced as external by service composes
 
 ### Makefile Targets
 - Keep it minimal: only `backup`, `restore`, `status` targets
