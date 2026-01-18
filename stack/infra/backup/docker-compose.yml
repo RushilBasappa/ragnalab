@@ -62,13 +62,11 @@ services:
         max-file: "3"
 
 # Reference external volumes to backup
+# Note: uptime-kuma-data is declared in uptime-kuma/docker-compose.yml (same include tree)
 volumes:
   vaultwarden-data:
     external: true
     name: vaultwarden_vaultwarden-data
-  uptime-kuma-data:
-    external: true
-    name: uptime-kuma_uptime-kuma-data
   rustdesk-data:
     external: true
     name: rustdesk_rustdesk-data

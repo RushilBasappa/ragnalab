@@ -10,18 +10,14 @@ services:
     environment:
       - HOMEPAGE_ALLOWED_HOSTS=home.ragnalab.xyz
       - PUID=1000
-      # PGID=123 is the docker group - required for socket access
-      - PGID=123
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
       # Config files in version control
       - ./config:/app/config
-      # Direct socket mount for container discovery
-      # TODO: Migrate to socket-proxy in 07-02-PLAN.md
-      - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - proxy
+      - socket_proxy_network
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.homepage.rule=Host(`home.ragnalab.xyz`)"

@@ -1,6 +1,8 @@
-# Docker Socket Configuration
+# Docker Socket Configuration via socket-proxy
 # https://gethomepage.dev/configs/docker/
 
 # Main Docker host - used for container discovery via labels
+# Uses TCP connection to socket-proxy for security (no direct socket mount)
 my-docker:
-  socket: /var/run/docker.sock
+  host: socket-proxy
+  port: 2375

@@ -45,5 +45,7 @@ services:
 
 volumes:
   uptime-kuma-data:
+    external: true
+    name: ragnalab_uptime-kuma-data
 
 # Networks defined in root docker-compose.yml
