@@ -3,7 +3,7 @@
 **Project:** RagnaLab
 **Created:** 2026-01-16
 **Current Milestone:** v2.0 Network Services
-**Phases:** 5 (4 complete, 1 active)
+**Phases:** 6 (4 complete, 2 pending)
 
 ## Overview
 
@@ -124,6 +124,41 @@ Plans:
 
 ---
 
+### Phase 6: Media Automation Stack
+
+**Goal:** Complete media automation system with arr stack for TV/movies, VPN-protected downloads, and Jellyfin media server
+**Depends on:** Phase 5
+**Milestone:** v2.0
+**Plans:** 8 plans
+
+**Success Criteria:**
+1. All media services accessible via HTTPS at ragnalab.xyz subdomains
+2. VPN protection verified for torrent traffic (qBittorrent shows VPN IP)
+3. End-to-end flow works: request in Jellyseerr -> download via qBittorrent -> organized by Sonarr/Radarr -> viewable in Jellyfin
+4. All services appear in Homepage dashboard with working widgets
+5. All service data included in automated backup system
+
+Plans:
+- [ ] 06-01-PLAN.md — Media directory structure and Gluetun VPN setup
+- [ ] 06-02-PLAN.md — qBittorrent download client with VPN routing
+- [ ] 06-03-PLAN.md — Prowlarr indexer manager
+- [ ] 06-04-PLAN.md — Sonarr (TV) and Radarr (Movies) automation
+- [ ] 06-05-PLAN.md — Bazarr subtitles and Unpackerr extraction
+- [ ] 06-06-PLAN.md — Jellyfin media server (direct-play only)
+- [ ] 06-07-PLAN.md — Jellyseerr requests and backup integration
+- [ ] 06-08-PLAN.md — End-to-end verification and indexer configuration
+
+**Services deployed:**
+- gluetun.ragnalab.xyz (VPN status - internal only)
+- prowlarr.ragnalab.xyz (Indexer manager)
+- sonarr.ragnalab.xyz (TV automation)
+- radarr.ragnalab.xyz (Movie automation)
+- bazarr.ragnalab.xyz (Subtitle automation)
+- jellyfin.ragnalab.xyz (Media server)
+- requests.ragnalab.xyz (Jellyseerr request portal)
+
+---
+
 ## Progress
 
 | Phase | Status | Completed |
@@ -133,6 +168,7 @@ Plans:
 | 3 - Operational Infrastructure | Complete | 2026-01-17 |
 | 4 - Applications & Templates | Complete | 2026-01-17 |
 | 5 - Pi-hole Network-Wide Ad Blocking | Pending | — |
+| 6 - Media Automation Stack | Planned | — |
 
 ---
 
