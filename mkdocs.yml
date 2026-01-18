@@ -1,6 +1,6 @@
 site_name: RagnaLab
 site_description: Self-hosted homelab on Raspberry Pi 5
-site_url: https://ragnalab.xyz/docs
+site_url: https://docs.ragnalab.xyz
 
 repo_name: ragnalab
 repo_url: https://github.com/yourusername/ragnalab
@@ -66,6 +66,7 @@ nav:
     - Homepage: apps/homepage.md
     - Vaultwarden: apps/vaultwarden.md
     - Pi-hole: apps/pihole.md
+    - Documentation: apps/docs.md
   - Media Stack:
     - Overview: media/index.md
     - Gluetun (VPN): media/gluetun.md

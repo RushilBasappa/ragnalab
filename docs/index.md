@@ -40,6 +40,7 @@ Deploy in this order:
 | [Homepage](apps/homepage.md) | Dashboard | home.ragnalab.xyz |
 | [Vaultwarden](apps/vaultwarden.md) | Password manager | vault.ragnalab.xyz |
 | [Pi-hole](apps/pihole.md) | DNS ad blocking | pihole.ragnalab.xyz |
+| [Documentation](apps/docs.md) | This docs site | docs.ragnalab.xyz |
 
 ### Media Stack
 
