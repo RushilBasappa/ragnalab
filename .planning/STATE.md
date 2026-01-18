@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md
 
 **Core value:** Secure, private-only access to self-hosted applications with professional-grade HTTPS, automatic service discovery, and dead-simple process for adding new apps.
-**Current focus:** v2.0 Network Services — Media Automation Stack
+**Current focus:** v2.0 Network Services COMPLETE
 
 ## Current Position
 
-Milestone: v2.0 Network Services
-Phase: 6 of 6 (Media Automation Stack) - IN PROGRESS
-Plan: 7 of 8 complete in phase
-Status: Plan 06-07 complete, ready for 06-08
+Milestone: v2.0 Network Services - COMPLETE
+Phase: 6 of 6 (Media Automation Stack) - COMPLETE
+Plan: 8 of 8 complete in phase
+Status: v2.0 milestone complete
 
-Progress: [Phase 6] ███████░ 7/8 plans | [v2.0] █████████░░ 10/11 plans (91%)
+Progress: [Phase 6] ████████ 8/8 plans | [v2.0] ███████████ 11/11 plans (100%)
 
 ## v2.0 Scope
 
@@ -23,7 +23,7 @@ Progress: [Phase 6] ███████░ 7/8 plans | [v2.0] █████�
 - [x] DHCP server configuration (05-02) - *DNS-only mode due to locked gateway*
 - [x] Blocklist and monitoring setup (05-03)
 
-**Phase 6: Media Automation Stack** (IN PROGRESS)
+**Phase 6: Media Automation Stack** (COMPLETE)
 - [x] Directory structure + Gluetun VPN (06-01)
 - [x] qBittorrent torrent client (06-02)
 - [x] Prowlarr indexer manager (06-03)
@@ -31,11 +31,11 @@ Progress: [Phase 6] ███████░ 7/8 plans | [v2.0] █████�
 - [x] Bazarr subtitles + Unpackerr extraction (06-05)
 - [x] Jellyfin media server (06-06)
 - [x] Jellyseerr request management (06-07)
-- [ ] Homepage integration (06-08)
+- [x] Stack verification & Homepage integration (06-08)
 - Grouped structure: `apps/media/*`
 - Storage: `/media/` local, future external migration
 
-**Plans:** 3 (Phase 5) + 8 (Phase 6) = 11 total
+**Plans:** 3 (Phase 5) + 8 (Phase 6) = 11 total - ALL COMPLETE
 
 ## Services Deployed
 
@@ -45,16 +45,18 @@ Progress: [Phase 6] ███████░ 7/8 plans | [v2.0] █████�
 | Uptime Kuma | status.ragnalab.xyz | v1.0 |
 | Homepage | home.ragnalab.xyz | v1.0 |
 | Vaultwarden | vault.ragnalab.xyz | v1.0 |
-| **Pi-hole** | **pihole.ragnalab.xyz** | **v2.0 (NEW)** |
-| **Gluetun** | (VPN tunnel, no UI) | **v2.0 (NEW)** |
-| **qBittorrent** | localhost:8080 (via VPN) | **v2.0 (NEW)** |
-| **Prowlarr** | **prowlarr.ragnalab.xyz** | **v2.0 (NEW)** |
-| **Sonarr** | **sonarr.ragnalab.xyz** | **v2.0 (NEW)** |
-| **Radarr** | **radarr.ragnalab.xyz** | **v2.0 (NEW)** |
-| **Bazarr** | **bazarr.ragnalab.xyz** | **v2.0 (NEW)** |
-| **Unpackerr** | (headless, no UI) | **v2.0 (NEW)** |
-| **Jellyfin** | **jellyfin.ragnalab.xyz** | **v2.0 (NEW)** |
-| **Jellyseerr** | **requests.ragnalab.xyz** | **v2.0 (NEW)** |
+| Pi-hole | pihole.ragnalab.xyz | v2.0 |
+| Gluetun | (VPN tunnel, no UI) | v2.0 |
+| qBittorrent | localhost:8080 (via VPN) | v2.0 |
+| Prowlarr | prowlarr.ragnalab.xyz | v2.0 |
+| Sonarr | sonarr.ragnalab.xyz | v2.0 |
+| Radarr | radarr.ragnalab.xyz | v2.0 |
+| Bazarr | bazarr.ragnalab.xyz | v2.0 |
+| Unpackerr | (headless, no UI) | v2.0 |
+| Jellyfin | jellyfin.ragnalab.xyz | v2.0 |
+| Jellyseerr | requests.ragnalab.xyz | v2.0 |
+
+**Total services:** 14 (4 from v1.0 + 10 from v2.0)
 
 ## Key Decisions (v2.0)
 
@@ -81,8 +83,23 @@ Progress: [Phase 6] ███████░ 7/8 plans | [v2.0] █████�
 | OpenSubtitles.com as default | Works without account for limited use; most popular subtitle source | Implemented (06-05) |
 | Jellyfin auth for Jellyseerr | Users authenticate with existing Jellyfin accounts, no separate credentials | Implemented (06-07) |
 | Backup volume aggregation | All 8 media volumes added to nightly backup for disaster recovery | Implemented (06-07) |
+| User-configured indexers | Prowlarr indexers require manual setup due to personal tracker preferences | Implemented (06-08) |
 
-## Previous Milestone
+## Completed Milestones
+
+**v2.0 (Complete 2026-01-18):**
+- Pi-hole network-wide ad blocking with DNS-only mode
+- Complete media automation stack (9 services)
+- VPN-protected torrent downloads via Gluetun/ProtonVPN
+- Prowlarr indexer management synced to arr apps
+- Sonarr/Radarr automated TV/movie acquisition
+- Bazarr automatic subtitle downloads
+- Unpackerr automated archive extraction
+- Jellyfin media server (direct-play only)
+- Jellyseerr request management with Jellyfin auth
+- Full Homepage dashboard integration with widgets
+- Uptime Kuma monitoring for all public services
+- Backup coverage for all media service volumes
 
 **v1.0 (Complete 2026-01-17):**
 - Traefik reverse proxy with production Let's Encrypt SSL
@@ -96,10 +113,11 @@ Progress: [Phase 6] ███████░ 7/8 plans | [v2.0] █████�
 ## Roadmap Evolution
 
 - Phase 6 added: Media Automation Stack (arr suite + Jellyfin)
+- v2.0 complete: Ready for future milestones
 
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Completed 06-07-PLAN.md (Jellyseerr request management)
-Resume file: .planning/phases/06-media-automation-stack/06-08-PLAN.md
-Next action: Execute 06-08 (Homepage integration finalization)
+Stopped at: Completed v2.0 milestone (all 11 plans)
+Resume file: None
+Next action: Plan v2.1 or v3.0 when ready
