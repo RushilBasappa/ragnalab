@@ -209,3 +209,10 @@ Next action: 07-08-PLAN.md (final verification and phase summary)
 - Container monitors all under Containers parent group
 - TCP port monitors for RustDesk non-HTTP services
 - Total: 33 monitors across all services (infrastructure + media + apps)
+
+## Accumulated Context
+
+### Pending Todos
+
+1 pending todo(s) in `.planning/todos/pending/`:
+- **Configure Pi-hole DNS for ragnalab.xyz subdomains** (networking)
