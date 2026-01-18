@@ -1,0 +1,39 @@
+# Unpackerr - Archive Extraction Service
+# No web UI - runs headless, monitoring download folders
+# Extracts RAR/ZIP archives when arr apps import media
+
+services:
+  unpackerr:
+    image: hotio/unpackerr:latest
+    container_name: unpackerr
+    restart: unless-stopped
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: America/Los_Angeles
+      # Sonarr connection
+      UN_SONARR_0_URL: http://sonarr:8989
+      UN_SONARR_0_API_KEY: ${SONARR_API_KEY}
+      UN_SONARR_0_PATHS_0: /media/downloads/tv
+      # Radarr connection
+      UN_RADARR_0_URL: http://radarr:7878
+      UN_RADARR_0_API_KEY: ${RADARR_API_KEY}
+      UN_RADARR_0_PATHS_0: /media/downloads/movies
+    volumes:
+      - /media:/media  # Write access for archive extraction
+    networks:
+      - media
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.25'
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  media:
+    external: true
