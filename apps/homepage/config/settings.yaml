@@ -41,6 +41,9 @@ layout:
   Apps:
     style: column
     icon: mdi-apps
+  Media:
+    style: column
+    icon: mdi-filmstrip
   Manage:
     style: row
     columns: 4
