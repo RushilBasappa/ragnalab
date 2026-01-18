@@ -4,12 +4,11 @@
 
 services:
   unpackerr:
-    image: hotio/unpackerr:latest
+    image: golift/unpackerr:latest
     container_name: unpackerr
     restart: unless-stopped
+    user: "1000:1000"
     environment:
-      PUID: 1000
-      PGID: 1000
       TZ: America/Los_Angeles
       # Sonarr connection
       UN_SONARR_0_URL: http://sonarr:8989
