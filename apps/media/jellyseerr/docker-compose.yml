@@ -1,0 +1,57 @@
+# Jellyseerr - Media Request Management
+# Allows users to request TV shows and movies via Jellyfin authentication
+# Sends requests to Sonarr (TV) and Radarr (Movies)
+# https://requests.ragnalab.xyz
+
+services:
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    restart: unless-stopped
+    environment:
+      - TZ=America/Los_Angeles
+      - LOG_LEVEL=info
+    volumes:
+      - jellyseerr-config:/app/config
+    networks:
+      - proxy
+    labels:
+      # Traefik reverse proxy
+      - traefik.enable=true
+      - traefik.http.routers.jellyseerr.rule=Host(`requests.ragnalab.xyz`)
+      - traefik.http.routers.jellyseerr.entrypoints=websecure
+      - traefik.http.routers.jellyseerr.tls=true
+      - traefik.http.routers.jellyseerr.tls.certresolver=letsencrypt
+      - traefik.http.services.jellyseerr.loadbalancer.server.port=5055
+      - traefik.docker.network=proxy
+      # Homepage dashboard
+      - homepage.group=Media
+      - homepage.name=Jellyseerr
+      - homepage.icon=jellyseerr.png
+      - homepage.href=https://requests.ragnalab.xyz
+      - homepage.description=Media Requests
+      - homepage.widget.type=jellyseerr
+      - homepage.widget.url=http://jellyseerr:5055
+      - homepage.widget.key=${JELLYSEERR_API_KEY}
+      - homepage.server=my-docker
+      # Backup coordination
+      - docker-volume-backup.stop-during-backup=jellyseerr
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  jellyseerr-config:
+
+networks:
+  proxy:
+    external: true
