@@ -11,11 +11,11 @@ See: .planning/PROJECT.md
 
 Milestone: v2.0 Network Services - IN PROGRESS
 Phase: 7 of 8 (Operational Hardening) - IN PROGRESS
-Plan: 3 of 8 in phase
-Status: Completed 07-03-PLAN.md (apps migration + Makefile)
-Last activity: 2026-01-18 - Completed 07-03-PLAN.md
+Plan: 4 of 8 in phase
+Status: Completed 07-04-PLAN.md (socket-proxy migration)
+Last activity: 2026-01-18 - Completed 07-04-PLAN.md
 
-Progress: [Phase 7] ███░░░░░ 3/8 plans | [v2.0] ████████████ 14/14+ plans
+Progress: [Phase 7] ████░░░░ 4/8 plans | [v2.0] ████████████ 14/14+ plans
 
 ## v2.0 Scope
 
@@ -40,8 +40,8 @@ Progress: [Phase 7] ███░░░░░ 3/8 plans | [v2.0] █████�
 - [x] Restructure to stack/ folder with nested includes (07-01)
 - [x] Migrate media stack to stack/media/ (07-02)
 - [x] Migrate apps to stack/apps/ + simplify Makefile (07-03)
-- [ ] Socket-proxy migration for Uptime Kuma/Homepage (07-05)
-- [ ] Backup audit and volume coverage (07-06)
+- [x] Socket-proxy migration for Uptime Kuma/Homepage (07-04)
+- [ ] Backup audit and volume coverage (07-05)
 - [ ] Autokuma automated monitoring (07-07)
 
 **Phase 8: Application Expansion** (NOT PLANNED)
@@ -118,6 +118,8 @@ Progress: [Phase 7] ███░░░░░ 3/8 plans | [v2.0] █████�
 | Gluetun include order | Must be first in media includes (qbittorrent uses network_mode: container:gluetun) | Implemented (07-02) |
 | Makefile simplification | Only backup, restore, status targets - services via docker compose --profile | Implemented (07-03) |
 | Old directories archived | apps/ and proxy/ moved to archive/pre-stack-migration/ for reference | Implemented (07-03) |
+| Socket-proxy for Docker API | Homepage and Uptime Kuma use socket-proxy:2375 instead of direct docker.sock | Implemented (07-04) |
+| External volume declarations | Volumes referenced in multiple compose files use external: true with explicit name | Implemented (07-04) |
 
 ## Completed Milestones
 
@@ -153,9 +155,9 @@ Progress: [Phase 7] ███░░░░░ 3/8 plans | [v2.0] █████�
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Completed 07-03-PLAN.md
+Stopped at: Completed 07-04-PLAN.md
 Resume file: None
-Next action: Execute next operational hardening plan (socket-proxy, backup audit, or autokuma)
+Next action: Execute next operational hardening plan (backup audit or autokuma)
 
 **Architecture completed (2026-01-18):**
 - `stack/` parent folder for all services
@@ -166,3 +168,8 @@ Next action: Execute next operational hardening plan (socket-proxy, backup audit
 - App services operational from stack/apps/
 - Old apps/ and proxy/ directories archived
 - Makefile simplified to operational targets only
+
+**Socket-proxy hardening (2026-01-18):**
+- Homepage and Uptime Kuma migrated to socket-proxy
+- Only socket-proxy, backup, and glances mount docker.sock directly
+- Uptime Kuma Docker host requires UI configuration (socket-proxy:2375)
