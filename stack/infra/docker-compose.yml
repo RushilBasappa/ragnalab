@@ -1,0 +1,17 @@
+# RagnaLab Infrastructure Services
+# Profile: infra
+# Services: traefik, socket-proxy, uptime-kuma, homepage, backup
+
+include:
+  - path: traefik/docker-compose.yml
+  - path: socket-proxy/docker-compose.yml
+  - path: uptime-kuma/docker-compose.yml
+  - path: homepage/docker-compose.yml
+  - path: backup/docker-compose.yml
+
+# Reference shared networks from root compose
+networks:
+  proxy:
+    external: true
+  socket_proxy_network:
+    external: true

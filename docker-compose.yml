@@ -1,0 +1,23 @@
+# RagnaLab Homelab - Root Docker Compose
+# Usage: docker compose --profile <category> up -d
+# Categories: infra, media, apps
+#
+# Examples:
+#   docker compose --profile infra up -d        # Infrastructure services
+#   docker compose --profile media up -d        # Media automation stack
+#   docker compose --profile apps up -d         # Applications
+#   docker compose --profile infra --profile media --profile apps up -d  # Everything
+
+include:
+  - path: stack/infra/docker-compose.yml
+  - path: stack/media/docker-compose.yml
+  - path: stack/apps/docker-compose.yml
+
+# Shared networks - defined once here, referenced as external in service composes
+networks:
+  proxy:
+    name: proxy
+  socket_proxy_network:
+    name: socket_proxy_network
+  media:
+    name: media

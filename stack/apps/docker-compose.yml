@@ -1,0 +1,15 @@
+# RagnaLab Applications
+# Profile: apps
+# Services: vaultwarden, pihole, and future apps
+#
+# Note: Services will be migrated from apps/ in a future plan
+
+# Placeholder - include directives will be added when app services are migrated
+# include:
+#   - path: vaultwarden/docker-compose.yml
+#   - path: pihole/docker-compose.yml
+
+# Reference shared networks from root compose
+networks:
+  proxy:
+    external: true

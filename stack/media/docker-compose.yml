@@ -1,0 +1,24 @@
+# RagnaLab Media Stack
+# Profile: media
+# Services: gluetun, qbittorrent, prowlarr, sonarr, radarr, bazarr, unpackerr, jellyfin, jellyseerr
+#
+# Note: Services will be migrated from apps/media/ in a future plan
+
+# Placeholder - include directives will be added when media services are migrated
+# include:
+#   - path: gluetun/docker-compose.yml
+#   - path: qbittorrent/docker-compose.yml
+#   - path: prowlarr/docker-compose.yml
+#   - path: sonarr/docker-compose.yml
+#   - path: radarr/docker-compose.yml
+#   - path: bazarr/docker-compose.yml
+#   - path: unpackerr/docker-compose.yml
+#   - path: jellyfin/docker-compose.yml
+#   - path: jellyseerr/docker-compose.yml
+
+# Reference shared networks from root compose
+networks:
+  proxy:
+    external: true
+  media:
+    external: true
