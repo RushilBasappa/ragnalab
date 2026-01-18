@@ -52,6 +52,7 @@ Progress: [Phase 6] ██████░░ 6/8 plans | [v2.0] █████�
 | **Sonarr** | **sonarr.ragnalab.xyz** | **v2.0 (NEW)** |
 | **Radarr** | **radarr.ragnalab.xyz** | **v2.0 (NEW)** |
 | **Bazarr** | **bazarr.ragnalab.xyz** | **v2.0 (NEW)** |
+| **Unpackerr** | (headless, no UI) | **v2.0 (NEW)** |
 | **Jellyfin** | **jellyfin.ragnalab.xyz** | **v2.0 (NEW)** |
 
 ## Key Decisions (v2.0)
@@ -74,6 +75,9 @@ Progress: [Phase 6] ██████░░ 6/8 plans | [v2.0] █████�
 | Read-only media mount for Jellyfin | Jellyfin reads from library but cannot modify - Sonarr/Radarr own the files | Implemented (06-06) |
 | Direct-play only (no transcoding) | Pi 5 lacks hardware encoding; clients must support direct-play | Implemented (06-06) |
 | API-based Jellyfin setup | Setup wizard, libraries, and transcoding config completed via API | Implemented (06-06) |
+| golift/unpackerr image | hotio/unpackerr doesn't exist; golift is the original maintainer | Implemented (06-05) |
+| Config file modification for Bazarr | API settings weren't persisting; direct config.yaml modification required | Implemented (06-05) |
+| OpenSubtitles.com as default | Works without account for limited use; most popular subtitle source | Implemented (06-05) |
 
 ## Previous Milestone
 
