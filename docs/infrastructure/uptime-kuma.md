@@ -56,6 +56,7 @@ Uptime Kuma requires one-time browser configuration.
 | Homepage | https://home.ragnalab.xyz |
 | Vaultwarden | https://vault.ragnalab.xyz |
 | Pi-hole Web UI | https://pihole.ragnalab.xyz |
+| Documentation | https://docs.ragnalab.xyz |
 
 **Docker Container Monitors** (Docker Host: Local Docker):
 
@@ -66,6 +67,7 @@ Uptime Kuma requires one-time browser configuration.
 | uptime-kuma | uptime-kuma |
 | backup | backup |
 | pihole | pihole |
+| docs | docs |
 
 ### Create Status Page
 
