@@ -8,6 +8,8 @@ services:
     image: fallenbagel/jellyseerr:latest
     container_name: jellyseerr
     restart: unless-stopped
+    env_file:
+      - ../.env
     environment:
       - TZ=America/Los_Angeles
       - LOG_LEVEL=info
