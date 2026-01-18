@@ -1,12 +1,12 @@
 # Homepage auto-generated files
-apps/homepage/config/logs/
-apps/homepage/config/custom.css
-apps/homepage/config/custom.js
-apps/homepage/config/kubernetes.yaml
-apps/homepage/config/proxmox.yaml
+stack/infra/homepage/config/logs/
+stack/infra/homepage/config/custom.css
+stack/infra/homepage/config/custom.js
+stack/infra/homepage/config/kubernetes.yaml
+stack/infra/homepage/config/proxmox.yaml
 
 # ACME/Let's Encrypt certificate storage (contains private keys)
-proxy/traefik/acme/*.json
+stack/infra/traefik/config/acme/*.json
 
 # Environment files with credentials (use .env.example as template)
 .env
@@ -15,3 +15,10 @@ proxy/traefik/acme/*.json
 
 # MkDocs build output
 site/
+
+# Archived old directory structure (pre-stack migration)
+archive/
+
+# Pi-hole data directories (not version controlled)
+stack/apps/pihole/etc-pihole/
+stack/apps/pihole/etc-dnsmasq.d/
