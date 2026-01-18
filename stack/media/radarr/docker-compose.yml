@@ -13,7 +13,7 @@ services:
       PGID: 1000
       TZ: America/Los_Angeles
     volumes:
-      - radarr-config:/config
+      - radarr_radarr-config:/config
       - /media:/media  # CRITICAL: Same path for hardlinks to work
     networks:
       - proxy
@@ -53,7 +53,7 @@ services:
         max-file: "3"
 
 volumes:
-  radarr-config:
+  radarr_radarr-config:
     external: true
 
 networks:

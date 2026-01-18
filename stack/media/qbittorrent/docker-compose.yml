@@ -18,7 +18,7 @@ services:
       - TZ=America/Los_Angeles
       - WEBUI_PORT=8080
     volumes:
-      - qbittorrent-config:/config
+      - qbittorrent_qbittorrent-config:/config
       # Media paths - MUST match all arr apps for hardlinks to work
       - /media:/media
     deploy:
@@ -37,7 +37,7 @@ services:
       - "docker-volume-backup.stop-during-backup=qbittorrent"
 
 volumes:
-  qbittorrent-config:
+  qbittorrent_qbittorrent-config:
     external: true
 
 # Note: No ports section - ports are exposed on gluetun container

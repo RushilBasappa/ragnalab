@@ -13,7 +13,7 @@ services:
       - PGID=1000
       - TZ=America/Los_Angeles
     volumes:
-      - prowlarr-config:/config
+      - prowlarr_prowlarr-config:/config
     networks:
       - proxy
     labels:
@@ -51,7 +51,7 @@ services:
         max-file: "3"
 
 volumes:
-  prowlarr-config:
+  prowlarr_prowlarr-config:
     external: true
 
 networks:

@@ -27,7 +27,7 @@ services:
       # qBittorrent WebUI (exposed through gluetun for VPN routing)
       - "8080:8080"
     volumes:
-      - gluetun-data:/gluetun
+      - gluetun_gluetun-data:/gluetun
     networks:
       - media
     # Note: Gluetun has built-in healthcheck at http://127.0.0.1:9999/
@@ -45,7 +45,7 @@ services:
         max-file: "3"
 
 volumes:
-  gluetun-data:
+  gluetun_gluetun-data:
     external: true
 
 networks:

@@ -14,7 +14,7 @@ services:
       - TZ=America/Los_Angeles
       - JELLYFIN_PublishedServerUrl=https://jellyfin.ragnalab.xyz
     volumes:
-      - jellyfin-config:/config
+      - jellyfin_jellyfin-config:/config
       - /media/library:/data/media:ro
     networks:
       - proxy
@@ -53,7 +53,7 @@ services:
         max-file: "3"
 
 volumes:
-  jellyfin-config:
+  jellyfin_jellyfin-config:
     external: true
 
 networks:

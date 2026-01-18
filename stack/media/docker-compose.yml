@@ -2,8 +2,19 @@
 # Profile: media
 # Services: gluetun, qbittorrent, prowlarr, sonarr, radarr, bazarr, unpackerr, jellyfin, jellyseerr
 #
-# Note: Services will be migrated from apps/media/ in a future plan.
-# When migrated, add include directives here for each service folder.
-#
-# Networks defined in root docker-compose.yml.
-# Service composes reference them in their networks section.
+# Usage: docker compose --profile media up -d
+
+include:
+  # gluetun must be first - qbittorrent uses network_mode: container:gluetun
+  - path: gluetun/docker-compose.yml
+  - path: qbittorrent/docker-compose.yml
+  - path: prowlarr/docker-compose.yml
+  - path: sonarr/docker-compose.yml
+  - path: radarr/docker-compose.yml
+  - path: bazarr/docker-compose.yml
+  - path: unpackerr/docker-compose.yml
+  - path: jellyfin/docker-compose.yml
+  - path: jellyseerr/docker-compose.yml
+
+# Networks defined in root docker-compose.yml
+# Service composes reference them as external: true

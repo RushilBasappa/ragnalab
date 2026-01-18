@@ -13,7 +13,7 @@ services:
       - TZ=America/Los_Angeles
       - LOG_LEVEL=info
     volumes:
-      - jellyseerr-config:/app/config
+      - jellyseerr_jellyseerr-config:/app/config
     networks:
       - proxy
     labels:
@@ -51,7 +51,7 @@ services:
         max-file: "3"
 
 volumes:
-  jellyseerr-config:
+  jellyseerr_jellyseerr-config:
     external: true
 
 networks:

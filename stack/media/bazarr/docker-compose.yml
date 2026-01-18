@@ -13,7 +13,7 @@ services:
       PGID: 1000
       TZ: America/Los_Angeles
     volumes:
-      - bazarr-config:/config
+      - bazarr_bazarr-config:/config
       - /media:/media  # Access to library folders for subtitle placement
     networks:
       - proxy
@@ -53,7 +53,7 @@ services:
         max-file: "3"
 
 volumes:
-  bazarr-config:
+  bazarr_bazarr-config:
     external: true
 
 networks:
