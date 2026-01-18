@@ -10,11 +10,11 @@ See: .planning/PROJECT.md
 ## Current Position
 
 Milestone: v2.0 Network Services
-Phase: 5 of 6 (Pi-hole Network-Wide Ad Blocking) - COMPLETE
-Plan: 3 of 3 complete in phase
-Status: Phase complete, ready for Phase 6
+Phase: 6 of 6 (Media Automation Stack) - IN PROGRESS
+Plan: 1 of 8 complete in phase
+Status: Plan 06-01 complete, ready for 06-02
 
-Progress: [Phase 5] ██████ 3/3 plans | [v2.0] ███░░░░░░░░ 3/11 plans (27%)
+Progress: [Phase 6] █░░░░░░░ 1/8 plans | [v2.0] ████░░░░░░░ 4/11 plans (36%)
 
 ## v2.0 Scope
 
@@ -23,11 +23,15 @@ Progress: [Phase 5] ██████ 3/3 plans | [v2.0] ███░░░░�
 - [x] DHCP server configuration (05-02) - *DNS-only mode due to locked gateway*
 - [x] Blocklist and monitoring setup (05-03)
 
-**Phase 6: Media Automation Stack** (PENDING)
-- Gluetun VPN + qBittorrent (torrent privacy)
-- Prowlarr, Sonarr, Radarr (media automation)
-- Bazarr, Unpackerr (subtitles, extraction)
-- Jellyfin media server + Jellyseerr requests
+**Phase 6: Media Automation Stack** (IN PROGRESS)
+- [x] Directory structure + Gluetun VPN (06-01)
+- [ ] qBittorrent torrent client (06-02)
+- [ ] Prowlarr indexer manager (06-03)
+- [ ] Sonarr + Radarr media automation (06-04)
+- [ ] Bazarr subtitles + Unpackerr extraction (06-05)
+- [ ] Jellyfin media server (06-06)
+- [ ] Jellyseerr request management (06-07)
+- [ ] Homepage integration (06-08)
 - Grouped structure: `apps/media/*`
 - Storage: `/media/` local, future external migration
 
@@ -42,6 +46,7 @@ Progress: [Phase 5] ██████ 3/3 plans | [v2.0] ███░░░░�
 | Homepage | home.ragnalab.xyz | v1.0 |
 | Vaultwarden | vault.ragnalab.xyz | v1.0 |
 | **Pi-hole** | **pihole.ragnalab.xyz** | **v2.0 (NEW)** |
+| **Gluetun** | (VPN tunnel, no UI) | **v2.0 (NEW)** |
 
 ## Key Decisions (v2.0)
 
@@ -52,6 +57,9 @@ Progress: [Phase 5] ██████ 3/3 plans | [v2.0] ███░░░░�
 | DHCP config preserved | Commented config kept for future if gateway replaced or bridge mode enabled | Documented (05-02) |
 | Macvlan networking for Pi-hole | Dedicated LAN IP (10.0.0.200) avoids port conflicts, enables DHCP | Implemented (05-01) |
 | Macvlan-shim at 10.0.0.201 | Linux kernel limitation requires shim for host-to-container communication | Implemented (05-01) |
+| ProtonVPN for torrent privacy | User-selected VPN provider with WireGuard support | Implemented (06-01) |
+| WireGuard over OpenVPN | Better performance on Raspberry Pi, lower resource usage | Implemented (06-01) |
+| Credentials in .env file | apps/media/.env excluded from git, .env.example provides template | Implemented (06-01) |
 
 ## Previous Milestone
 
@@ -71,6 +79,6 @@ Progress: [Phase 5] ██████ 3/3 plans | [v2.0] ███░░░░�
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Completed Phase 5 (Pi-hole Network-Wide Ad Blocking)
-Resume file: .planning/phases/06-media-automation-stack/06-01-PLAN.md
-Next action: Begin Phase 6 (Media Automation Stack) with 06-01 (Directory structure and Gluetun VPN)
+Stopped at: Completed 06-01-PLAN.md (Directory structure and Gluetun VPN)
+Resume file: .planning/phases/06-media-automation-stack/06-02-PLAN.md
+Next action: Execute 06-02 (qBittorrent deployment using Gluetun network)
