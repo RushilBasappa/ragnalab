@@ -42,7 +42,7 @@ services:
       - "homepage.group=Network"
       - "homepage.name=Pi-hole"
       - "homepage.icon=pi-hole.png"
-      - "homepage.href=https://pihole.ragnalab.xyz"
+      - "homepage.href=https://pihole.ragnalab.xyz/admin"
       - "homepage.description=DNS Ad Blocking"
       - "homepage.widget.type=pihole"
       - "homepage.widget.url=http://pihole:80"
