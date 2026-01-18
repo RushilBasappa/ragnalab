@@ -84,8 +84,9 @@ Progress: [Phase 7] ███████░ 7/8 plans | [v2.0] █████�
 | Jellyseerr | requests.ragnalab.xyz | v2.0 |
 | RustDesk | 100.75.173.7:21115-21119 | v1.0 |
 | Glances | glances.ragnalab.xyz | v1.0 |
+| Autokuma | (headless, no UI) | v2.0 |
 
-**Total services:** 16 (6 from v1.0 + 10 from v2.0)
+**Total services:** 17 (6 from v1.0 + 11 from v2.0)
 
 ## Key Decisions (v2.0)
 
@@ -130,6 +131,9 @@ Progress: [Phase 7] ███████░ 7/8 plans | [v2.0] █████�
 | Container monitors under Containers | Single location for container health across all services | Implemented (07-07) |
 | TCP port monitors for RustDesk | RustDesk uses custom protocol, not HTTP - TCP port check appropriate | Implemented (07-07) |
 | Container-only for headless services | Gluetun, qBittorrent, Unpackerr have no web UI to monitor | Implemented (07-07) |
+| Parent groups in traefik compose | Traefik always-running ensures groups created before services reference them | Implemented (07-06) |
+| Docker host via socket-proxy | socket-proxy already provides filtered Docker API access | Implemented (07-06) |
+| autokuma tag for tracking | Easy identification of Autokuma-managed vs manual monitors | Implemented (07-06) |
 
 ## Completed Milestones
 
@@ -165,9 +169,9 @@ Progress: [Phase 7] ███████░ 7/8 plans | [v2.0] █████�
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Completed 07-07-PLAN.md
+Stopped at: Completed 07-06-PLAN.md and 07-07-PLAN.md
 Resume file: None
-Next action: Wait for 07-06-PLAN.md (Autokuma deployment) then 07-08-PLAN.md (verification)
+Next action: 07-08-PLAN.md (final verification and phase summary)
 
 **Architecture completed (2026-01-18):**
 - `stack/` parent folder for all services
@@ -190,10 +194,18 @@ Next action: Wait for 07-06-PLAN.md (Autokuma deployment) then 07-08-PLAN.md (ve
 - Restore script rewritten for stack/ directory structure
 - Bind mount restore support for pihole and traefik-acme
 
+**Autokuma deployment (2026-01-18):**
+- Autokuma service deployed in stack/infra/autokuma/
+- Connected to Uptime Kuma via API for monitor management
+- Connected to socket-proxy for Docker label discovery
+- Parent groups created: Infrastructure (HTTP), Containers (Docker)
+- Docker host created: my-docker via socket-proxy:2375
+- Infrastructure monitors: 3 HTTP + 5 container = 8 total
+
 **Autokuma monitoring labels (2026-01-18):**
 - All 9 media services have kuma labels for automatic monitoring
 - All 5 app containers have kuma labels (4 services, RustDesk has 2 containers)
 - HTTP monitors grouped under Media and Apps parent groups
 - Container monitors all under Containers parent group
 - TCP port monitors for RustDesk non-HTTP services
-- Total: 25 monitors from media/app labels (11 HTTP/TCP + 14 container)
+- Total: 33 monitors across all services (infrastructure + media + apps)
