@@ -1,0 +1,15 @@
+# Bookmarks Configuration
+# https://gethomepage.dev/configs/bookmarks/
+
+- Manage:
+    - Cloudflare:
+        - icon: mdi-cloud
+          href: https://dash.cloudflare.com
+
+    - Tailscale:
+        - icon: mdi-vpn
+          href: https://login.tailscale.com/admin/machines
+
+    - GitHub:
+        - icon: mdi-github
+          href: https://github.com

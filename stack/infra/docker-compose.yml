@@ -9,9 +9,5 @@ include:
   - path: homepage/docker-compose.yml
   - path: backup/docker-compose.yml
 
-# Reference shared networks from root compose
-networks:
-  proxy:
-    external: true
-  socket_proxy_network:
-    external: true
+# Networks defined in root docker-compose.yml
+# Service composes reference them as external: true

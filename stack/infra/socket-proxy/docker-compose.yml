@@ -1,0 +1,52 @@
+# Docker Socket Proxy - Security boundary for Docker API access
+# Services connect here instead of raw Docker socket
+
+services:
+  socket-proxy:
+    image: tecnativa/docker-socket-proxy:latest
+    container_name: socket-proxy
+    restart: unless-stopped
+    profiles: ["infra"]
+    privileged: true
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+          cpus: '0.1'
+        reservations:
+          memory: 32M
+    environment:
+      # Read-only access for container discovery
+      - CONTAINERS=1
+      - NETWORKS=1
+      # Optional: Homepage shows image versions, system info
+      - IMAGES=1
+      - INFO=1
+      # Events for real-time updates
+      - EVENTS=1
+      # Deny all write operations and sensitive endpoints
+      - SERVICES=0
+      - TASKS=0
+      - POST=0
+      - BUILD=0
+      - COMMIT=0
+      - CONFIGS=0
+      - SECRETS=0
+      - VOLUMES=0
+      - AUTH=0
+      - EXEC=0
+      - PLUGINS=0
+      - SWARM=0
+      - SYSTEM=0
+      - LOG_LEVEL=info
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - socket_proxy_network
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# Networks defined in root docker-compose.yml

@@ -1,0 +1,6 @@
+# Docker Socket Configuration
+# https://gethomepage.dev/configs/docker/
+
+# Main Docker host - used for container discovery via labels
+my-docker:
+  socket: /var/run/docker.sock

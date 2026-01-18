@@ -1,0 +1,63 @@
+# Traefik Reverse Proxy
+# Access at: https://traefik.ragnalab.xyz
+
+services:
+  traefik:
+    image: traefik:v3.6
+    container_name: traefik
+    restart: unless-stopped
+    profiles: ["infra"]
+    depends_on:
+      - socket-proxy
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+        reservations:
+          memory: 128M
+    environment:
+      - CF_API_EMAIL=${CF_API_EMAIL}
+      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
+      - ACME_EMAIL=${ACME_EMAIL:-${CF_API_EMAIL}}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # Static configuration
+      - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
+      # Dynamic configuration (middlewares)
+      - ./config/dynamic:/etc/traefik/dynamic:ro
+      # Let's Encrypt certificates
+      - ./config/acme:/etc/traefik/acme
+    networks:
+      - socket_proxy_network
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      # Dashboard routing
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.ragnalab.xyz`)"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
+      # Note: security-headers@file omitted - CSP blocks dashboard's inline scripts
+      - "traefik.docker.network=proxy"
+      # --- Homepage labels ---
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Traefik"
+      - "homepage.icon=traefik.png"
+      - "homepage.href=https://traefik.ragnalab.xyz"
+      - "homepage.description=Reverse Proxy"
+      - "homepage.widget.type=traefik"
+      - "homepage.widget.url=http://traefik:8080"
+      - "homepage.server=my-docker"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# Networks defined in root docker-compose.yml

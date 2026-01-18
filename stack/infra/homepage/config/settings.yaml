@@ -1,0 +1,54 @@
+# Homepage Settings
+# https://gethomepage.dev/configs/settings/
+
+title: RagnaLab
+
+# Modern dark theme with neutral tones
+theme: dark
+color: zinc
+
+# Glassy card effect
+cardBlur: xl
+
+# Subtle animated gradient background
+background:
+  image: https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920
+  opacity: 20
+  blur: sm
+
+# Clean header
+headerStyle: clean
+
+# Ping-style status dots
+statusStyle: dot
+
+# Hide clutter
+hideVersion: true
+disableCollapse: true
+
+# Hide container stats on cards
+showStats: false
+
+# Layout - columns on top, bookmarks at bottom
+layout:
+  System Stats:
+    style: row
+    columns: 5
+    icon: mdi-chart-line
+  Local Access:
+    style: row
+    columns: 3
+    icon: mdi-lan
+  Infrastructure:
+    style: column
+    icon: mdi-server-network
+  Apps:
+    style: column
+    icon: mdi-apps
+  Media:
+    style: column
+    icon: mdi-filmstrip
+  Manage:
+    style: row
+    columns: 4
+    icon: mdi-link-variant

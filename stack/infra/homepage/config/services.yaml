@@ -1,0 +1,77 @@
+# Services Configuration
+# https://gethomepage.dev/configs/services/
+
+# Services are discovered automatically via Docker labels.
+# Add homepage.* labels to container definitions to appear here.
+#
+# Example labels for a service:
+#   - homepage.group=Infrastructure
+#   - homepage.name=Traefik
+#   - homepage.icon=traefik.png
+#   - homepage.href=https://traefik.ragnalab.xyz
+#   - homepage.description=Reverse Proxy
+#
+# For manual entries, use this format:
+# - Group Name:
+#     - Service Name:
+#         href: https://example.com
+#         icon: example.png
+#         description: Service description
+
+- System Stats:
+    - CPU:
+        widget:
+          type: glances
+          url: http://glances:61208
+          version: 4
+          metric: cpu
+    - Memory:
+        widget:
+          type: glances
+          url: http://glances:61208
+          version: 4
+          metric: memory
+    - Disk:
+        widget:
+          type: glances
+          url: http://glances:61208
+          version: 4
+          metric: fs:/rootfs
+    - Network:
+        widget:
+          type: glances
+          url: http://glances:61208
+          version: 4
+          metric: network:eth0
+    - Processes:
+        widget:
+          type: glances
+          url: http://glances:61208
+          version: 4
+          metric: process
+
+# Network info and VPN-only services (not exposed via Traefik)
+# Uses host.docker.internal to reach ip-info service on host network
+- Local Access:
+    - Local IP:
+        icon: mdi-ip-network
+        widget:
+          type: customapi
+          url: http://host.docker.internal:3099
+          refreshInterval: 60000
+          mappings:
+            - field: local_ip
+              label: Local
+    - Tailscale IP:
+        icon: si-tailscale
+        widget:
+          type: customapi
+          url: http://host.docker.internal:3099
+          refreshInterval: 60000
+          mappings:
+            - field: tailscale_ip
+              label: Tailscale
+    - qBittorrent:
+        icon: qbittorrent
+        href: http://host.docker.internal:8080
+        description: Torrent client (VPN only)
