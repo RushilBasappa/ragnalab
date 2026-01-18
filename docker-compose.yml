@@ -13,11 +13,12 @@ include:
   - path: stack/media/docker-compose.yml
   - path: stack/apps/docker-compose.yml
 
-# Shared networks - defined once here, referenced as external in service composes
+# Shared networks - external networks created once, used by all services
+# Create with: docker network create proxy && docker network create socket_proxy_network && docker network create media
 networks:
   proxy:
-    name: proxy
+    external: true
   socket_proxy_network:
-    name: socket_proxy_network
+    external: true
   media:
-    name: media
+    external: true
