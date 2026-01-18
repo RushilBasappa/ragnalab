@@ -54,10 +54,22 @@
 - Local Access:
     - Local IP:
         icon: mdi-ip-network
-        description: "10.0.0.245"
+        widget:
+          type: customapi
+          url: http://localhost:3099
+          refreshInterval: 60000
+          mappings:
+            - field: local_ip
+              label: Local
     - Tailscale IP:
         icon: si-tailscale
-        description: "100.75.173.7"
+        widget:
+          type: customapi
+          url: http://localhost:3099
+          refreshInterval: 60000
+          mappings:
+            - field: tailscale_ip
+              label: Tailscale
     - qBittorrent:
         icon: qbittorrent
         href: http://100.75.173.7:8080
