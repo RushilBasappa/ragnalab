@@ -53,11 +53,11 @@ services:
       # Autokuma monitoring - HTTP and container
       - "kuma.pihole.http.name=Pi-hole"
       - "kuma.pihole.http.url=https://pihole.ragnalab.xyz"
-      - "kuma.pihole.http.parent_name=Apps"
+      - "kuma.pihole.http.parent_name=apps-group"
       - "kuma.pihole-container.docker.name=Pi-hole Container"
       - "kuma.pihole-container.docker.docker_container=pihole"
-      - "kuma.pihole-container.docker.docker_host=my-docker"
-      - "kuma.pihole-container.docker.parent_name=Containers"
+      - "kuma.pihole-container.docker.docker_host_name=my-docker"
+      - "kuma.pihole-container.docker.parent_name=containers-group"
     deploy:
       resources:
         limits:

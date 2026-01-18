@@ -42,11 +42,11 @@ services:
       # Autokuma monitoring - HTTP and container
       - "kuma.radarr.http.name=Radarr"
       - "kuma.radarr.http.url=https://radarr.ragnalab.xyz"
-      - "kuma.radarr.http.parent_name=Media"
+      - "kuma.radarr.http.parent_name=media-group"
       - "kuma.radarr-container.docker.name=Radarr Container"
       - "kuma.radarr-container.docker.docker_container=radarr"
-      - "kuma.radarr-container.docker.docker_host=my-docker"
-      - "kuma.radarr-container.docker.parent_name=Containers"
+      - "kuma.radarr-container.docker.docker_host_name=my-docker"
+      - "kuma.radarr-container.docker.parent_name=containers-group"
     deploy:
       resources:
         limits:

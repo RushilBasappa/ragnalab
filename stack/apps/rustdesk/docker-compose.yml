@@ -25,11 +25,11 @@ services:
       - "kuma.rustdesk-hbbs.port.name=RustDesk ID Server"
       - "kuma.rustdesk-hbbs.port.hostname=100.75.173.7"
       - "kuma.rustdesk-hbbs.port.port=21116"
-      - "kuma.rustdesk-hbbs.port.parent_name=Apps"
+      - "kuma.rustdesk-hbbs.port.parent_name=apps-group"
       - "kuma.rustdesk-hbbs-container.docker.name=RustDesk HBBS Container"
       - "kuma.rustdesk-hbbs-container.docker.docker_container=rustdesk-hbbs"
-      - "kuma.rustdesk-hbbs-container.docker.docker_host=my-docker"
-      - "kuma.rustdesk-hbbs-container.docker.parent_name=Containers"
+      - "kuma.rustdesk-hbbs-container.docker.docker_host_name=my-docker"
+      - "kuma.rustdesk-hbbs-container.docker.parent_name=containers-group"
 
   hbbr:
     image: rustdesk/rustdesk-server:latest
@@ -45,11 +45,11 @@ services:
       - "kuma.rustdesk-hbbr.port.name=RustDesk Relay Server"
       - "kuma.rustdesk-hbbr.port.hostname=100.75.173.7"
       - "kuma.rustdesk-hbbr.port.port=21117"
-      - "kuma.rustdesk-hbbr.port.parent_name=Apps"
+      - "kuma.rustdesk-hbbr.port.parent_name=apps-group"
       - "kuma.rustdesk-hbbr-container.docker.name=RustDesk HBBR Container"
       - "kuma.rustdesk-hbbr-container.docker.docker_container=rustdesk-hbbr"
-      - "kuma.rustdesk-hbbr-container.docker.docker_host=my-docker"
-      - "kuma.rustdesk-hbbr-container.docker.parent_name=Containers"
+      - "kuma.rustdesk-hbbr-container.docker.docker_host_name=my-docker"
+      - "kuma.rustdesk-hbbr-container.docker.parent_name=containers-group"
 
 volumes:
   rustdesk-data:

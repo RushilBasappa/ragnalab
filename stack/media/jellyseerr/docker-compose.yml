@@ -40,11 +40,11 @@ services:
       # Autokuma monitoring - HTTP and container
       - kuma.jellyseerr.http.name=Jellyseerr
       - kuma.jellyseerr.http.url=https://requests.ragnalab.xyz
-      - kuma.jellyseerr.http.parent_name=Media
+      - kuma.jellyseerr.http.parent_name=media-group
       - kuma.jellyseerr-container.docker.name=Jellyseerr Container
       - kuma.jellyseerr-container.docker.docker_container=jellyseerr
-      - kuma.jellyseerr-container.docker.docker_host=my-docker
-      - kuma.jellyseerr-container.docker.parent_name=Containers
+      - kuma.jellyseerr-container.docker.docker_host_name=my-docker
+      - kuma.jellyseerr-container.docker.parent_name=containers-group
     deploy:
       resources:
         limits:

@@ -42,11 +42,11 @@ services:
       # Autokuma monitoring - HTTP and container
       - "kuma.sonarr.http.name=Sonarr"
       - "kuma.sonarr.http.url=https://sonarr.ragnalab.xyz"
-      - "kuma.sonarr.http.parent_name=Media"
+      - "kuma.sonarr.http.parent_name=media-group"
       - "kuma.sonarr-container.docker.name=Sonarr Container"
       - "kuma.sonarr-container.docker.docker_container=sonarr"
-      - "kuma.sonarr-container.docker.docker_host=my-docker"
-      - "kuma.sonarr-container.docker.parent_name=Containers"
+      - "kuma.sonarr-container.docker.docker_host_name=my-docker"
+      - "kuma.sonarr-container.docker.parent_name=containers-group"
     deploy:
       resources:
         limits:

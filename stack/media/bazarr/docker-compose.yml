@@ -42,11 +42,11 @@ services:
       # Autokuma monitoring - HTTP and container
       - "kuma.bazarr.http.name=Bazarr"
       - "kuma.bazarr.http.url=https://bazarr.ragnalab.xyz"
-      - "kuma.bazarr.http.parent_name=Media"
+      - "kuma.bazarr.http.parent_name=media-group"
       - "kuma.bazarr-container.docker.name=Bazarr Container"
       - "kuma.bazarr-container.docker.docker_container=bazarr"
-      - "kuma.bazarr-container.docker.docker_host=my-docker"
-      - "kuma.bazarr-container.docker.parent_name=Containers"
+      - "kuma.bazarr-container.docker.docker_host_name=my-docker"
+      - "kuma.bazarr-container.docker.parent_name=containers-group"
     deploy:
       resources:
         limits:

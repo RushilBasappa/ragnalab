@@ -42,11 +42,11 @@ services:
       # Autokuma monitoring - HTTP and container
       - "kuma.jellyfin.http.name=Jellyfin"
       - "kuma.jellyfin.http.url=https://jellyfin.ragnalab.xyz"
-      - "kuma.jellyfin.http.parent_name=Media"
+      - "kuma.jellyfin.http.parent_name=media-group"
       - "kuma.jellyfin-container.docker.name=Jellyfin Container"
       - "kuma.jellyfin-container.docker.docker_container=jellyfin"
-      - "kuma.jellyfin-container.docker.docker_host=my-docker"
-      - "kuma.jellyfin-container.docker.parent_name=Containers"
+      - "kuma.jellyfin-container.docker.docker_host_name=my-docker"
+      - "kuma.jellyfin-container.docker.parent_name=containers-group"
     deploy:
       resources:
         limits:

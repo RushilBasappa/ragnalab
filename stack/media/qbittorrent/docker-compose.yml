@@ -36,10 +36,10 @@ services:
     labels:
       - "docker-volume-backup.stop-during-backup=qbittorrent"
       # Autokuma monitoring - container only (no HTTP endpoint via Traefik)
-      - "kuma.qbittorrent.docker.name=qBittorrent"
-      - "kuma.qbittorrent.docker.docker_container=qbittorrent"
-      - "kuma.qbittorrent.docker.docker_host=my-docker"
-      - "kuma.qbittorrent.docker.parent_name=Containers"
+      - "kuma.qbittorrent-container.docker.name=qBittorrent"
+      - "kuma.qbittorrent-container.docker.docker_container=qbittorrent"
+      - "kuma.qbittorrent-container.docker.docker_host_name=my-docker"
+      - "kuma.qbittorrent-container.docker.parent_name=containers-group"
 
 volumes:
   qbittorrent_qbittorrent-config:
