@@ -3,19 +3,21 @@
 set -e
 source "$(dirname "$0")/common.sh"
 
-URL="http://localhost:7878"
-wait_for "$URL"
+wait_for radarr 7878
 
 API_KEY="${RADARR_API_KEY:-$(get_api_key radarr)}"
 [ -z "$API_KEY" ] && echo "No API key found" && exit 1
 
 echo "Configuring Radarr auth..."
-CONFIG=$(curl -ks "$URL/api/v3/config/host" -H "X-Api-Key: $API_KEY")
+CONFIG=$(api radarr http://localhost:7878/api/v3/config/host -H "X-Api-Key: $API_KEY")
 echo "$CONFIG" | jq '.authenticationMethod = "Forms" | .username = "admin" | .password = "Ragnalab2026" | .authenticationRequired = "Enabled"' | \
-curl -ks -X PUT "$URL/api/v3/config/host" -H "X-Api-Key: $API_KEY" -H "Content-Type: application/json" -d @- > /dev/null
+docker exec -i radarr curl -sf -X PUT http://localhost:7878/api/v3/config/host \
+    -H "X-Api-Key: $API_KEY" \
+    -H "Content-Type: application/json" \
+    -d @- > /dev/null
 
 echo "Adding qBittorrent download client..."
-curl -ks -X POST "$URL/api/v3/downloadclient" \
+docker exec radarr curl -sf -X POST http://localhost:7878/api/v3/downloadclient \
     -H "X-Api-Key: $API_KEY" \
     -H "Content-Type: application/json" \
     -d '{
@@ -34,7 +36,7 @@ curl -ks -X POST "$URL/api/v3/downloadclient" \
     }' > /dev/null 2>&1 || echo "(may already exist)"
 
 echo "Adding root folder..."
-curl -ks -X POST "$URL/api/v3/rootfolder" \
+docker exec radarr curl -sf -X POST http://localhost:7878/api/v3/rootfolder \
     -H "X-Api-Key: $API_KEY" \
     -H "Content-Type: application/json" \
     -d '{"path": "/media/library/movies"}' > /dev/null 2>&1 || echo "(may already exist)"

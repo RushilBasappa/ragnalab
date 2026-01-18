@@ -3,15 +3,14 @@
 set -e
 source "$(dirname "$0")/common.sh"
 
-URL="http://localhost:9696"
-wait_for "$URL"
+wait_for prowlarr 9696
 
 PROWLARR_KEY="${PROWLARR_API_KEY:-$(get_api_key prowlarr)}"
 SONARR_KEY="${SONARR_API_KEY:-$(get_api_key sonarr)}"
 RADARR_KEY="${RADARR_API_KEY:-$(get_api_key radarr)}"
 
 echo "Adding Sonarr to Prowlarr..."
-curl -ks -X POST "$URL/api/v1/applications" \
+docker exec prowlarr curl -sf -X POST http://localhost:9696/api/v1/applications \
     -H "X-Api-Key: $PROWLARR_KEY" \
     -H "Content-Type: application/json" \
     -d "{
@@ -27,7 +26,7 @@ curl -ks -X POST "$URL/api/v1/applications" \
     }" > /dev/null 2>&1 || echo "(may already exist)"
 
 echo "Adding Radarr to Prowlarr..."
-curl -ks -X POST "$URL/api/v1/applications" \
+docker exec prowlarr curl -sf -X POST http://localhost:9696/api/v1/applications \
     -H "X-Api-Key: $PROWLARR_KEY" \
     -H "Content-Type: application/json" \
     -d "{

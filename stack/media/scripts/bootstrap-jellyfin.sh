@@ -3,12 +3,11 @@
 set -e
 source "$(dirname "$0")/common.sh"
 
-URL="http://localhost:8096"
-wait_for "$URL"
+wait_for jellyfin 8096
 
 echo ""
 echo "Jellyfin requires browser setup:"
-echo "  1. Open http://localhost:8096"
+echo "  1. Open https://jellyfin.ragnalab.xyz"
 echo "  2. Complete setup wizard"
 echo "  3. Create admin user"
 echo "  4. Add libraries:"

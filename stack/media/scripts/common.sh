@@ -11,19 +11,20 @@ if [ -f "$ENV_FILE" ]; then
     export $(grep -v '^#' "$ENV_FILE" | grep -v '^$' | xargs)
 fi
 
-# Wait for service to respond
+# Wait for container to be healthy
 wait_for() {
-    local url="$1"
+    local container="$1"
+    local port="$2"
     local max=30
-    echo "Waiting for $url..."
+    echo "Waiting for $container..."
     for i in $(seq 1 $max); do
-        if curl -ks -o /dev/null -w "" "$url" 2>/dev/null; then
+        if docker exec "$container" curl -sf "http://localhost:$port" > /dev/null 2>&1; then
             echo "Ready."
             return 0
         fi
         sleep 2
     done
-    echo "Timeout waiting for $url"
+    echo "Timeout"
     return 1
 }
 
@@ -31,4 +32,11 @@ wait_for() {
 get_api_key() {
     local container="$1"
     docker exec "$container" cat /config/config.xml 2>/dev/null | grep -oP '(?<=<ApiKey>)[^<]+' || echo ""
+}
+
+# Run curl inside container
+api() {
+    local container="$1"
+    shift
+    docker exec "$container" curl -sf "$@"
 }
