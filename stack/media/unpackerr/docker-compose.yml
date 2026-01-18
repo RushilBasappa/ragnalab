@@ -38,7 +38,7 @@ services:
       - "kuma.unpackerr-container.docker.name=Unpackerr"
       - "kuma.unpackerr-container.docker.docker_container=unpackerr"
       - "kuma.unpackerr-container.docker.docker_host_name=my-docker"
-      - "kuma.unpackerr-container.docker.parent_name=containers-group"
+      - "kuma.unpackerr-container.docker.parent_name=media-group"
 
 networks:
   media:

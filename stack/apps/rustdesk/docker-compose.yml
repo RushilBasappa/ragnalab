@@ -29,7 +29,7 @@ services:
       - "kuma.rustdesk-hbbs-container.docker.name=RustDesk HBBS Container"
       - "kuma.rustdesk-hbbs-container.docker.docker_container=rustdesk-hbbs"
       - "kuma.rustdesk-hbbs-container.docker.docker_host_name=my-docker"
-      - "kuma.rustdesk-hbbs-container.docker.parent_name=containers-group"
+      - "kuma.rustdesk-hbbs-container.docker.parent_name=apps-group"
 
   hbbr:
     image: rustdesk/rustdesk-server:latest
@@ -49,7 +49,7 @@ services:
       - "kuma.rustdesk-hbbr-container.docker.name=RustDesk HBBR Container"
       - "kuma.rustdesk-hbbr-container.docker.docker_container=rustdesk-hbbr"
       - "kuma.rustdesk-hbbr-container.docker.docker_host_name=my-docker"
-      - "kuma.rustdesk-hbbr-container.docker.parent_name=containers-group"
+      - "kuma.rustdesk-hbbr-container.docker.parent_name=apps-group"
 
 volumes:
   rustdesk-data:

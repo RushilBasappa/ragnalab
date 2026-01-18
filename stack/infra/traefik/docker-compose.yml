@@ -51,18 +51,12 @@ services:
       - "kuma.containers-group.group.name=Containers"
       # Define Docker Host for container monitoring (socket-proxy)
       - "kuma.my-docker.docker_host.name=Docker Socket Proxy"
-      - "kuma.my-docker.docker_host.connection_type=tcp"
-      - "kuma.my-docker.docker_host.hostname=socket-proxy"
-      - "kuma.my-docker.docker_host.port=2375"
+      - "kuma.my-docker.docker_host.docker_type=tcp"
+      - "kuma.my-docker.docker_host.docker_daemon=tcp://socket-proxy:2375"
       # Traefik HTTP monitor
       - "kuma.traefik.http.name=Traefik"
       - "kuma.traefik.http.url=https://traefik.ragnalab.xyz"
       - "kuma.traefik.http.parent_name=infra-group"
-      # Traefik container monitor
-      - "kuma.traefik-container.docker.name=Traefik Container"
-      - "kuma.traefik-container.docker.docker_container=traefik"
-      - "kuma.traefik-container.docker.docker_host_name=my-docker"
-      - "kuma.traefik-container.docker.parent_name=containers-group"
       # --- Homepage labels ---
       - "homepage.group=Infrastructure"
       - "homepage.name=Traefik"

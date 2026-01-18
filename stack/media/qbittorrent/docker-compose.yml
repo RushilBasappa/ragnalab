@@ -39,7 +39,7 @@ services:
       - "kuma.qbittorrent-container.docker.name=qBittorrent"
       - "kuma.qbittorrent-container.docker.docker_container=qbittorrent"
       - "kuma.qbittorrent-container.docker.docker_host_name=my-docker"
-      - "kuma.qbittorrent-container.docker.parent_name=containers-group"
+      - "kuma.qbittorrent-container.docker.parent_name=media-group"
 
 volumes:
   qbittorrent_qbittorrent-config:

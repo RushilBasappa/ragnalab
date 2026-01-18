@@ -11,8 +11,9 @@ services:
     image: pihole/pihole:latest
     container_name: pihole
     restart: unless-stopped
-    hostname: pihole
-    domainname: ragnalab.xyz
+    # Note: hostname/domainname removed to prevent Docker from adding
+    # pihole.ragnalab.xyz -> container IPs in /etc/hosts, which would
+    # override our DNS config that points to Traefik's Tailscale IP
     profiles: ["apps"]
     cap_add:
       - NET_ADMIN  # Required for DHCP
@@ -50,14 +51,10 @@ services:
       - "homepage.widget.version=6"
       - "homepage.widget.key=${PIHOLE_API_KEY}"
       - "homepage.server=my-docker"
-      # Autokuma monitoring - HTTP and container
+      # Autokuma monitoring - HTTP only
       - "kuma.pihole.http.name=Pi-hole"
-      - "kuma.pihole.http.url=https://pihole.ragnalab.xyz"
+      - "kuma.pihole.http.url=https://pihole.ragnalab.xyz/admin/"
       - "kuma.pihole.http.parent_name=apps-group"
-      - "kuma.pihole-container.docker.name=Pi-hole Container"
-      - "kuma.pihole-container.docker.docker_container=pihole"
-      - "kuma.pihole-container.docker.docker_host_name=my-docker"
-      - "kuma.pihole-container.docker.parent_name=containers-group"
     deploy:
       resources:
         limits:

@@ -176,14 +176,14 @@ Plans:
 7. All existing services automatically monitored (HTTP + Docker container checks)
 
 Plans:
-- [ ] 07-01-PLAN.md — Create stack/ structure and migrate infrastructure services
-- [ ] 07-02-PLAN.md — Migrate media services to stack/media/
-- [ ] 07-03-PLAN.md — Migrate apps to stack/apps/ and simplify Makefile
-- [ ] 07-04-PLAN.md — Socket-proxy migration for Uptime Kuma and Homepage
-- [ ] 07-05-PLAN.md — Expand backup coverage with missing volumes
-- [ ] 07-06-PLAN.md — Deploy Autokuma and add kuma labels to infrastructure
-- [ ] 07-07-PLAN.md — Add kuma labels to media and app services
-- [ ] 07-08-PLAN.md — Final verification checkpoint
+- [x] 07-01-PLAN.md — Create stack/ structure and migrate infrastructure services
+- [x] 07-02-PLAN.md — Migrate media services to stack/media/
+- [x] 07-03-PLAN.md — Migrate apps to stack/apps/ and simplify Makefile
+- [x] 07-04-PLAN.md — Socket-proxy migration for Uptime Kuma and Homepage
+- [x] 07-05-PLAN.md — Expand backup coverage with missing volumes
+- [x] 07-06-PLAN.md — Deploy Autokuma and add kuma labels to infrastructure
+- [x] 07-07-PLAN.md — Add kuma labels to media and app services
+- [x] 07-08-PLAN.md — Final verification checkpoint
 
 **Scope:**
 - Restructure into `stack/` folder with nested includes (root -> category -> service composes)
@@ -248,7 +248,7 @@ Plans:
 | 4 - Applications & Templates | Complete | 2026-01-17 |
 | 5 - Pi-hole Network-Wide Ad Blocking | Complete | 2026-01-18 |
 | 6 - Media Automation Stack | Complete | 2026-01-18 |
-| 7 - Operational Hardening | Planned | — |
+| 7 - Operational Hardening | Complete | 2026-01-18 |
 | 8 - Application Expansion | Pending | — |
 
 ---

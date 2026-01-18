@@ -33,14 +33,10 @@ services:
       - "homepage.href=https://glances.ragnalab.xyz"
       - "homepage.description=System Monitor"
       - "homepage.server=my-docker"
-      # Autokuma monitoring - HTTP and container
+      # Autokuma monitoring - HTTP only
       - "kuma.glances.http.name=Glances"
       - "kuma.glances.http.url=https://glances.ragnalab.xyz"
       - "kuma.glances.http.parent_name=apps-group"
-      - "kuma.glances-container.docker.name=Glances Container"
-      - "kuma.glances-container.docker.docker_container=glances"
-      - "kuma.glances-container.docker.docker_host_name=my-docker"
-      - "kuma.glances-container.docker.parent_name=containers-group"
     deploy:
       resources:
         limits:

@@ -28,7 +28,7 @@ services:
       - "kuma.backup-container.docker.name=Backup Container"
       - "kuma.backup-container.docker.docker_container=backup"
       - "kuma.backup-container.docker.docker_host_name=my-docker"
-      - "kuma.backup-container.docker.parent_name=containers-group"
+      - "kuma.backup-container.docker.parent_name=infra-group"
     volumes:
       # Docker socket for container stop/start during backup
       - /var/run/docker.sock:/var/run/docker.sock:ro

@@ -48,7 +48,7 @@ services:
       - "kuma.gluetun-container.docker.name=Gluetun VPN"
       - "kuma.gluetun-container.docker.docker_container=gluetun"
       - "kuma.gluetun-container.docker.docker_host_name=my-docker"
-      - "kuma.gluetun-container.docker.parent_name=containers-group"
+      - "kuma.gluetun-container.docker.parent_name=media-group"
 
 volumes:
   gluetun_gluetun-data:
