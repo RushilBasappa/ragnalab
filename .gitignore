@@ -12,3 +12,6 @@ proxy/traefik/acme/*.json
 .env
 *.env
 !*.env.example
+
+# MkDocs build output
+site/

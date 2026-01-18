@@ -1,0 +1,84 @@
+site_name: RagnaLab
+site_description: Self-hosted homelab on Raspberry Pi 5
+site_url: https://ragnalab.xyz/docs
+
+repo_name: ragnalab
+repo_url: https://github.com/yourusername/ragnalab
+
+theme:
+  name: material
+  palette:
+    # Dark mode
+    - scheme: slate
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    # Light mode
+    - scheme: default
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+
+plugins:
+  - search
+  - tags
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - attr_list
+  - md_in_html
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Prerequisites: getting-started/prerequisites.md
+    - Cloudflare Setup: getting-started/cloudflare.md
+    - Host Setup: getting-started/host-setup.md
+  - Infrastructure:
+    - Traefik: infrastructure/traefik.md
+    - Uptime Kuma: infrastructure/uptime-kuma.md
+    - Backup: infrastructure/backup.md
+  - Applications:
+    - Homepage: apps/homepage.md
+    - Vaultwarden: apps/vaultwarden.md
+    - Pi-hole: apps/pihole.md
+  - Media Stack:
+    - Overview: media/index.md
+    - Gluetun (VPN): media/gluetun.md
+    - qBittorrent: media/qbittorrent.md
+    - Prowlarr: media/prowlarr.md
+    - Sonarr: media/sonarr.md
+    - Radarr: media/radarr.md
+    - Bazarr: media/bazarr.md
+    - Unpackerr: media/unpackerr.md
+    - Jellyfin: media/jellyfin.md
+    - Jellyseerr: media/jellyseerr.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/yourusername/ragnalab

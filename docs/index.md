@@ -101,7 +101,7 @@ make restore SERVICE=vaultwarden
 
 ## Adding New Apps
 
-See the [whoami example](../apps/whoami/docker-compose.yml) for the template pattern.
+See `apps/whoami/docker-compose.yml` in the repository for the template pattern.
 
 Key labels for auto-discovery:
 
