@@ -11,11 +11,11 @@ See: .planning/PROJECT.md
 
 Milestone: v2.0 Network Services - IN PROGRESS
 Phase: 7 of 8 (Operational Hardening) - IN PROGRESS
-Plan: 2 of 8 in phase
-Status: Completed 07-02-PLAN.md (media stack migration)
-Last activity: 2026-01-18 - Completed 07-02-PLAN.md
+Plan: 3 of 8 in phase
+Status: Completed 07-03-PLAN.md (apps migration + Makefile)
+Last activity: 2026-01-18 - Completed 07-03-PLAN.md
 
-Progress: [Phase 7] ██░░░░░░ 2/8 plans | [v2.0] ████████████ 13/13+ plans
+Progress: [Phase 7] ███░░░░░ 3/8 plans | [v2.0] ████████████ 14/14+ plans
 
 ## v2.0 Scope
 
@@ -33,18 +33,16 @@ Progress: [Phase 7] ██░░░░░░ 2/8 plans | [v2.0] █████�
 - [x] Jellyfin media server (06-06)
 - [x] Jellyseerr request management (06-07)
 - [x] Stack verification & Homepage integration (06-08)
-- Grouped structure: `apps/media/*`
+- Grouped structure: `stack/media/*`
 - Storage: `/media/` local, future external migration
 
 **Phase 7: Operational Hardening** (IN PROGRESS)
 - [x] Restructure to stack/ folder with nested includes (07-01)
 - [x] Migrate media stack to stack/media/ (07-02)
-- [ ] Migrate apps to stack/apps/ (07-03)
-- [ ] Archive old directories (07-04)
+- [x] Migrate apps to stack/apps/ + simplify Makefile (07-03)
 - [ ] Socket-proxy migration for Uptime Kuma/Homepage (07-05)
 - [ ] Backup audit and volume coverage (07-06)
 - [ ] Autokuma automated monitoring (07-07)
-- [ ] Makefile operational targets (07-08)
 
 **Phase 8: Application Expansion** (NOT PLANNED)
 - [ ] Immich (photos)
@@ -82,8 +80,10 @@ Progress: [Phase 7] ██░░░░░░ 2/8 plans | [v2.0] █████�
 | Unpackerr | (headless, no UI) | v2.0 |
 | Jellyfin | jellyfin.ragnalab.xyz | v2.0 |
 | Jellyseerr | requests.ragnalab.xyz | v2.0 |
+| RustDesk | 100.75.173.7:21115-21119 | v1.0 |
+| Glances | glances.ragnalab.xyz | v1.0 |
 
-**Total services:** 14 (4 from v1.0 + 10 from v2.0)
+**Total services:** 16 (6 from v1.0 + 10 from v2.0)
 
 ## Key Decisions (v2.0)
 
@@ -111,11 +111,13 @@ Progress: [Phase 7] ██░░░░░░ 2/8 plans | [v2.0] █████�
 | Jellyfin auth for Jellyseerr | Users authenticate with existing Jellyfin accounts, no separate credentials | Implemented (06-07) |
 | Backup volume aggregation | All 8 media volumes added to nightly backup for disaster recovery | Implemented (06-07) |
 | User-configured indexers | Prowlarr indexers require manual setup due to personal tracker preferences | Implemented (06-08) |
-| Nested includes pattern | stack/ → category → service composes for modular management | Implemented (07-01) |
+| Nested includes pattern | stack/ -> category -> service composes for modular management | Implemented (07-01) |
 | Networks as external | Pre-existing networks (proxy, socket_proxy_network, media) marked external | Implemented (07-01) |
 | Extended socket-proxy permissions | IMAGES=1, INFO=1, EVENTS=1 for Homepage/Uptime Kuma | Implemented (07-01) |
 | External volume naming | Use project_volumename format to match existing Docker volumes | Implemented (07-02) |
 | Gluetun include order | Must be first in media includes (qbittorrent uses network_mode: container:gluetun) | Implemented (07-02) |
+| Makefile simplification | Only backup, restore, status targets - services via docker compose --profile | Implemented (07-03) |
+| Old directories archived | apps/ and proxy/ moved to archive/pre-stack-migration/ for reference | Implemented (07-03) |
 
 ## Completed Milestones
 
@@ -151,13 +153,16 @@ Progress: [Phase 7] ██░░░░░░ 2/8 plans | [v2.0] █████�
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Completed 07-02-PLAN.md
+Stopped at: Completed 07-03-PLAN.md
 Resume file: None
-Next action: Execute 07-03-PLAN.md (apps migration)
+Next action: Execute next operational hardening plan (socket-proxy, backup audit, or autokuma)
 
-**Architecture implemented (2026-01-18):**
+**Architecture completed (2026-01-18):**
 - `stack/` parent folder for all services
-- Nested includes: root → category → service composes
+- Nested includes: root -> category -> service composes
 - Each service has own folder with own docker-compose.yml
 - Infrastructure services operational from stack/infra/
-- Media services operational from stack/media/ (07-02)
+- Media services operational from stack/media/
+- App services operational from stack/apps/
+- Old apps/ and proxy/ directories archived
+- Makefile simplified to operational targets only
