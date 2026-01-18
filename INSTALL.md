@@ -23,7 +23,8 @@ Complete setup guide for installing RagnaLab on a fresh Raspberry Pi 5.
 12. [Homepage Setup](#12-homepage-setup)
 13. [Vaultwarden Setup](#13-vaultwarden-setup)
 14. [Pi-hole Setup](#14-pi-hole-setup)
-15. [Adding New Applications](#15-adding-new-applications)
+15. [Media Automation Stack Setup](#15-media-automation-stack-setup)
+16. [Adding New Applications](#16-adding-new-applications)
 
 ---
 
@@ -539,7 +540,128 @@ Pi-hole runs in DNS-only mode. Configure devices to use `10.0.0.200` as their DN
 
 ---
 
-## 15. Adding New Applications
+## 15. Media Automation Stack Setup
+
+The media stack provides automated TV and movie downloading with request management.
+
+### 15.1 Prerequisites
+
+**Required:** VPN account with WireGuard support (e.g., ProtonVPN, Mullvad)
+
+### 15.2 Configure Environment
+
+```bash
+cp apps/media/.env.example apps/media/.env
+nano apps/media/.env
+```
+
+Fill in your VPN credentials:
+```
+VPN_SERVICE_PROVIDER=protonvpn
+OPENVPN_USER=your-protonvpn-username
+OPENVPN_PASSWORD=your-protonvpn-password
+WIREGUARD_PRIVATE_KEY=your-wireguard-private-key
+SERVER_COUNTRIES=Netherlands
+```
+
+### 15.3 Deploy Media Stack
+
+```bash
+# Deploy in order (dependencies matter)
+docker compose -f apps/media/gluetun/docker-compose.yml up -d
+docker compose -f apps/media/qbittorrent/docker-compose.yml up -d
+docker compose -f apps/media/prowlarr/docker-compose.yml up -d
+docker compose -f apps/media/sonarr/docker-compose.yml up -d
+docker compose -f apps/media/radarr/docker-compose.yml up -d
+docker compose -f apps/media/bazarr/docker-compose.yml up -d
+docker compose -f apps/media/unpackerr/docker-compose.yml up -d
+docker compose -f apps/media/jellyfin/docker-compose.yml up -d
+docker compose -f apps/media/jellyseerr/docker-compose.yml up -d
+```
+
+### 15.4 Verify VPN Protection
+
+```bash
+# Check VPN IP (should NOT be your home IP)
+docker exec qbittorrent curl -s ifconfig.me
+
+# Verify Gluetun is healthy
+docker inspect gluetun --format='{{.State.Health.Status}}'
+```
+
+### 15.5 Configure Prowlarr Indexers
+
+1. Open https://prowlarr.ragnalab.xyz
+2. Navigate to: Indexers > Add Indexer
+3. Add public indexers (no account needed):
+   - YTS (movies)
+   - EZTV (TV shows)
+   - TorrentGalaxy
+4. Test each indexer after adding
+5. Verify sync to Sonarr/Radarr: Settings > Apps
+
+### 15.6 Jellyfin Initial Setup
+
+1. Open https://jellyfin.ragnalab.xyz
+2. Complete the setup wizard
+3. Create admin account
+4. Libraries are pre-configured (Movies, TV Shows)
+5. **Important:** Verify transcoding is DISABLED in Settings > Playback > Transcoding
+
+### 15.7 Jellyseerr Initial Setup
+
+1. Open https://requests.ragnalab.xyz
+2. Select "Use your Jellyfin account"
+3. Enter Jellyfin URL: `http://jellyfin:8096`
+4. Log in with your Jellyfin admin account
+5. Sonarr/Radarr connections are pre-configured
+
+### 15.8 Add Uptime Kuma Monitors
+
+Add these monitors to https://status.ragnalab.xyz:
+
+**HTTP(s) Monitors** (Interval: 60s, Retries: 3):
+
+| Friendly Name | URL |
+|---------------|-----|
+| Prowlarr | https://prowlarr.ragnalab.xyz |
+| Sonarr | https://sonarr.ragnalab.xyz |
+| Radarr | https://radarr.ragnalab.xyz |
+| Bazarr | https://bazarr.ragnalab.xyz |
+| Jellyfin | https://jellyfin.ragnalab.xyz |
+| Jellyseerr | https://requests.ragnalab.xyz |
+
+**Docker Container Monitors** (Type: Docker Container, Docker Host: Local Docker, Interval: 60s):
+
+| Friendly Name | Container Name |
+|---------------|----------------|
+| gluetun (container) | gluetun |
+| qbittorrent (container) | qbittorrent |
+| prowlarr (container) | prowlarr |
+| sonarr (container) | sonarr |
+| radarr (container) | radarr |
+| bazarr (container) | bazarr |
+| unpackerr (container) | unpackerr |
+| jellyfin (container) | jellyfin |
+| jellyseerr (container) | jellyseerr |
+
+**Organize into "Media" group** for better dashboard organization.
+
+### 15.9 Service URLs
+
+| URL | Service | Purpose |
+|-----|---------|---------|
+| https://prowlarr.ragnalab.xyz | Prowlarr | Indexer management |
+| https://sonarr.ragnalab.xyz | Sonarr | TV show automation |
+| https://radarr.ragnalab.xyz | Radarr | Movie automation |
+| https://bazarr.ragnalab.xyz | Bazarr | Subtitle management |
+| https://jellyfin.ragnalab.xyz | Jellyfin | Media server |
+| https://requests.ragnalab.xyz | Jellyseerr | Request management |
+| localhost:8080 | qBittorrent | Torrent client (VPN-only) |
+
+---
+
+## 16. Adding New Applications
 
 Create a new app folder with a docker-compose.yml:
 
@@ -605,6 +727,12 @@ The app will automatically appear in Traefik and Homepage.
 | https://home.ragnalab.xyz | Homepage Dashboard |
 | https://vault.ragnalab.xyz | Vaultwarden |
 | https://pihole.ragnalab.xyz | Pi-hole Admin |
+| https://prowlarr.ragnalab.xyz | Prowlarr (Indexers) |
+| https://sonarr.ragnalab.xyz | Sonarr (TV) |
+| https://radarr.ragnalab.xyz | Radarr (Movies) |
+| https://bazarr.ragnalab.xyz | Bazarr (Subtitles) |
+| https://jellyfin.ragnalab.xyz | Jellyfin (Media Server) |
+| https://requests.ragnalab.xyz | Jellyseerr (Requests) |
 | https://whoami.ragnalab.xyz | Test Service |
 
 ---
@@ -637,4 +765,4 @@ tailscale status
 ---
 
 *Last updated: 2026-01-18*
-*Covers: Phase 1-4 (v1.0), Phase 5 (Pi-hole)*
+*Covers: Phase 1-4 (v1.0), Phase 5 (Pi-hole), Phase 6 (Media Stack)*
