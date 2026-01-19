@@ -71,7 +71,3 @@
           mappings:
             - field: tailscale_ip
               label: Tailscale
-    - qBittorrent:
-        icon: qbittorrent
-        href: http://host.docker.internal:8080
-        description: Torrent client (VPN only)

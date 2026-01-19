@@ -1,6 +1,6 @@
 # Gluetun VPN Container - Network tunnel for torrent privacy
 # All torrent traffic from qBittorrent routes through this VPN
-# Access qBittorrent WebUI at: http://localhost:8080 (via gluetun)
+# Access qBittorrent WebUI at: https://qbit.ragnalab.xyz (via Traefik)
 
 services:
   gluetun:
@@ -23,13 +23,11 @@ services:
       - SERVER_COUNTRIES=${SERVER_COUNTRIES:-United States}
       # Timezone
       - TZ=America/Los_Angeles
-    ports:
-      # qBittorrent WebUI (exposed through gluetun for VPN routing)
-      - "8080:8080"
     volumes:
       - gluetun-data:/gluetun
     networks:
       - media
+      - proxy
     # Note: Gluetun has built-in healthcheck at http://127.0.0.1:9999/
     deploy:
       resources:
@@ -44,11 +42,33 @@ services:
         max-size: "10m"
         max-file: "3"
     labels:
-      # Autokuma monitoring - container only (no HTTP endpoint)
+      # --- Traefik labels for qBittorrent WebUI ---
+      - "traefik.enable=true"
+      - "traefik.http.routers.qbittorrent.rule=Host(`qbit.ragnalab.xyz`)"
+      - "traefik.http.routers.qbittorrent.entrypoints=websecure"
+      - "traefik.http.routers.qbittorrent.tls=true"
+      - "traefik.http.routers.qbittorrent.tls.certresolver=letsencrypt"
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
+      - "traefik.docker.network=proxy"
+      # --- Homepage labels for qBittorrent ---
+      - "homepage.group=Media"
+      - "homepage.name=qBittorrent"
+      - "homepage.icon=qbittorrent.png"
+      - "homepage.href=https://qbit.ragnalab.xyz"
+      - "homepage.description=Torrent Client"
+      - "homepage.widget.type=qbittorrent"
+      - "homepage.widget.url=http://gluetun:8080"
+      - "homepage.widget.username=${QBIT_USERNAME}"
+      - "homepage.widget.password=${QBIT_PASSWORD}"
+      - "homepage.server=ragnalab-docker"
+      # --- Autokuma monitoring ---
       - "kuma.gluetun-container.docker.name=Gluetun VPN"
       - "kuma.gluetun-container.docker.docker_container=gluetun"
       - "kuma.gluetun-container.docker.docker_host_name=ragnalab-docker"
       - "kuma.gluetun-container.docker.parent_name=media-group"
+      - "kuma.qbittorrent.http.name=qBittorrent"
+      - "kuma.qbittorrent.http.url=https://qbit.ragnalab.xyz"
+      - "kuma.qbittorrent.http.parent_name=media-group"
 
 volumes:
   gluetun-data:
@@ -57,4 +77,6 @@ volumes:
 
 networks:
   media:
+    external: true
+  proxy:
     external: true
