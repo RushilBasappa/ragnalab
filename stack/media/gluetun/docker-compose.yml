@@ -19,8 +19,15 @@ services:
       # WireGuard credentials
       - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
       - WIREGUARD_ADDRESSES=${WIREGUARD_ADDRESSES}
-      # Server location preference
-      - SERVER_COUNTRIES=${SERVER_COUNTRIES:-United States}
+      # Server location preference (Netherlands supports port forwarding)
+      - SERVER_COUNTRIES=${SERVER_COUNTRIES:-Netherlands}
+      # Port forwarding for torrents (required for incoming connections)
+      - VPN_PORT_FORWARDING=on
+      - VPN_PORT_FORWARDING_PROVIDER=protonvpn
+      # Auto-update qBittorrent listening port when forwarded port changes
+      # Note: Uses POST method and {{PORTS}} template variable (gluetun syntax)
+      # Retry loop waits for qBittorrent to be ready (may start after gluetun)
+      - VPN_PORT_FORWARDING_UP_COMMAND=/bin/sh -c 'for i in 1 2 3 4 5 6 7 8 9 10; do wget -qO- --post-data="json={\"listen_port\":{{PORTS}}}" "http://localhost:8080/api/v2/app/setPreferences" && exit 0; sleep 5; done; exit 1'
       # Timezone
       - TZ=America/Los_Angeles
     volumes:
