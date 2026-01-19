@@ -1,6 +1,7 @@
 ---
 created: 2026-01-19T05:19
-title: Review Jellyfin bootstrap script
+updated: 2026-01-19T13:45
+title: Rewrite Jellyfin bootstrap script
 area: media
 files:
   - stack/media/scripts/bootstrap-jellyfin.sh
@@ -8,12 +9,14 @@ files:
 
 ## Problem
 
-The Jellyfin bootstrap script was recently rewritten to auto-complete the setup wizard programmatically. Need to review the implementation to ensure:
-- API calls are correct and complete
-- Error handling is adequate
-- Admin credentials are handled securely
-- Script integrates properly with main bootstrap sequence
+Current Jellyfin bootstrap script is overly complex and doesn't work properly. Needs complete rewrite.
 
 ## Solution
 
-TBD - manual review of the bootstrap script implementation.
+1. Delete everything in the current bootstrap-jellyfin.sh
+2. Use other bootstrap scripts (Sonarr, Radarr, Prowlarr) as reference for style/pattern
+3. Implement:
+   - Complete the Jellyfin setup wizard via API
+   - Get the API key
+   - Add media folders (movies, tv)
+4. Keep it simple and consistent with other bootstrap scripts
