@@ -214,5 +214,6 @@ Next action: 07-08-PLAN.md (final verification and phase summary)
 
 ### Pending Todos
 
-1 pending todo(s) in `.planning/todos/pending/`:
+2 pending todo(s) in `.planning/todos/pending/`:
 - **Configure Pi-hole DNS for ragnalab.xyz subdomains** (networking)
+- **Review Jellyfin bootstrap script** (media)
