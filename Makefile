@@ -1,7 +1,7 @@
 # RagnaLab Operations
 # Services managed via: docker compose --profile {infra|media|apps} up -d
 
-.PHONY: init networks volumes media-dirs volumes-delete backup restore status bootstrap
+.PHONY: init networks volumes media-dirs volumes-delete backup restore restore-all status bootstrap
 
 # === Setup Targets ===
 
@@ -32,6 +32,7 @@ networks:
 volumes:
 	@echo "Creating volumes..."
 	@docker volume create ragnalab_uptime-kuma-data 2>/dev/null || echo "  ragnalab_uptime-kuma-data (exists)"
+	@docker volume create ragnalab_autokuma-data 2>/dev/null || echo "  ragnalab_autokuma-data (exists)"
 	@docker volume create ragnalab_vaultwarden-data 2>/dev/null || echo "  ragnalab_vaultwarden-data (exists)"
 	@docker volume create ragnalab_rustdesk-data 2>/dev/null || echo "  ragnalab_rustdesk-data (exists)"
 	@docker volume create ragnalab_prowlarr-config 2>/dev/null || echo "  ragnalab_prowlarr-config (exists)"
@@ -88,7 +89,7 @@ backup:
 	@echo "\nBackup complete. Recent archives:"
 	@ls -lht backups/*.tar.gz 2>/dev/null | head -3
 
-# Restore from backup
+# Restore from backup (single service)
 restore:
 ifndef SERVICE
 	@echo "Usage: make restore SERVICE=<service-name> [BACKUP=<filename>]"
@@ -100,6 +101,46 @@ ifndef SERVICE
 else
 	@./stack/infra/backup/scripts/restore.sh $(SERVICE) $(BACKUP)
 endif
+
+# Services to restore (order matters: infra first, then apps, then media)
+RESTORE_SERVICES := uptime-kuma vaultwarden rustdesk pihole traefik-acme prowlarr sonarr radarr bazarr jellyfin jellyseerr qbittorrent gluetun
+
+# Restore all services from backup
+# Usage: make restore-all [BACKUP=<filename>]
+restore-all:
+	@echo "=== Full System Restore ==="
+	@echo ""
+	@echo "This will restore ALL services from backup:"
+	@echo "  $(RESTORE_SERVICES)"
+	@echo ""
+	@if [ -z "$(BACKUP)" ]; then \
+		echo "Using: backup-latest.tar.gz"; \
+	else \
+		echo "Using: $(BACKUP)"; \
+	fi
+	@echo ""
+	@echo "WARNING: This will OVERWRITE all existing service data!"
+	@echo "Press Ctrl+C to cancel, or wait 10 seconds..."
+	@sleep 10
+	@echo ""
+	@echo "Step 1: Stopping all services..."
+	@docker compose --profile infra --profile media --profile apps down 2>/dev/null || true
+	@echo ""
+	@echo "Step 2: Ensuring volumes exist..."
+	@$(MAKE) -s volumes
+	@echo ""
+	@echo "Step 3: Restoring services..."
+	@for svc in $(RESTORE_SERVICES); do \
+		echo ""; \
+		echo "--- Restoring $$svc ---"; \
+		echo "y" | ./stack/infra/backup/scripts/restore.sh $$svc $(BACKUP) 2>&1 | grep -v "^$$" || true; \
+	done
+	@echo ""
+	@echo "Step 4: Starting all services..."
+	@docker compose --profile infra --profile media --profile apps up -d
+	@echo ""
+	@echo "=== Restore complete ==="
+	@echo "Verify services at their URLs"
 
 # Status overview
 status:
