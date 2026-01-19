@@ -26,9 +26,9 @@ sleep 5 # Wait for radarr to be ready
 echo "5/8 Prowlarr sync..."
 $SCRIPT_DIR/bootstrap-prowlarr-sync.sh
 
-# sleep 5 # Wait for prowlarr sync to be ready
-# echo "6/8 Bazarr..."
-# $SCRIPT_DIR/bootstrap-bazarr.sh
+sleep 5 # Wait for prowlarr sync to be ready
+echo "6/8 Bazarr..."
+$SCRIPT_DIR/bootstrap-bazarr.sh
 
 # sleep 5 # Wait for bazarr to be ready
 # echo "7/8 Jellyfin..."
