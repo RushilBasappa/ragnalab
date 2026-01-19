@@ -24,10 +24,11 @@ services:
       # Port forwarding for torrents (required for incoming connections)
       - VPN_PORT_FORWARDING=on
       - VPN_PORT_FORWARDING_PROVIDER=protonvpn
-      # Auto-update qBittorrent listening port when forwarded port changes
-      # Note: Uses POST method and {{PORTS}} template variable (gluetun syntax)
-      # Retry loop waits for qBittorrent to be ready (may start after gluetun)
-      - VPN_PORT_FORWARDING_UP_COMMAND=/bin/sh -c 'for i in 1 2 3 4 5 6 7 8 9 10; do wget -qO- --post-data="json={\"listen_port\":{{PORTS}}}" "http://localhost:8080/api/v2/app/setPreferences" && exit 0; sleep 5; done; exit 1'
+      # Auto-update qBittorrent listening port and bind to VPN interface when forwarded port changes
+      # Uses {{PORT}} template variable. Gets tun0 IP dynamically because qBittorrent 5.x doesn't
+      # properly resolve interface names - must use actual IP address for binding to work.
+      # Retry loop (10x5s) waits for qBittorrent to be ready after gluetun starts
+      - VPN_PORT_FORWARDING_UP_COMMAND=/bin/sh -c 'TUN_IP=$$(ip -4 addr show tun0 | grep -o "inet [0-9.]*" | cut -d" " -f2); for i in 1 2 3 4 5 6 7 8 9 10; do wget -qO- --post-data "json={\"listen_port\":{{PORT}},\"current_network_interface\":\"\",\"current_interface_address\":\"$$TUN_IP\"}" "http://127.0.0.1:8080/api/v2/app/setPreferences" && exit 0; sleep 5; done; exit 1'
       # Timezone
       - TZ=America/Los_Angeles
     volumes:
