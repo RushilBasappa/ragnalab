@@ -3,7 +3,7 @@
 **Project:** RagnaLab
 **Created:** 2026-01-16
 **Current Milestone:** v2.0 Network Services
-**Phases:** 8 (6 complete, 2 pending)
+**Phases:** 9 (7 complete, 2 pending)
 
 ## Overview
 
@@ -200,10 +200,44 @@ Plans:
 
 ---
 
+### Phase 7.1: Backrest Backup System (INSERTED)
+
+**Goal:** Replace offen/docker-volume-backup with Backrest for UI-based backup management, better deduplication, and easier restore operations
+**Depends on:** Phase 7
+**Milestone:** v2.0
+**Plans:** 0 plans
+
+**Success Criteria:**
+1. Backrest accessible at backups.ragnalab.xyz with valid SSL certificate
+2. All 13 volumes + 2 bind mounts configured as backup sources
+3. Pre/post hooks stop SQLite containers (9 services) during backup
+4. Retention policy configured (7 daily, 4 weekly, 12 monthly)
+5. Test restore completes successfully via Backrest UI
+6. Old backup system removed after parallel verification period
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 7.1 to break down)
+
+**Scope:**
+- Deploy Backrest container with Traefik integration
+- Mount all backup source volumes (read-only)
+- Configure local repository at /backups
+- Set up backup plans via Backrest UI
+- Configure container stop/start hooks for SQLite databases
+- Run parallel with old system during verification
+- Remove old offen/docker-volume-backup after Backrest verified
+
+**Migration notes:**
+- Keep old system temporarily for safety
+- Old system: offen/docker-volume-backup:v2 (no UI, script-based restore)
+- New system: Backrest (Restic backend, web UI, better deduplication)
+
+---
+
 ### Phase 8: Application Expansion
 
 **Goal:** Deploy 14 new applications to expand homelab capabilities across productivity, media, and personal management
-**Depends on:** Phase 7
+**Depends on:** Phase 7.1
 **Milestone:** v2.0
 **Plans:** 0 plans
 
@@ -249,6 +283,7 @@ Plans:
 | 5 - Pi-hole Network-Wide Ad Blocking | Complete | 2026-01-18 |
 | 6 - Media Automation Stack | Complete | 2026-01-18 |
 | 7 - Operational Hardening | Complete | 2026-01-18 |
+| 7.1 - Backrest Backup System | Pending | — |
 | 8 - Application Expansion | Pending | — |
 
 ---

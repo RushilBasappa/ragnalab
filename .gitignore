@@ -22,3 +22,6 @@ archive/
 # Pi-hole data directories (not version controlled)
 stack/infra/pihole/etc-pihole/
 stack/infra/pihole/etc-dnsmasq.d/
+stack/infra/homepage/config/logs/
+backups/
+stack/infra/backrest/config/

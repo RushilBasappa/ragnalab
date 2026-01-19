@@ -25,6 +25,6 @@ if [ -z "$API_KEY" ]; then
 fi
 
 # Save API key to .env
-sed -i "s/^#\?JELLYSEERR_API_KEY=.*/JELLYSEERR_API_KEY=$API_KEY/" "$(dirname "$0")/../.env"
+sed -i "s/^JELLYSEERR_API_KEY=.*/JELLYSEERR_API_KEY=$API_KEY/" "$(dirname "$0")/../.env"
 
 echo "Jellyseerr API key saved to .env"

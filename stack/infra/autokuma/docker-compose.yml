@@ -44,6 +44,8 @@ services:
 
 volumes:
   autokuma-data:
+    external: true
+    name: ragnalab_autokuma-data
 
 networks:
   socket_proxy_network:

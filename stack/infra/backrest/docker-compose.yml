@@ -1,0 +1,118 @@
+# Backrest - UI-Based Backup System (Restic backend)
+# Access at: https://backups.ragnalab.xyz
+# Replaces: offen/docker-volume-backup
+
+services:
+  backrest:
+    image: garethgeorge/backrest:latest
+    container_name: backrest
+    hostname: backrest
+    restart: unless-stopped
+    profiles: ["infra"]
+    environment:
+      - TZ=America/Los_Angeles
+      - BACKREST_DATA=/data
+      - BACKREST_CONFIG=/config/config.json
+    volumes:
+      # Backrest config and data
+      - backrest-data:/data
+      - ./config:/config
+      # Docker socket for container stop/start hooks
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Backup destination (local repository)
+      - /home/rushil/workspace/ragnalab/backups:/backups
+      # === Volumes to backup/restore ===
+      # Infrastructure
+      - uptime-kuma-data:/sources/uptime-kuma
+      - autokuma-data:/sources/autokuma
+      # Apps
+      - vaultwarden-data:/sources/vaultwarden
+      - rustdesk-data:/sources/rustdesk
+      # Media
+      - prowlarr-config:/sources/prowlarr
+      - sonarr-config:/sources/sonarr
+      - radarr-config:/sources/radarr
+      - bazarr-config:/sources/bazarr
+      - jellyfin-config:/sources/jellyfin
+      - jellyseerr-config:/sources/jellyseerr
+      - qbittorrent-config:/sources/qbittorrent
+      - gluetun-data:/sources/gluetun
+      # Bind mounts
+      - /home/rushil/workspace/ragnalab/stack/infra/pihole/etc-pihole:/sources/pihole
+      - /home/rushil/workspace/ragnalab/stack/infra/traefik/config/acme:/sources/traefik-acme
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backrest.rule=Host(`backups.ragnalab.xyz`)"
+      - "traefik.http.routers.backrest.entrypoints=websecure"
+      - "traefik.http.routers.backrest.tls.certresolver=letsencrypt"
+      - "traefik.http.services.backrest.loadbalancer.server.port=9898"
+      - "traefik.docker.network=proxy"
+      # --- Autokuma monitoring labels ---
+      - "kuma.backrest.http.name=Backrest"
+      - "kuma.backrest.http.url=https://backups.ragnalab.xyz"
+      - "kuma.backrest.http.parent_name=infra-group"
+      - "kuma.backrest-container.docker.name=Backrest Container"
+      - "kuma.backrest-container.docker.docker_container=backrest"
+      - "kuma.backrest-container.docker.docker_host_name=ragnalab-docker"
+      - "kuma.backrest-container.docker.parent_name=containers-group"
+      # --- Homepage labels ---
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Backrest"
+      - "homepage.icon=backrest.png"
+      - "homepage.href=https://backups.ragnalab.xyz"
+      - "homepage.description=Backup Management"
+      - "homepage.server=ragnalab-docker"
+    networks:
+      - proxy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '1.0'
+        reservations:
+          memory: 128M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  backrest-data:
+  # Note: uptime-kuma-data and autokuma-data are in same include tree (no redeclaration needed)
+  # External volumes - Apps
+  vaultwarden-data:
+    external: true
+    name: ragnalab_vaultwarden-data
+  rustdesk-data:
+    external: true
+    name: ragnalab_rustdesk-data
+  # External volumes - Media
+  prowlarr-config:
+    external: true
+    name: ragnalab_prowlarr-config
+  sonarr-config:
+    external: true
+    name: ragnalab_sonarr-config
+  radarr-config:
+    external: true
+    name: ragnalab_radarr-config
+  bazarr-config:
+    external: true
+    name: ragnalab_bazarr-config
+  jellyfin-config:
+    external: true
+    name: ragnalab_jellyfin-config
+  jellyseerr-config:
+    external: true
+    name: ragnalab_jellyseerr-config
+  qbittorrent-config:
+    external: true
+    name: ragnalab_qbittorrent-config
+  gluetun-data:
+    external: true
+    name: ragnalab_gluetun-data
+
+networks:
+  proxy:
+    external: true

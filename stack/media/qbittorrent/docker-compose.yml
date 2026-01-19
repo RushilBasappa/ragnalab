@@ -9,8 +9,11 @@ services:
     container_name: qbittorrent
     restart: unless-stopped
     profiles: ["media"]
+    # Wait for Gluetun VPN to be healthy before starting
+    depends_on:
+      gluetun:
+        condition: service_healthy
     # CRITICAL: Route ALL traffic through Gluetun VPN
-    # network_mode implicitly depends on gluetun - container must be running
     network_mode: "container:gluetun"
     environment:
       - PUID=1000
