@@ -32,6 +32,7 @@ services:
       - "homepage.description=Service Monitoring"
       - "homepage.widget.type=uptimekuma"
       - "homepage.widget.url=http://uptime-kuma:3001"
+      - "homepage.widget.key=uk1_5FA68veGbrA6CN895oIT0knRzHVhpyt2W2sowwm6"
       - "homepage.widget.slug=status-page"
       - "homepage.server=ragnalab-docker"
       # --- Backup labels ---
