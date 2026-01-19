@@ -23,19 +23,19 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 
 # Service to compose path mapping
 # Format: service-name:compose-path:volume-name:backup-dir-name
-# volume-name: Docker volume name (without project prefix)
+# volume-name: Docker volume name (full name with ragnalab_ prefix)
 # backup-dir-name: Directory name in backup archive
 get_service_config() {
     local service="$1"
     case "$service" in
         # Infrastructure services
         uptime-kuma)
-            echo "stack/infra/uptime-kuma/docker-compose.yml:uptime-kuma_uptime-kuma-data:uptime-kuma"
+            echo "stack/infra/uptime-kuma/docker-compose.yml:ragnalab_uptime-kuma-data:uptime-kuma"
             ;;
         homepage)
-            echo "stack/infra/homepage/docker-compose.yml:homepage_homepage-config:homepage"
+            echo "stack/infra/homepage/docker-compose.yml:NONE:homepage"
             ;;
-        traefik-acme)
+        traefik-acme|traefik)
             # Special case: bind mount restore
             echo "BIND_MOUNT:${STACK_DIR}/infra/traefik/config/acme:traefik-acme"
             ;;
@@ -46,37 +46,40 @@ get_service_config() {
         glances)
             echo "stack/infra/glances/docker-compose.yml:NONE:glances"
             ;;
+        autokuma)
+            echo "stack/infra/autokuma/docker-compose.yml:ragnalab_autokuma-data:autokuma"
+            ;;
         # App services
         vaultwarden)
-            echo "stack/apps/vaultwarden/docker-compose.yml:vaultwarden_vaultwarden-data:vaultwarden"
+            echo "stack/apps/vaultwarden/docker-compose.yml:ragnalab_vaultwarden-data:vaultwarden"
             ;;
         rustdesk)
-            echo "stack/apps/rustdesk/docker-compose.yml:rustdesk_rustdesk-data:rustdesk"
+            echo "stack/apps/rustdesk/docker-compose.yml:ragnalab_rustdesk-data:rustdesk"
             ;;
         # Media services
         prowlarr)
-            echo "stack/media/prowlarr/docker-compose.yml:prowlarr_prowlarr-config:prowlarr"
+            echo "stack/media/prowlarr/docker-compose.yml:ragnalab_prowlarr-config:prowlarr"
             ;;
         sonarr)
-            echo "stack/media/sonarr/docker-compose.yml:sonarr_sonarr-config:sonarr"
+            echo "stack/media/sonarr/docker-compose.yml:ragnalab_sonarr-config:sonarr"
             ;;
         radarr)
-            echo "stack/media/radarr/docker-compose.yml:radarr_radarr-config:radarr"
+            echo "stack/media/radarr/docker-compose.yml:ragnalab_radarr-config:radarr"
             ;;
         bazarr)
-            echo "stack/media/bazarr/docker-compose.yml:bazarr_bazarr-config:bazarr"
+            echo "stack/media/bazarr/docker-compose.yml:ragnalab_bazarr-config:bazarr"
             ;;
         jellyfin)
-            echo "stack/media/jellyfin/docker-compose.yml:jellyfin_jellyfin-config:jellyfin"
+            echo "stack/media/jellyfin/docker-compose.yml:ragnalab_jellyfin-config:jellyfin"
             ;;
         jellyseerr)
-            echo "stack/media/jellyseerr/docker-compose.yml:jellyseerr_jellyseerr-config:jellyseerr"
+            echo "stack/media/jellyseerr/docker-compose.yml:ragnalab_jellyseerr-config:jellyseerr"
             ;;
         qbittorrent)
-            echo "stack/media/qbittorrent/docker-compose.yml:qbittorrent_qbittorrent-config:qbittorrent"
+            echo "stack/media/qbittorrent/docker-compose.yml:ragnalab_qbittorrent-config:qbittorrent"
             ;;
         gluetun)
-            echo "stack/media/gluetun/docker-compose.yml:gluetun_gluetun-data:gluetun"
+            echo "stack/media/gluetun/docker-compose.yml:ragnalab_gluetun-data:gluetun"
             ;;
         *)
             echo ""
@@ -197,15 +200,12 @@ if [[ "$VOLUME_NAME" == "NONE" ]]; then
 fi
 
 # Docker volume restore flow
-COMPOSE_FULL_PATH="${RAGNALAB_ROOT}/${COMPOSE_PATH}"
-if [[ ! -f "$COMPOSE_FULL_PATH" ]]; then
-    log_error "Compose file not found: ${COMPOSE_FULL_PATH}"
-    exit 1
-fi
+# With nested includes, we must use the root compose with profiles
+# Individual service compose files can't run standalone
 
-# Step 1: Stop the service
+# Step 1: Stop the service using docker stop (profile-based compose doesn't support single-service down)
 log_info "Stopping ${SERVICE_NAME}..."
-docker compose -f "${COMPOSE_FULL_PATH}" down || true
+docker stop "${SERVICE_NAME}" 2>/dev/null || true
 
 # Step 2: Extract backup to temp location
 TEMP_DIR=$(mktemp -d)
@@ -241,7 +241,9 @@ rm -rf "$TEMP_DIR"
 
 # Step 7: Restart service
 log_info "Restarting ${SERVICE_NAME}..."
-docker compose -f "${COMPOSE_FULL_PATH}" up -d
+docker start "${SERVICE_NAME}" 2>/dev/null || {
+    log_warn "Could not start via docker start. Try: docker compose --profile <profile> up -d"
+}
 
 # Step 8: Verify service is running
 sleep 5
