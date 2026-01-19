@@ -5,17 +5,17 @@
 See: .planning/PROJECT.md
 
 **Core value:** Secure, private-only access to self-hosted applications with professional-grade HTTPS, automatic service discovery, and dead-simple process for adding new apps.
-**Current focus:** Phase 7 - Operational Hardening
+**Current focus:** Phase 7.1 - Backrest Backup System
 
 ## Current Position
 
 Milestone: v2.0 Network Services - IN PROGRESS
-Phase: 7 of 8 (Operational Hardening) - IN PROGRESS
-Plan: 7 of 8 in phase
-Status: Completed 07-07-PLAN.md (kuma labels for media and app services)
-Last activity: 2026-01-18 - Completed 07-07-PLAN.md
+Phase: 7.1 (Backrest Backup System) - IN PROGRESS
+Plan: Backrest deployed and configured, verification pending
+Status: Backrest running with 4 backup plans scheduled daily at 3 AM
+Last activity: 2026-01-19 - Configured backup plans, hooks, and retention
 
-Progress: [Phase 7] ███████░ 7/8 plans | [v2.0] ████████████ 14/14+ plans
+Progress: [Phase 7] ████████ 8/8 plans (COMPLETE) | [Phase 7.1] ██████░░ 3/5 tasks | [v2.0] 14+ plans
 
 ## v2.0 Scope
 
@@ -36,15 +36,22 @@ Progress: [Phase 7] ███████░ 7/8 plans | [v2.0] █████�
 - Grouped structure: `stack/media/*`
 - Storage: `/media/` local, future external migration
 
-**Phase 7: Operational Hardening** (IN PROGRESS)
+**Phase 7: Operational Hardening** (COMPLETE)
 - [x] Restructure to stack/ folder with nested includes (07-01)
 - [x] Migrate media stack to stack/media/ (07-02)
 - [x] Migrate apps to stack/apps/ + simplify Makefile (07-03)
 - [x] Socket-proxy migration for Uptime Kuma/Homepage (07-04)
 - [x] Backup audit and volume coverage (07-05)
-- [x] Autokuma deployment and configuration (07-06) - *in parallel*
+- [x] Autokuma deployment and configuration (07-06)
 - [x] Kuma labels for media and app services (07-07)
-- [ ] Final verification and phase summary (07-08)
+- [x] Final verification and phase summary (07-08)
+
+**Phase 7.1: Backrest Backup System** (IN PROGRESS) - INSERTED
+- [x] Deploy Backrest with Traefik integration
+- [x] Configure backup plans (4 plans via config.json)
+- [x] Set up pre/post hooks for SQLite containers
+- [ ] Verify backups and test restore (run manual backup from UI)
+- [ ] Remove old backup system after verification
 
 **Phase 8: Application Expansion** (NOT PLANNED)
 - [ ] Immich (photos)
@@ -85,8 +92,9 @@ Progress: [Phase 7] ███████░ 7/8 plans | [v2.0] █████�
 | RustDesk | 100.75.173.7:21115-21119 | v1.0 |
 | Glances | glances.ragnalab.xyz | v1.0 |
 | Autokuma | (headless, no UI) | v2.0 |
+| Backrest | backups.ragnalab.xyz | v2.0 |
 
-**Total services:** 17 (6 from v1.0 + 11 from v2.0)
+**Total services:** 18 (6 from v1.0 + 12 from v2.0)
 
 ## Key Decisions (v2.0)
 
@@ -164,6 +172,7 @@ Progress: [Phase 7] ███████░ 7/8 plans | [v2.0] █████�
 
 - Phase 6 added: Media Automation Stack (arr suite + Jellyfin)
 - Phase 7 added: Operational Hardening (backup coverage + socket-proxy migration)
+- Phase 7.1 inserted after Phase 7: Backrest Backup System (URGENT) - replace script-based backup with UI tool
 - Phase 8 added: Application Expansion (14 new apps)
 
 ## Session Continuity
@@ -214,6 +223,5 @@ Next action: 07-08-PLAN.md (final verification and phase summary)
 
 ### Pending Todos
 
-2 pending todo(s) in `.planning/todos/pending/`:
+1 pending todo(s) in `.planning/todos/pending/`:
 - **Configure Pi-hole DNS for ragnalab.xyz subdomains** (networking)
-- **Review Jellyfin bootstrap script** (media)
