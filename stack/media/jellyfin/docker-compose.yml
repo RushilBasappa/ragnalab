@@ -12,7 +12,11 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/Los_Angeles
-      - JELLYFIN_PublishedServerUrl=https://jellyfin.ragnalab.xyz
+      - JELLYFIN_PublishedServerUrl=http://10.0.0.245:8096
+    ports:
+      # LAN access (for TV apps and local discovery)
+      - "8096:8096"           # HTTP web interface
+      - "7359:7359/udp"       # Jellyfin autodiscovery
     volumes:
       - jellyfin-config:/config
       - /media/library:/data/media:ro
