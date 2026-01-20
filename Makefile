@@ -46,6 +46,7 @@ volumes:
 	@docker volume create ragnalab_gluetun-data 2>/dev/null || echo "  ragnalab_gluetun-data (exists)"
 	@docker volume create ragnalab_recyclarr-config 2>/dev/null || echo "  ragnalab_recyclarr-config (exists)"
 	@docker volume create ragnalab_maintainerr-config 2>/dev/null || echo "  ragnalab_maintainerr-config (exists)"
+	@docker volume create ragnalab_plex-config 2>/dev/null || echo "  ragnalab_plex-config (exists)"
 	@echo "Volumes ready."
 
 # Bootstrap media stack (configure apps after fresh deploy)
@@ -54,7 +55,7 @@ bootstrap:
 
 # Volume groups by profile
 VOLUMES_INFRA := ragnalab_uptime-kuma-data ragnalab_autokuma-data ragnalab_backrest-data
-VOLUMES_MEDIA := ragnalab_prowlarr-config ragnalab_sonarr-config ragnalab_radarr-config ragnalab_bazarr-config ragnalab_jellyfin-config ragnalab_jellyseerr-config ragnalab_qbittorrent-config ragnalab_gluetun-data ragnalab_recyclarr-config ragnalab_maintainerr-config
+VOLUMES_MEDIA := ragnalab_prowlarr-config ragnalab_sonarr-config ragnalab_radarr-config ragnalab_bazarr-config ragnalab_jellyfin-config ragnalab_jellyseerr-config ragnalab_qbittorrent-config ragnalab_gluetun-data ragnalab_recyclarr-config ragnalab_maintainerr-config ragnalab_plex-config
 VOLUMES_APPS := ragnalab_vaultwarden-data ragnalab_rustdesk-data
 
 # Delete volumes (WARNING: destroys data)

@@ -45,4 +45,5 @@ $SCRIPT_DIR/bootstrap-recyclarr.sh
 echo "=== Done ==="
 echo ""
 echo "Manual setup required:"
+echo "  - Plex: https://plex.ragnalab.xyz (get claim token from https://plex.tv/claim)"
 echo "  - Maintainerr: https://maintainerr.ragnalab.xyz (configure cleanup rules)"

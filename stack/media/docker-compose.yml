@@ -1,14 +1,12 @@
 # RagnaLab Media Stack
 # Profile: media
 # Services: gluetun, port-manager, qbittorrent, prowlarr (+ flaresolverr), sonarr, radarr,
-#           bazarr, recyclarr, unpackerr, jellyfin, jellyseerr, maintainerr
+#           bazarr, recyclarr, unpackerr, jellyfin, jellyseerr, plex, maintainerr
 #
 # Usage: docker compose --profile media up -d
 
 include:
-  # gluetun must be first - qbittorrent uses network_mode: container:gluetun
-  # port-manager is defined in gluetun/docker-compose.yml
-  - path: gluetun/docker-compose.yml
+  # qbittorrent stack includes gluetun and port-manager with proper depends_on
   - path: qbittorrent/docker-compose.yml
   - path: prowlarr/docker-compose.yml
   - path: sonarr/docker-compose.yml
@@ -18,6 +16,7 @@ include:
   - path: unpackerr/docker-compose.yml
   - path: jellyfin/docker-compose.yml
   - path: jellyseerr/docker-compose.yml
+  - path: plex/docker-compose.yml
   - path: maintainerr/docker-compose.yml
 
 # Networks defined in root docker-compose.yml
