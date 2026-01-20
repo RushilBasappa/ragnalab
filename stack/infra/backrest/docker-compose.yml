@@ -78,8 +78,10 @@ services:
         max-file: "3"
 
 volumes:
-  backrest-data:
   # Note: uptime-kuma-data and autokuma-data are in same include tree (no redeclaration needed)
+  backrest-data:
+    external: true
+    name: ragnalab_backrest-data
   # External volumes - Apps
   vaultwarden-data:
     external: true

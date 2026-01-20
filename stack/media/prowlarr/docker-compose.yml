@@ -1,6 +1,7 @@
 # Prowlarr - Indexer Manager for arr apps
 # Access at: https://prowlarr.ragnalab.xyz
 # Centralizes indexer configuration for Sonarr/Radarr
+# Includes Flaresolverr for Cloudflare bypass
 
 services:
   prowlarr:
@@ -15,6 +16,7 @@ services:
     volumes:
       - prowlarr-config:/config
     networks:
+      - media
       - proxy
     labels:
       # Traefik routing
@@ -56,11 +58,35 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  # Flaresolverr - Cloudflare bypass proxy for indexers
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    restart: unless-stopped
+    profiles: ["media"]
+    environment:
+      - TZ=America/Los_Angeles
+      - LOG_LEVEL=info
+    networks:
+      - media
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+
 volumes:
   prowlarr-config:
     external: true
     name: ragnalab_prowlarr-config
 
 networks:
+  media:
+    external: true
   proxy:
     external: true

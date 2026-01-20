@@ -5,7 +5,7 @@ set -e
 # This script just extracts the API key after manual setup
 
 # Check if Jellyseerr is initialized
-INITIALIZED=$(docker exec jellyseerr curl -sf "http://localhost:5055/api/v1/settings/public" 2>/dev/null | jq -r '.initialized // false')
+INITIALIZED=$(docker exec jellyseerr wget -qO- "http://localhost:5055/api/v1/settings/public" 2>/dev/null | jq -r '.initialized // false')
 
 if [ "$INITIALIZED" != "true" ]; then
   echo "Jellyseerr requires manual setup at https://requests.ragnalab.xyz"
@@ -16,15 +16,6 @@ if [ "$INITIALIZED" != "true" ]; then
   exit 0
 fi
 
-# Get API key from settings
-API_KEY=$(docker exec jellyseerr curl -sf "http://localhost:5055/api/v1/settings/main" 2>/dev/null | jq -r '.apiKey // empty')
-
-if [ -z "$API_KEY" ]; then
-  echo "Jellyseerr setup complete but couldn't retrieve API key"
-  exit 0
-fi
-
-# Save API key to .env
-sed -i "s/^JELLYSEERR_API_KEY=.*/JELLYSEERR_API_KEY=$API_KEY/" "$(dirname "$0")/../.env"
-
-echo "Jellyseerr API key saved to .env"
+echo "Jellyseerr initialized."
+echo "REMINDER: Copy API key from Settings → General → API Key"
+echo "  Then add to .env: JELLYSEERR_API_KEY=<key>"

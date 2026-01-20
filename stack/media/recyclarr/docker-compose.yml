@@ -1,0 +1,35 @@
+# Recyclarr - Syncs TRaSH Guides quality profiles to Sonarr/Radarr
+# Runs on schedule to keep quality settings optimal
+# Config: /config/recyclarr.yml
+
+services:
+  recyclarr:
+    image: ghcr.io/recyclarr/recyclarr:latest
+    container_name: recyclarr
+    restart: unless-stopped
+    profiles: ["media"]
+    environment:
+      - TZ=America/Los_Angeles
+    volumes:
+      - recyclarr-config:/config
+    networks:
+      - media
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.25'
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+volumes:
+  recyclarr-config:
+    external: true
+    name: ragnalab_recyclarr-config
+
+networks:
+  media:
+    external: true

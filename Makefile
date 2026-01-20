@@ -33,6 +33,7 @@ volumes:
 	@echo "Creating volumes..."
 	@docker volume create ragnalab_uptime-kuma-data 2>/dev/null || echo "  ragnalab_uptime-kuma-data (exists)"
 	@docker volume create ragnalab_autokuma-data 2>/dev/null || echo "  ragnalab_autokuma-data (exists)"
+	@docker volume create ragnalab_backrest-data 2>/dev/null || echo "  ragnalab_backrest-data (exists)"
 	@docker volume create ragnalab_vaultwarden-data 2>/dev/null || echo "  ragnalab_vaultwarden-data (exists)"
 	@docker volume create ragnalab_rustdesk-data 2>/dev/null || echo "  ragnalab_rustdesk-data (exists)"
 	@docker volume create ragnalab_prowlarr-config 2>/dev/null || echo "  ragnalab_prowlarr-config (exists)"
@@ -43,6 +44,8 @@ volumes:
 	@docker volume create ragnalab_jellyseerr-config 2>/dev/null || echo "  ragnalab_jellyseerr-config (exists)"
 	@docker volume create ragnalab_qbittorrent-config 2>/dev/null || echo "  ragnalab_qbittorrent-config (exists)"
 	@docker volume create ragnalab_gluetun-data 2>/dev/null || echo "  ragnalab_gluetun-data (exists)"
+	@docker volume create ragnalab_recyclarr-config 2>/dev/null || echo "  ragnalab_recyclarr-config (exists)"
+	@docker volume create ragnalab_maintainerr-config 2>/dev/null || echo "  ragnalab_maintainerr-config (exists)"
 	@echo "Volumes ready."
 
 # Bootstrap media stack (configure apps after fresh deploy)
@@ -50,8 +53,8 @@ bootstrap:
 	@./stack/media/bootstrap.sh
 
 # Volume groups by profile
-VOLUMES_INFRA := ragnalab_uptime-kuma-data ragnalab_autokuma-data
-VOLUMES_MEDIA := ragnalab_prowlarr-config ragnalab_sonarr-config ragnalab_radarr-config ragnalab_bazarr-config ragnalab_jellyfin-config ragnalab_jellyseerr-config ragnalab_qbittorrent-config ragnalab_gluetun-data
+VOLUMES_INFRA := ragnalab_uptime-kuma-data ragnalab_autokuma-data ragnalab_backrest-data
+VOLUMES_MEDIA := ragnalab_prowlarr-config ragnalab_sonarr-config ragnalab_radarr-config ragnalab_bazarr-config ragnalab_jellyfin-config ragnalab_jellyseerr-config ragnalab_qbittorrent-config ragnalab_gluetun-data ragnalab_recyclarr-config ragnalab_maintainerr-config
 VOLUMES_APPS := ragnalab_vaultwarden-data ragnalab_rustdesk-data
 
 # Delete volumes (WARNING: destroys data)

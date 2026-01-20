@@ -1,6 +1,7 @@
 # RagnaLab Media Stack
 # Profile: media
-# Services: gluetun, port-manager, qbittorrent, prowlarr, sonarr, radarr, bazarr, unpackerr, jellyfin, jellyseerr
+# Services: gluetun, port-manager, qbittorrent, prowlarr (+ flaresolverr), sonarr, radarr,
+#           bazarr, recyclarr, unpackerr, jellyfin, jellyseerr, maintainerr
 #
 # Usage: docker compose --profile media up -d
 
@@ -13,9 +14,11 @@ include:
   - path: sonarr/docker-compose.yml
   - path: radarr/docker-compose.yml
   - path: bazarr/docker-compose.yml
+  - path: recyclarr/docker-compose.yml
   - path: unpackerr/docker-compose.yml
   - path: jellyfin/docker-compose.yml
   - path: jellyseerr/docker-compose.yml
+  - path: maintainerr/docker-compose.yml
 
 # Networks defined in root docker-compose.yml
 # Service composes reference them as external: true

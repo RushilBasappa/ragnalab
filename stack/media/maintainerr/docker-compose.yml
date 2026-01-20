@@ -1,0 +1,54 @@
+# Maintainerr - Automated media cleanup based on rules
+# Auto-remove watched/old media to manage disk space
+# WebUI: Configure rules for cleanup (watched X days ago, older than Y, etc.)
+
+services:
+  maintainerr:
+    image: ghcr.io/jorenn92/maintainerr:latest
+    container_name: maintainerr
+    restart: unless-stopped
+    profiles: ["media"]
+    environment:
+      - TZ=America/Los_Angeles
+    volumes:
+      - maintainerr-config:/opt/data
+    networks:
+      - media
+      - proxy
+    labels:
+      # Traefik routing
+      - "traefik.enable=true"
+      - "traefik.http.routers.maintainerr.rule=Host(`maintainerr.ragnalab.xyz`)"
+      - "traefik.http.routers.maintainerr.entrypoints=websecure"
+      - "traefik.http.routers.maintainerr.tls=true"
+      - "traefik.http.routers.maintainerr.tls.certresolver=letsencrypt"
+      - "traefik.http.services.maintainerr.loadbalancer.server.port=6246"
+      - "traefik.docker.network=proxy"
+      # Homepage dashboard
+      - "homepage.group=Media"
+      - "homepage.name=Maintainerr"
+      - "homepage.icon=maintainerr.png"
+      - "homepage.href=https://maintainerr.ragnalab.xyz"
+      - "homepage.description=Media Cleanup"
+      - "homepage.server=ragnalab-docker"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.25'
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+volumes:
+  maintainerr-config:
+    external: true
+    name: ragnalab_maintainerr-config
+
+networks:
+  media:
+    external: true
+  proxy:
+    external: true
