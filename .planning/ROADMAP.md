@@ -3,7 +3,7 @@
 **Project:** RagnaLab
 **Created:** 2026-01-16
 **Current Milestone:** v2.0 Network Services
-**Phases:** 9 (7 complete, 2 pending)
+**Phases:** 8 (8 complete, Phase 8 moved to v3.0)
 
 ## Overview
 
@@ -234,41 +234,17 @@ Plans:
 
 ---
 
-### Phase 8: Application Expansion
+### Phase 8: Application Expansion (MOVED TO v3.0)
 
-**Goal:** Deploy 14 new applications to expand homelab capabilities across productivity, media, and personal management
-**Depends on:** Phase 7.1
-**Milestone:** v2.0
-**Plans:** 0 plans
+**Status:** Moved to v3.0 — apps will be deployed after Authelia SSO is in place
 
-**Success Criteria:**
-1. All 14 apps accessible via HTTPS at ragnalab.xyz subdomains
-2. All apps with persistent data included in backup system
-3. All apps appear in Homepage dashboard with appropriate widgets
-4. Plex and Jellyfin both functional pointing to same media library
-5. Syncthing successfully syncing test folder between devices
+**Rationale:** Deploying Authelia first means all new apps get SSO protection from day one, avoiding retrofit.
 
-Plans:
-- [ ] TBD (run /gsd:plan-phase 8 to break down)
+**Apps moved to v3.0:**
+- Immich, Paperless-ngx, Tandoor Recipes, ntfy, Dozzle, IT-Tools, Stirling-PDF, Actual Budget, Kavita, Linkding, Memos, Syncthing
 
-**Apps to deploy (14):**
-
-| # | App | Purpose | Subdomain |
-|---|-----|---------|-----------|
-| 1 | Immich | Photo backup | photos.ragnalab.xyz |
-| 2 | Paperless-ngx | Document management | docs.ragnalab.xyz |
-| 3 | Tandoor Recipes | Recipe manager | recipes.ragnalab.xyz |
-| 4 | ntfy | Push notifications | ntfy.ragnalab.xyz |
-| 5 | Dozzle | Log viewer | logs.ragnalab.xyz |
-| 6 | IT-Tools | Developer utilities | tools.ragnalab.xyz |
-| 7 | Stirling-PDF | PDF tools | pdf.ragnalab.xyz |
-| 8 | Actual Budget | Budgeting | budget.ragnalab.xyz |
-| 9 | Recyclarr | Arr quality sync | (no UI - scheduled job) |
-| 10 | Kavita | Manga/comics reader | manga.ragnalab.xyz |
-| 11 | Plex | Media server | plex.ragnalab.xyz |
-| 12 | Linkding | Bookmark manager | links.ragnalab.xyz |
-| 13 | Memos | Quick notes | memos.ragnalab.xyz |
-| 14 | Syncthing | File sync | sync.ragnalab.xyz |
+**Already deployed (v2.0):**
+- Plex, Recyclarr, Flaresolverr, Maintainerr (deployed outside GSD workflow)
 
 ---
 
@@ -283,8 +259,8 @@ Plans:
 | 5 - Pi-hole Network-Wide Ad Blocking | Complete | 2026-01-18 |
 | 6 - Media Automation Stack | Complete | 2026-01-18 |
 | 7 - Operational Hardening | Complete | 2026-01-18 |
-| 7.1 - Backrest Backup System | Pending | — |
-| 8 - Application Expansion | Pending | — |
+| 7.1 - Backrest Backup System | Complete | 2026-01-20 |
+| 8 - Application Expansion | Moved to v3.0 | — |
 
 ---
 

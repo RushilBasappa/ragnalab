@@ -5,17 +5,17 @@
 See: .planning/PROJECT.md
 
 **Core value:** Secure, private-only access to self-hosted applications with professional-grade HTTPS, automatic service discovery, and dead-simple process for adding new apps.
-**Current focus:** Phase 7.1 - Backrest Backup System
+**Current focus:** v2.0 Milestone Completion
 
 ## Current Position
 
-Milestone: v2.0 Network Services - IN PROGRESS
-Phase: 7.1 (Backrest Backup System) - IN PROGRESS
-Plan: Backrest deployed and configured, verification pending
-Status: Backrest running with 4 backup plans scheduled daily at 3 AM
-Last activity: 2026-01-19 - Configured backup plans, hooks, and retention
+Milestone: v2.0 Network Services - READY TO COMPLETE
+Phase: All phases complete (Phase 8 moved to v3.0)
+Plan: None
+Status: Ready to archive v2.0 milestone
+Last activity: 2026-01-20 - Phase 8 moved to v3.0, v2.0 ready for completion
 
-Progress: [Phase 7] ████████ 8/8 plans (COMPLETE) | [Phase 7.1] ██████░░ 3/5 tasks | [v2.0] 14+ plans
+Progress: [v2.0] ████████ 8/8 phases (COMPLETE) | Phase 8 deferred to v3.0 (SSO-first approach)
 
 ## v2.0 Scope
 
@@ -46,28 +46,16 @@ Progress: [Phase 7] ████████ 8/8 plans (COMPLETE) | [Phase 7.1] 
 - [x] Kuma labels for media and app services (07-07)
 - [x] Final verification and phase summary (07-08)
 
-**Phase 7.1: Backrest Backup System** (IN PROGRESS) - INSERTED
+**Phase 7.1: Backrest Backup System** (COMPLETE) - INSERTED
 - [x] Deploy Backrest with Traefik integration
 - [x] Configure backup plans (4 plans via config.json)
 - [x] Set up pre/post hooks for SQLite containers
-- [ ] Verify backups and test restore (run manual backup from UI)
-- [ ] Remove old backup system after verification
+- [x] Verify backups and test restore (run manual backup from UI)
+- [x] Remove old backup system after verification
 
-**Phase 8: Application Expansion** (NOT PLANNED)
-- [ ] Immich (photos)
-- [ ] Paperless-ngx (documents)
-- [ ] Tandoor Recipes (recipes)
-- [ ] ntfy (notifications)
-- [ ] Dozzle (logs)
-- [ ] IT-Tools (dev utilities)
-- [ ] Stirling-PDF (PDF tools)
-- [ ] Actual Budget (budgeting)
-- [ ] Recyclarr (arr sync)
-- [ ] Kavita (manga/comics)
-- [ ] Plex (media server)
-- [ ] Linkding (bookmarks)
-- [ ] Memos (quick notes)
-- [ ] Syncthing (file sync)
+**Phase 8: Application Expansion** (MOVED TO v3.0)
+- Moved to v3.0 — apps will deploy after Authelia SSO
+- Already deployed in v2.0: Plex, Recyclarr, Flaresolverr, Maintainerr
 
 **Plans:** 3 (Phase 5) + 8 (Phase 6) + TBD (Phase 7) + TBD (Phase 8) = 11+ total
 
