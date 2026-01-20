@@ -1,19 +1,81 @@
-# qBittorrent Download Client - Torrent downloads for Sonarr/Radarr
-# All traffic routes through Gluetun VPN for privacy
-# WebUI: http://localhost:8080 (port exposed via gluetun container)
-# Note: First startup generates random admin password - check logs
+# qBittorrent Stack - Torrent client with VPN and port forwarding
+# Startup order: gluetun (VPN) → qbittorrent → port-manager
+# WebUI: https://qbit.ragnalab.xyz (via Traefik on gluetun)
 
 services:
+  # Gluetun VPN - Network tunnel for torrent privacy
+  # Built-in healthcheck verifies VPN connectivity before reporting healthy
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: gluetun
+    restart: unless-stopped
+    profiles: ["media"]
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      - VPN_SERVICE_PROVIDER=${VPN_SERVICE_PROVIDER}
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+      - WIREGUARD_ADDRESSES=${WIREGUARD_ADDRESSES}
+      - SERVER_COUNTRIES=${SERVER_COUNTRIES:-Netherlands}
+      - VPN_PORT_FORWARDING=on
+      - VPN_PORT_FORWARDING_PROVIDER=protonvpn
+      - VPN_PORT_FORWARDING_STATUS_FILE=/gluetun/forwarded_port
+      - TZ=America/Los_Angeles
+    volumes:
+      - gluetun-data:/gluetun
+    networks:
+      - media
+      - proxy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+        reservations:
+          memory: 128M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.qbittorrent.rule=Host(`qbit.ragnalab.xyz`)"
+      - "traefik.http.routers.qbittorrent.entrypoints=websecure"
+      - "traefik.http.routers.qbittorrent.tls=true"
+      - "traefik.http.routers.qbittorrent.tls.certresolver=letsencrypt"
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
+      - "traefik.docker.network=proxy"
+      - "homepage.group=Media"
+      - "homepage.name=qBittorrent"
+      - "homepage.icon=qbittorrent.png"
+      - "homepage.href=https://qbit.ragnalab.xyz"
+      - "homepage.description=Torrent Client"
+      - "homepage.widget.type=qbittorrent"
+      - "homepage.widget.url=http://gluetun:8080"
+      - "homepage.widget.username=${QBIT_USERNAME}"
+      - "homepage.widget.password=${QBIT_PASSWORD}"
+      - "homepage.server=ragnalab-docker"
+      - "kuma.gluetun-container.docker.name=Gluetun VPN"
+      - "kuma.gluetun-container.docker.docker_container=gluetun"
+      - "kuma.gluetun-container.docker.docker_host_name=ragnalab-docker"
+      - "kuma.gluetun-container.docker.parent_name=media-group"
+      - "kuma.qbittorrent.http.name=qBittorrent"
+      - "kuma.qbittorrent.http.url=https://qbit.ragnalab.xyz"
+      - "kuma.qbittorrent.http.parent_name=media-group"
+
+  # qBittorrent - Torrent downloads for Sonarr/Radarr
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
     restart: unless-stopped
     profiles: ["media"]
-    # Wait for Gluetun VPN to be healthy before starting
     depends_on:
       gluetun:
         condition: service_healthy
-    # CRITICAL: Route ALL traffic through Gluetun VPN
     network_mode: "container:gluetun"
     environment:
       - PUID=1000
@@ -22,8 +84,13 @@ services:
       - WEBUI_PORT=8080
     volumes:
       - qbittorrent-config:/config
-      # Media paths - MUST match all arr apps for hardlinks to work
       - /media:/media
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8080 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
     deploy:
       resources:
         limits:
@@ -38,16 +105,51 @@ services:
         max-file: "3"
     labels:
       - "docker-volume-backup.stop-during-backup=qbittorrent"
-      # Autokuma monitoring - container only (no HTTP endpoint via Traefik)
       - "kuma.qbittorrent-container.docker.name=qBittorrent"
       - "kuma.qbittorrent-container.docker.docker_container=qbittorrent"
       - "kuma.qbittorrent-container.docker.docker_host_name=ragnalab-docker"
       - "kuma.qbittorrent-container.docker.parent_name=media-group"
 
+  # Port Manager - Syncs Gluetun forwarded port to qBittorrent
+  port-manager:
+    image: snoringdragon/gluetun-qbittorrent-port-manager:latest
+    container_name: port-manager
+    restart: unless-stopped
+    profiles: ["media"]
+    depends_on:
+      qbittorrent:
+        condition: service_healthy
+    network_mode: "container:gluetun"
+    environment:
+      - QBITTORRENT_SERVER=localhost
+      - QBITTORRENT_PORT=8080
+      - QBITTORRENT_USER=${QBIT_USERNAME:-}
+      - QBITTORRENT_PASS=${QBIT_PASSWORD:-}
+      - PORT_FORWARDED=/tmp/gluetun/forwarded_port
+      - HTTP_S=http
+    volumes:
+      - gluetun-data:/tmp/gluetun:ro
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+          cpus: '0.1'
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+
 volumes:
   qbittorrent-config:
     external: true
     name: ragnalab_qbittorrent-config
+  gluetun-data:
+    external: true
+    name: ragnalab_gluetun-data
 
-# Note: No ports section - ports are exposed on gluetun container
-# Note: No networks section - uses gluetun's network stack
+networks:
+  media:
+    external: true
+  proxy:
+    external: true

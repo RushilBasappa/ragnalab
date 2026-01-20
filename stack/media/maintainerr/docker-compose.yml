@@ -4,7 +4,7 @@
 
 services:
   maintainerr:
-    image: ghcr.io/jorenn92/maintainerr:latest
+    image: ghcr.io/maintainerr/maintainerr:latest
     container_name: maintainerr
     restart: unless-stopped
     profiles: ["media"]
