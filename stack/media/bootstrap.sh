@@ -34,8 +34,8 @@ sleep 5 # Wait for bazarr to be ready
 echo "7/8 Jellyfin..."
 $SCRIPT_DIR/bootstrap-jellyfin.sh
 
-# sleep 5 # Wait for jellyfin to be ready
-# echo "8/8 Jellyseerr..."
-# $SCRIPT_DIR/bootstrap-jellyseerr.sh
+sleep 5 # Wait for jellyfin to be ready
+echo "8/8 Jellyseerr..."
+$SCRIPT_DIR/bootstrap-jellyseerr.sh
 
 echo "=== Done ==="

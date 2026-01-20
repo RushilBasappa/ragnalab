@@ -16,3 +16,7 @@ docker exec prowlarr curl -s "http://localhost:9696/api/v1/config/host" -H "X-Ap
 sed -i "s/^PROWLARR_API_KEY=.*/PROWLARR_API_KEY=$API_KEY/" "$(dirname "$0")/../.env"
 
 echo "Prowlarr configured. API key saved to .env"
+echo "REMINDER: Add indexers in Prowlarr UI (Indexers → Add Indexer):"
+echo "  - YTS (movies, small files)"
+echo "  - EZTV (TV shows)"
+echo "  - Nyaa (anime)"

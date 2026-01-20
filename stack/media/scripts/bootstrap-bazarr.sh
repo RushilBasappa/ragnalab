@@ -34,8 +34,14 @@ if [ -n "$RADARR_KEY" ]; then
     -d "settings-radarr-base_url=" > /dev/null 2>&1 || true
 fi
 
+# Disable embedded subtitles - always download external subs for better sync
+docker exec bazarr curl -s -X POST "http://localhost:6767/api/system/settings" \
+  -H "X-API-KEY: $API_KEY" \
+  -d "settings-general-use_embedded_subs=false" > /dev/null 2>&1 || true
+
 # Save API key to .env
 sed -i "s/^BAZARR_API_KEY=.*/BAZARR_API_KEY=$API_KEY/" "$(dirname "$0")/../.env"
 
 
 echo "Bazarr configured. API key saved to .env"
+echo "REMINDER: Add subtitle providers in Bazarr UI (Settings → Providers)"

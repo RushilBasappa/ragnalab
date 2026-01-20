@@ -38,6 +38,33 @@ docker exec radarr curl -s -X POST "http://localhost:7878/api/v3/rootfolder" \
   -H "Content-Type: application/json" \
   -d '{"path": "/media/library/movies"}' > /dev/null 2>&1 || true
 
+# Add Jellyfin notification to trigger library scan on import
+source "$(dirname "$0")/../.env"
+if [ -n "$JELLYFIN_API_KEY" ]; then
+  docker exec radarr curl -s -X POST "http://localhost:7878/api/v3/notification" \
+    -H "X-Api-Key: $API_KEY" \
+    -H "Content-Type: application/json" \
+    -d "{
+      \"name\": \"Jellyfin\",
+      \"implementation\": \"MediaBrowser\",
+      \"configContract\": \"MediaBrowserSettings\",
+      \"onDownload\": true,
+      \"onUpgrade\": true,
+      \"onRename\": true,
+      \"onMovieDelete\": true,
+      \"onMovieFileDelete\": true,
+      \"fields\": [
+        {\"name\": \"host\", \"value\": \"jellyfin\"},
+        {\"name\": \"port\", \"value\": 8096},
+        {\"name\": \"useSsl\", \"value\": false},
+        {\"name\": \"apiKey\", \"value\": \"$JELLYFIN_API_KEY\"},
+        {\"name\": \"updateLibrary\", \"value\": true},
+        {\"name\": \"mapFrom\", \"value\": \"/media\"},
+        {\"name\": \"mapTo\", \"value\": \"/data/media\"}
+      ]
+    }" > /dev/null 2>&1 || true
+fi
+
 # Save API key to .env
 sed -i "s/^RADARR_API_KEY=.*/RADARR_API_KEY=$API_KEY/" "$(dirname "$0")/../.env"
 
