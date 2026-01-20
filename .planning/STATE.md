@@ -2,74 +2,53 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md
+See: .planning/PROJECT.md (updated 2026-01-20)
 
 **Core value:** Secure, private-only access to self-hosted applications with professional-grade HTTPS, automatic service discovery, and dead-simple process for adding new apps.
-**Current focus:** v2.0 Milestone Completion
+**Current focus:** v3.0 SSO & Access Control — planning next milestone
 
 ## Current Position
 
-Milestone: v2.0 Network Services - READY TO COMPLETE
-Phase: All phases complete (Phase 8 moved to v3.0)
+Milestone: v3.0 SSO & Access Control - NOT STARTED
+Phase: None (milestone not yet planned)
 Plan: None
-Status: Ready to archive v2.0 milestone
-Last activity: 2026-01-20 - Phase 8 moved to v3.0, v2.0 ready for completion
+Status: Ready to plan v3.0 roadmap
+Last activity: 2026-01-20 - v2.0 milestone completed and archived
 
-Progress: [v2.0] ████████ 8/8 phases (COMPLETE) | Phase 8 deferred to v3.0 (SSO-first approach)
+Progress: [v1.0] ████████ SHIPPED | [v2.0] ████████ SHIPPED | [v3.0] ░░░░░░░░ NOT STARTED
 
-## v2.0 Scope
+## Completed Milestones
 
-**Phase 5: Pi-hole Network-Wide Ad Blocking** (COMPLETE)
-- [x] Pi-hole Docker deployment with Traefik integration (05-01)
-- [x] DHCP server configuration (05-02) - *DNS-only mode due to locked gateway*
-- [x] Blocklist and monitoring setup (05-03)
+**v2.0 Network Services (Shipped 2026-01-20):**
+- Pi-hole DNS-based ad blocking (DNS-only mode)
+- Complete media automation stack (13 services)
+- stack/ folder reorganization with nested includes
+- Socket-proxy security hardening
+- Autokuma automatic monitoring (33 monitors)
+- Backrest web UI backup system
+- Bonus: Plex, Recyclarr, Flaresolverr, Maintainerr
 
-**Phase 6: Media Automation Stack** (COMPLETE)
-- [x] Directory structure + Gluetun VPN (06-01)
-- [x] qBittorrent torrent client (06-02)
-- [x] Prowlarr indexer manager (06-03)
-- [x] Sonarr + Radarr media automation (06-04)
-- [x] Bazarr subtitles + Unpackerr extraction (06-05)
-- [x] Jellyfin media server (06-06)
-- [x] Jellyseerr request management (06-07)
-- [x] Stack verification & Homepage integration (06-08)
-- Grouped structure: `stack/media/*`
-- Storage: `/media/` local, future external migration
-
-**Phase 7: Operational Hardening** (COMPLETE)
-- [x] Restructure to stack/ folder with nested includes (07-01)
-- [x] Migrate media stack to stack/media/ (07-02)
-- [x] Migrate apps to stack/apps/ + simplify Makefile (07-03)
-- [x] Socket-proxy migration for Uptime Kuma/Homepage (07-04)
-- [x] Backup audit and volume coverage (07-05)
-- [x] Autokuma deployment and configuration (07-06)
-- [x] Kuma labels for media and app services (07-07)
-- [x] Final verification and phase summary (07-08)
-
-**Phase 7.1: Backrest Backup System** (COMPLETE) - INSERTED
-- [x] Deploy Backrest with Traefik integration
-- [x] Configure backup plans (4 plans via config.json)
-- [x] Set up pre/post hooks for SQLite containers
-- [x] Verify backups and test restore (run manual backup from UI)
-- [x] Remove old backup system after verification
-
-**Phase 8: Application Expansion** (MOVED TO v3.0)
-- Moved to v3.0 — apps will deploy after Authelia SSO
-- Already deployed in v2.0: Plex, Recyclarr, Flaresolverr, Maintainerr
-
-**Plans:** 3 (Phase 5) + 8 (Phase 6) + TBD (Phase 7) + TBD (Phase 8) = 11+ total
+**v1.0 Foundation (Shipped 2026-01-17):**
+- Traefik reverse proxy with Let's Encrypt DNS-01
+- Tailscale VPN integration (host-level, dual access)
+- Uptime Kuma monitoring
+- Homepage dashboard with widgets
+- Vaultwarden password manager
+- Automated backups with 3-2-1 strategy
 
 ## Services Deployed
 
-| Service | URL | Status |
-|---------|-----|--------|
+| Service | URL | Version |
+|---------|-----|---------|
 | Traefik | traefik.ragnalab.xyz | v1.0 |
 | Uptime Kuma | status.ragnalab.xyz | v1.0 |
 | Homepage | home.ragnalab.xyz | v1.0 |
 | Vaultwarden | vault.ragnalab.xyz | v1.0 |
+| RustDesk | 100.75.173.7:21115-21119 | v1.0 |
+| Glances | glances.ragnalab.xyz | v1.0 |
 | Pi-hole | pihole.ragnalab.xyz | v2.0 |
 | Gluetun | (VPN tunnel, no UI) | v2.0 |
-| qBittorrent | localhost:8080 (via VPN) | v2.0 |
+| qBittorrent | qbit.ragnalab.xyz | v2.0 |
 | Prowlarr | prowlarr.ragnalab.xyz | v2.0 |
 | Sonarr | sonarr.ragnalab.xyz | v2.0 |
 | Radarr | radarr.ragnalab.xyz | v2.0 |
@@ -77,139 +56,51 @@ Progress: [v2.0] ████████ 8/8 phases (COMPLETE) | Phase 8 deferr
 | Unpackerr | (headless, no UI) | v2.0 |
 | Jellyfin | jellyfin.ragnalab.xyz | v2.0 |
 | Jellyseerr | requests.ragnalab.xyz | v2.0 |
-| RustDesk | 100.75.173.7:21115-21119 | v1.0 |
-| Glances | glances.ragnalab.xyz | v1.0 |
+| Plex | plex.ragnalab.xyz | v2.0 |
+| Recyclarr | (scheduled job, no UI) | v2.0 |
+| Flaresolverr | (internal, no UI) | v2.0 |
+| Maintainerr | maintainerr.ragnalab.xyz | v2.0 |
 | Autokuma | (headless, no UI) | v2.0 |
 | Backrest | backups.ragnalab.xyz | v2.0 |
 
-**Total services:** 18 (6 from v1.0 + 12 from v2.0)
+**Total services:** 22
 
-## Key Decisions (v2.0)
+## v3.0 Scope (Planned)
 
-| Decision | Rationale | Outcome |
-|----------|-----------|---------|
-| DNS-only mode for Pi-hole | Xfinity XB8 gateway DHCP settings locked and cannot be disabled | Implemented (05-02) |
-| Manual device DNS config | Users set DNS to 10.0.0.200 on devices they want ad blocking for | Implemented (05-02) |
-| DHCP config preserved | Commented config kept for future if gateway replaced or bridge mode enabled | Documented (05-02) |
-| Macvlan networking for Pi-hole | Dedicated LAN IP (10.0.0.200) avoids port conflicts, enables DHCP | Implemented (05-01) |
-| Macvlan-shim at 10.0.0.201 | Linux kernel limitation requires shim for host-to-container communication | Implemented (05-01) |
-| ProtonVPN for torrent privacy | User-selected VPN provider with WireGuard support | Implemented (06-01) |
-| WireGuard over OpenVPN | Better performance on Raspberry Pi, lower resource usage | Implemented (06-01) |
-| Credentials in .env file | apps/media/.env excluded from git, .env.example provides template | Implemented (06-01) |
-| network_mode over depends_on | Cross-compose depends_on doesn't work; network_mode: container:gluetun enforces dependency | Implemented (06-02) |
-| Forms auth via API | Prowlarr auth configured programmatically during deployment | Implemented (06-03) |
-| Media group in Homepage | Added layout group for arr services auto-discovery | Implemented (06-03) |
-| Multi-network for arr apps | Sonarr/Radarr need proxy (Traefik) + media (qBittorrent) networks | Implemented (06-04) |
-| API-based arr configuration | Auth, download clients, root folders configured via API during deployment | Implemented (06-04) |
-| Read-only media mount for Jellyfin | Jellyfin reads from library but cannot modify - Sonarr/Radarr own the files | Implemented (06-06) |
-| Direct-play only (no transcoding) | Pi 5 lacks hardware encoding; clients must support direct-play | Implemented (06-06) |
-| API-based Jellyfin setup | Setup wizard, libraries, and transcoding config completed via API | Implemented (06-06) |
-| golift/unpackerr image | hotio/unpackerr doesn't exist; golift is the original maintainer | Implemented (06-05) |
-| Config file modification for Bazarr | API settings weren't persisting; direct config.yaml modification required | Implemented (06-05) |
-| OpenSubtitles.com as default | Works without account for limited use; most popular subtitle source | Implemented (06-05) |
-| Jellyfin auth for Jellyseerr | Users authenticate with existing Jellyfin accounts, no separate credentials | Implemented (06-07) |
-| Backup volume aggregation | All 8 media volumes added to nightly backup for disaster recovery | Implemented (06-07) |
-| User-configured indexers | Prowlarr indexers require manual setup due to personal tracker preferences | Implemented (06-08) |
-| Nested includes pattern | stack/ -> category -> service composes for modular management | Implemented (07-01) |
-| Networks as external | Pre-existing networks (proxy, socket_proxy_network, media) marked external | Implemented (07-01) |
-| Extended socket-proxy permissions | IMAGES=1, INFO=1, EVENTS=1 for Homepage/Uptime Kuma | Implemented (07-01) |
-| External volume naming | Use project_volumename format to match existing Docker volumes | Implemented (07-02) |
-| Gluetun include order | Must be first in media includes (qbittorrent uses network_mode: container:gluetun) | Implemented (07-02) |
-| Makefile simplification | Only backup, restore, status targets - services via docker compose --profile | Implemented (07-03) |
-| Old directories archived | apps/ and proxy/ moved to archive/pre-stack-migration/ for reference | Implemented (07-03) |
-| Socket-proxy for Docker API | Homepage and Uptime Kuma use socket-proxy:2375 instead of direct docker.sock | Implemented (07-04) |
-| External volume declarations | Volumes referenced in multiple compose files use external: true with explicit name | Implemented (07-04) |
-| Uptime Kuma volume sharing | Volumes in same include tree share without external redeclaration | Implemented (07-05) |
-| Traefik ACME bind mount backup | Certificates backed up via bind mount (config dir, not Docker volume) | Implemented (07-05) |
-| RustDesk hot backup | Keys only, no database - safe for backup without stopping | Implemented (07-05) |
-| Uptime Kuma stop during backup | SQLite database requires consistent state via stop label | Implemented (07-05) |
-| HTTP monitors under service category | Easier to find service status by category (Media, Apps) | Implemented (07-07) |
-| Container monitors under Containers | Single location for container health across all services | Implemented (07-07) |
-| TCP port monitors for RustDesk | RustDesk uses custom protocol, not HTTP - TCP port check appropriate | Implemented (07-07) |
-| Container-only for headless services | Gluetun, qBittorrent, Unpackerr have no web UI to monitor | Implemented (07-07) |
-| Parent groups in traefik compose | Traefik always-running ensures groups created before services reference them | Implemented (07-06) |
-| Docker host via socket-proxy | socket-proxy already provides filtered Docker API access | Implemented (07-06) |
-| autokuma tag for tracking | Easy identification of Autokuma-managed vs manual monitors | Implemented (07-06) |
+**SSO & Access Control:**
+- Authelia SSO with Traefik forward auth
+- Passkey/WebAuthn + password fallback
+- Four access levels: Admin, Power Users, Family, Guests
+- Apps trust external auth
 
-## Completed Milestones
+**App Expansion (after SSO):**
+- Immich, Paperless-ngx, Tandoor Recipes, ntfy, Dozzle, IT-Tools, Stirling-PDF, Actual Budget, Kavita, Linkding, Memos, Syncthing
 
-**v2.0 (Complete 2026-01-18):**
-- Pi-hole network-wide ad blocking with DNS-only mode
-- Complete media automation stack (9 services)
-- VPN-protected torrent downloads via Gluetun/ProtonVPN
-- Prowlarr indexer management synced to arr apps
-- Sonarr/Radarr automated TV/movie acquisition
-- Bazarr automatic subtitle downloads
-- Unpackerr automated archive extraction
-- Jellyfin media server (direct-play only)
-- Jellyseerr request management with Jellyfin auth
-- Full Homepage dashboard integration with widgets
-- Uptime Kuma monitoring for all public services
-- Backup coverage for all media service volumes
+## Key Decisions (Cumulative)
 
-**v1.0 (Complete 2026-01-17):**
-- Traefik reverse proxy with production Let's Encrypt SSL
-- Tailscale VPN integration (host-level, dual access)
-- Uptime Kuma monitoring with 7+ monitors
-- Automated backups with restore procedure
-- Homepage dashboard with widgets
-- Vaultwarden password manager
-- App template for future deployments
+See PROJECT.md Key Decisions table for full history.
 
-## Roadmap Evolution
-
-- Phase 6 added: Media Automation Stack (arr suite + Jellyfin)
-- Phase 7 added: Operational Hardening (backup coverage + socket-proxy migration)
-- Phase 7.1 inserted after Phase 7: Backrest Backup System (URGENT) - replace script-based backup with UI tool
-- Phase 8 added: Application Expansion (14 new apps)
+Recent v2.0 decisions:
+- DNS-only mode for Pi-hole (gateway locked)
+- ProtonVPN WireGuard for torrents
+- Direct-play only for Jellyfin
+- stack/ nested includes pattern
+- Socket-proxy for Docker API
+- Autokuma for automatic monitoring
+- Backrest over script-based backup
+- SSO-first app deployment approach
 
 ## Session Continuity
 
-Last session: 2026-01-18
-Stopped at: Completed 07-06-PLAN.md and 07-07-PLAN.md
+Last session: 2026-01-20
+Stopped at: v2.0 milestone completion
 Resume file: None
-Next action: 07-08-PLAN.md (final verification and phase summary)
+Next action: /gsd:discuss-milestone or /gsd:create-roadmap for v3.0
 
-**Architecture completed (2026-01-18):**
-- `stack/` parent folder for all services
-- Nested includes: root -> category -> service composes
-- Each service has own folder with own docker-compose.yml
-- Infrastructure services operational from stack/infra/
-- Media services operational from stack/media/
-- App services operational from stack/apps/
-- Old apps/ and proxy/ directories archived
-- Makefile simplified to operational targets only
+## Pending Todos
 
-**Socket-proxy hardening (2026-01-18):**
-- Homepage and Uptime Kuma migrated to socket-proxy
-- Only socket-proxy, backup, and glances mount docker.sock directly
-- Uptime Kuma Docker host requires UI configuration (socket-proxy:2375)
+Check `.planning/todos/pending/` for any pending items.
 
-**Backup coverage expanded (2026-01-18):**
-- 13 data sources in nightly backup (was 10)
-- Added: Uptime Kuma (SQLite), RustDesk (keys), Traefik ACME (certificates)
-- Restore script rewritten for stack/ directory structure
-- Bind mount restore support for pihole and traefik-acme
+## Active Debug Sessions
 
-**Autokuma deployment (2026-01-18):**
-- Autokuma service deployed in stack/infra/autokuma/
-- Connected to Uptime Kuma via API for monitor management
-- Connected to socket-proxy for Docker label discovery
-- Parent groups created: Infrastructure (HTTP), Containers (Docker)
-- Docker host created: my-docker via socket-proxy:2375
-- Infrastructure monitors: 3 HTTP + 5 container = 8 total
-
-**Autokuma monitoring labels (2026-01-18):**
-- All 9 media services have kuma labels for automatic monitoring
-- All 5 app containers have kuma labels (4 services, RustDesk has 2 containers)
-- HTTP monitors grouped under Media and Apps parent groups
-- Container monitors all under Containers parent group
-- TCP port monitors for RustDesk non-HTTP services
-- Total: 33 monitors across all services (infrastructure + media + apps)
-
-## Accumulated Context
-
-### Pending Todos
-
-1 pending todo(s) in `.planning/todos/pending/`:
-- **Configure Pi-hole DNS for ragnalab.xyz subdomains** (networking)
+Check `.planning/debug/` for any active debug sessions (exclude resolved/).

@@ -24,6 +24,7 @@ Secure, private-only access to self-hosted applications with professional-grade 
 
 ### Validated (v1.0 + v2.0)
 
+**v1.0 Foundation:**
 - [x] Traefik reverse proxy infrastructure with Let's Encrypt DNS-01 via Cloudflare
 - [x] Wildcard DNS (`*.ragnalab.xyz`) pointing to Tailscale IP with automatic subdomain routing
 - [x] Private-only access (Traefik bound to Tailscale interface, unreachable from public internet)
@@ -34,13 +35,22 @@ Secure, private-only access to self-hosted applications with professional-grade 
 - [x] Template and documentation for adding new apps with single compose file
 - [x] Backup strategy for app data and configuration
 - [x] ARM64-compatible Docker images for all services
-- [x] Pi-hole DNS-based ad blocking at pihole.ragnalab.xyz
-- [x] Complete media automation stack (Gluetun, qBittorrent, Prowlarr, Sonarr, Radarr, Bazarr, Unpackerr)
-- [x] Jellyfin media server at jellyfin.ragnalab.xyz
+
+**v2.0 Network Services:**
+- [x] Pi-hole DNS-based ad blocking at pihole.ragnalab.xyz (DNS-only mode)
+- [x] Complete media automation stack (Gluetun VPN, qBittorrent, Prowlarr, Sonarr, Radarr, Bazarr, Unpackerr)
+- [x] Jellyfin media server at jellyfin.ragnalab.xyz (direct-play only)
 - [x] Jellyseerr request portal at requests.ragnalab.xyz
+- [x] Plex media server at plex.ragnalab.xyz
+- [x] stack/ folder structure with nested Docker Compose includes
+- [x] Socket-proxy security hardening for Docker API access
+- [x] Autokuma automatic monitoring via Docker labels (33 monitors)
+- [x] Backrest web UI backup system at backups.ragnalab.xyz
+- [x] Recyclarr, Flaresolverr, Maintainerr media tools
 
 ### Active (v3.0)
 
+**SSO & Access Control:**
 - [ ] Authelia deployed with Traefik forward auth middleware
 - [ ] Passkey/WebAuthn authentication enabled
 - [ ] Username/password authentication as fallback
@@ -53,6 +63,20 @@ Secure, private-only access to self-hosted applications with professional-grade 
 - [ ] Jellyfin configured to trust proxy authentication
 - [ ] Authelia config included in automated backup system
 - [ ] User management documentation for adding/removing users
+
+**App Expansion (after SSO):**
+- [ ] Immich photo backup at photos.ragnalab.xyz
+- [ ] Paperless-ngx document management at docs.ragnalab.xyz
+- [ ] Tandoor Recipes at recipes.ragnalab.xyz
+- [ ] ntfy push notifications at ntfy.ragnalab.xyz
+- [ ] Dozzle log viewer at logs.ragnalab.xyz
+- [ ] IT-Tools at tools.ragnalab.xyz
+- [ ] Stirling-PDF at pdf.ragnalab.xyz
+- [ ] Actual Budget at budget.ragnalab.xyz
+- [ ] Kavita manga/comics at manga.ragnalab.xyz
+- [ ] Linkding bookmarks at links.ragnalab.xyz
+- [ ] Memos quick notes at memos.ragnalab.xyz
+- [ ] Syncthing file sync at sync.ragnalab.xyz
 
 ### Out of Scope
 
@@ -80,16 +104,14 @@ Secure, private-only access to self-hosted applications with professional-grade 
 - DNS managed in Cloudflare
 - Cloudflare API access available for Let's Encrypt DNS-01 challenges
 
-**Deployed Services (v2.0):**
-- Traefik reverse proxy at traefik.ragnalab.xyz
-- Uptime Kuma monitoring at status.ragnalab.xyz
-- Homepage dashboard at home.ragnalab.xyz
-- Vaultwarden password manager at vault.ragnalab.xyz
-- Pi-hole DNS at pihole.ragnalab.xyz
-- Glances system monitoring at glances.ragnalab.xyz
-- Documentation at docs.ragnalab.xyz
-- Media stack: Prowlarr, Sonarr, Radarr, Bazarr, Jellyfin, Jellyseerr
-- VPN-only: qBittorrent (via Gluetun), Unpackerr
+**Deployed Services (v2.0 — 20+ services):**
+- Infrastructure: Traefik, Socket-proxy, Autokuma
+- Monitoring: Uptime Kuma (status.ragnalab.xyz), Glances (glances.ragnalab.xyz)
+- Dashboard: Homepage (home.ragnalab.xyz)
+- Apps: Vaultwarden (vault.ragnalab.xyz), RustDesk
+- Network: Pi-hole (pihole.ragnalab.xyz)
+- Media: Gluetun, qBittorrent, Prowlarr, Sonarr, Radarr, Bazarr, Unpackerr, Jellyfin, Jellyseerr, Plex, Recyclarr, Flaresolverr, Maintainerr
+- Backup: Backrest (backups.ragnalab.xyz)
 
 **Users (v3.0 context):**
 - Admin (owner): Full access to everything
@@ -122,8 +144,16 @@ Secure, private-only access to self-hosted applications with professional-grade 
 | Docker label-based service discovery | Zero manual routing config, apps self-register with Traefik | ✓ Validated v1.0 |
 | Host-level Tailscale (not container) | Simpler, more robust; Tailscale is infrastructure like OS | ✓ Validated v1.0 |
 | Dual access (local + VPN) | User prefers local network access; VPN for remote only | ✓ Validated v1.0 |
+| DNS-only mode for Pi-hole | Xfinity XB8 gateway DHCP locked, cannot disable | ✓ Validated v2.0 |
+| ProtonVPN WireGuard for torrents | User-selected VPN provider, better Pi performance | ✓ Validated v2.0 |
+| Direct-play only for Jellyfin | Pi 5 lacks hardware encoding for transcoding | ✓ Validated v2.0 |
+| stack/ nested includes pattern | Modular compose organization, easy to manage | ✓ Validated v2.0 |
+| Socket-proxy for Docker API | Security hardening, no direct docker.sock exposure | ✓ Validated v2.0 |
+| Autokuma for automatic monitoring | Docker labels auto-create Uptime Kuma monitors | ✓ Validated v2.0 |
+| Backrest over script-based backup | Web UI, better deduplication, easier restores | ✓ Validated v2.0 |
 | Authelia over Authentik | Lightweight (~30MB), config-file based, better for Pi resources | — Pending v3.0 |
 | Passkeys + password fallback | Modern auth with backup option for compatibility | — Pending v3.0 |
+| SSO-first app deployment | New apps get SSO protection from day one | — Pending v3.0 |
 
 ---
-*Last updated: 2026-01-18 after v3.0 milestone initialization*
+*Last updated: 2026-01-20 after v2.0 milestone completion*
