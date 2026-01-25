@@ -26,6 +26,7 @@ services:
       - "traefik.http.routers.prowlarr.tls=true"
       - "traefik.http.routers.prowlarr.tls.certresolver=letsencrypt"
       - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
+      - "traefik.http.routers.prowlarr.middlewares=authelia@file"
       - "traefik.docker.network=proxy"
       # Homepage dashboard
       - "homepage.group=Media"
