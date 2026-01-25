@@ -44,11 +44,13 @@ Plans:
   2. *Arr apps (Sonarr, Radarr, Prowlarr) use External auth mode (no double login)
   3. qBittorrent configured with IP whitelist and reverse proxy setting
   4. Mobile apps and widgets still work via API bypass
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 10-01: TBD
-- [ ] 10-02: TBD
+- [ ] 10-01-PLAN.md — Simple services: Homepage, Glances, Traefik dashboard with authelia middleware
+- [ ] 10-02-PLAN.md — Auth-disable services: Uptime Kuma, Backrest (disable built-in auth + middleware)
+- [ ] 10-03-PLAN.md — *arr apps: Sonarr, Radarr, Prowlarr with External auth mode + middleware
+- [ ] 10-04-PLAN.md — qBittorrent: reverse proxy config, IP whitelist + middleware
 
 ### Phase 11: New App Deployment
 **Goal**: Deploy Paperless-ngx, Dozzle, IT-Tools with SSO protection from day one
@@ -74,5 +76,5 @@ Phases execute in numeric order: 9 → 10 → 11
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 9. Authelia SSO Foundation | 2/2 | Complete | 2026-01-25 |
-| 10. Existing App Integration | 0/? | Not started | — |
+| 10. Existing App Integration | 0/4 | Planned | — |
 | 11. New App Deployment | 0/? | Not started | — |
