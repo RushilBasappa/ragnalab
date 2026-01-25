@@ -29,11 +29,11 @@ Deploy Authelia SSO with passkey authentication and per-user access control, int
   5. Access rules enforce correct policies per group (admin=2FA, others=1FA)
   6. API endpoints and Plex bypass auth for mobile app compatibility
   7. Authelia included in backup and has monitoring
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 09-01: TBD
-- [ ] 09-02: TBD
+- [ ] 09-01-PLAN.md — Deploy Authelia with Traefik forwardAuth, users/groups, WebAuthn passkeys, access control rules
+- [ ] 09-02-PLAN.md — Operations: Backrest backup, Autokuma monitoring, user management documentation
 
 ### Phase 10: Existing App Integration
 **Goal**: Protect all existing apps with SSO, configure External auth mode for *arr apps
@@ -73,6 +73,6 @@ Phases execute in numeric order: 9 → 10 → 11
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 9. Authelia SSO Foundation | 0/? | Not started | — |
+| 9. Authelia SSO Foundation | 0/2 | Planned | — |
 | 10. Existing App Integration | 0/? | Not started | — |
 | 11. New App Deployment | 0/? | Not started | — |
