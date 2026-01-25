@@ -9,23 +9,23 @@ Requirements for v3.0 milestone. Each maps to roadmap phases.
 
 ### SSO Foundation
 
-- [ ] **SSO-01**: User can authenticate via passkey/fingerprint (WebAuthn)
-- [ ] **SSO-02**: User can authenticate via username/password as fallback
-- [ ] **SSO-03**: Admin users are configured in Authelia user file
-- [ ] **SSO-04**: Power users group exists with media management access
-- [ ] **SSO-05**: Family group exists with media consumption access
-- [ ] **SSO-06**: Guests group exists with view-only Jellyfin access
-- [ ] **SSO-07**: Session persists across ragnalab.xyz subdomains
-- [ ] **SSO-08**: Authelia cookie domain set to `.ragnalab.xyz`
+- [x] **SSO-01**: User can authenticate via passkey/fingerprint (WebAuthn)
+- [x] **SSO-02**: User can authenticate via username/password as fallback
+- [x] **SSO-03**: Admin users are configured in Authelia user file
+- [x] **SSO-04**: Power users group exists with media management access
+- [x] **SSO-05**: Family group exists with media consumption access
+- [x] **SSO-06**: Guests group exists with view-only Jellyfin access
+- [x] **SSO-07**: Session persists across ragnalab.xyz subdomains
+- [x] **SSO-08**: Authelia cookie domain set to `.ragnalab.xyz`
 
 ### Access Control
 
-- [ ] **ACL-01**: Admin services (Traefik, Backrest, Pi-hole, Dozzle) require two-factor auth
-- [ ] **ACL-02**: Power user services (*arr apps, qBittorrent) require one-factor auth
-- [ ] **ACL-03**: Family services (Jellyfin, Jellyseerr) require one-factor auth
-- [ ] **ACL-04**: API endpoints bypass auth for mobile apps and widgets
-- [ ] **ACL-05**: Plex bypasses auth completely (client app compatibility)
-- [ ] **ACL-06**: Default policy is deny (explicit allow required)
+- [x] **ACL-01**: Admin services (Traefik, Backrest, Pi-hole, Dozzle) require two-factor auth
+- [x] **ACL-02**: Power user services (*arr apps, qBittorrent) require one-factor auth
+- [x] **ACL-03**: Family services (Jellyfin, Jellyseerr) require one-factor auth
+- [x] **ACL-04**: API endpoints bypass auth for mobile apps and widgets
+- [x] **ACL-05**: Plex bypasses auth completely (client app compatibility)
+- [x] **ACL-06**: Default policy is deny (explicit allow required)
 
 ### Existing App Integration
 
@@ -49,9 +49,9 @@ Requirements for v3.0 milestone. Each maps to roadmap phases.
 
 ### Operations
 
-- [ ] **OPS-01**: Authelia config included in Backrest backup
-- [ ] **OPS-02**: User management documented (add/remove users)
-- [ ] **OPS-03**: Authelia has Autokuma monitoring
+- [x] **OPS-01**: Authelia config included in Backrest backup
+- [x] **OPS-02**: User management documented (add/remove users)
+- [x] **OPS-03**: Authelia has Autokuma monitoring
 
 ## v4.0 Requirements
 
@@ -90,23 +90,23 @@ Which phases cover which requirements.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SSO-01 | Phase 9 | Pending |
-| SSO-02 | Phase 9 | Pending |
-| SSO-03 | Phase 9 | Pending |
-| SSO-04 | Phase 9 | Pending |
-| SSO-05 | Phase 9 | Pending |
-| SSO-06 | Phase 9 | Pending |
-| SSO-07 | Phase 9 | Pending |
-| SSO-08 | Phase 9 | Pending |
-| ACL-01 | Phase 9 | Pending |
-| ACL-02 | Phase 9 | Pending |
-| ACL-03 | Phase 9 | Pending |
-| ACL-04 | Phase 9 | Pending |
-| ACL-05 | Phase 9 | Pending |
-| ACL-06 | Phase 9 | Pending |
-| OPS-01 | Phase 9 | Pending |
-| OPS-02 | Phase 9 | Pending |
-| OPS-03 | Phase 9 | Pending |
+| SSO-01 | Phase 9 | Complete |
+| SSO-02 | Phase 9 | Complete |
+| SSO-03 | Phase 9 | Complete |
+| SSO-04 | Phase 9 | Complete |
+| SSO-05 | Phase 9 | Complete |
+| SSO-06 | Phase 9 | Complete |
+| SSO-07 | Phase 9 | Complete |
+| SSO-08 | Phase 9 | Complete |
+| ACL-01 | Phase 9 | Complete |
+| ACL-02 | Phase 9 | Complete |
+| ACL-03 | Phase 9 | Complete |
+| ACL-04 | Phase 9 | Complete |
+| ACL-05 | Phase 9 | Complete |
+| ACL-06 | Phase 9 | Complete |
+| OPS-01 | Phase 9 | Complete |
+| OPS-02 | Phase 9 | Complete |
+| OPS-03 | Phase 9 | Complete |
 | APP-01 | Phase 10 | Pending |
 | APP-02 | Phase 10 | Pending |
 | APP-03 | Phase 10 | Pending |
@@ -129,4 +129,4 @@ Which phases cover which requirements.
 
 ---
 *Requirements defined: 2026-01-25*
-*Last updated: 2026-01-25 after roadmap creation*
+*Last updated: 2026-01-25 after Phase 9 completion*

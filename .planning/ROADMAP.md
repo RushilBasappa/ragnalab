@@ -11,7 +11,7 @@ Deploy Authelia SSO with passkey authentication and per-user access control, int
 - v2.0 Network Services: Phases 5-7.1 (shipped)
 - v3.0 SSO & Apps: Phases 9-11 (this milestone)
 
-- [ ] **Phase 9: Authelia SSO Foundation** — Deploy Authelia, configure users/groups, enable passkey auth
+- [x] **Phase 9: Authelia SSO Foundation** — Deploy Authelia, configure users/groups, enable passkey auth
 - [ ] **Phase 10: Existing App Integration** — Protect existing apps with SSO, configure External auth mode
 - [ ] **Phase 11: New App Deployment** — Deploy Paperless-ngx, Dozzle, IT-Tools with SSO
 
@@ -32,8 +32,8 @@ Deploy Authelia SSO with passkey authentication and per-user access control, int
 **Plans**: 2 plans
 
 Plans:
-- [ ] 09-01-PLAN.md — Deploy Authelia with Traefik forwardAuth, users/groups, WebAuthn passkeys, access control rules
-- [ ] 09-02-PLAN.md — Operations: Backrest backup, Autokuma monitoring, user management documentation
+- [x] 09-01-PLAN.md — Deploy Authelia with Traefik forwardAuth, users/groups, WebAuthn passkeys, access control rules
+- [x] 09-02-PLAN.md — Operations: Backrest backup, Autokuma monitoring, user management documentation
 
 ### Phase 10: Existing App Integration
 **Goal**: Protect all existing apps with SSO, configure External auth mode for *arr apps
@@ -73,6 +73,6 @@ Phases execute in numeric order: 9 → 10 → 11
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 9. Authelia SSO Foundation | 0/2 | Planned | — |
+| 9. Authelia SSO Foundation | 2/2 | Complete | 2026-01-25 |
 | 10. Existing App Integration | 0/? | Not started | — |
 | 11. New App Deployment | 0/? | Not started | — |
