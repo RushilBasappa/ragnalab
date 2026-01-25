@@ -1,0 +1,23 @@
+# Authelia Users Database
+# Documentation: https://www.authelia.com/reference/guides/passwords/
+#
+# Password hashes generated with:
+#   docker run --rm authelia/authelia:4.39.14 authelia crypto hash generate argon2 --password 'YourPassword'
+#
+# Groups:
+#   - admin: Full access to all services, two_factor required for sensitive services
+#   - powerusers: Access to *arr apps and media management
+#   - family: Access to Jellyfin and Jellyseerr
+#   - guests: Limited access to Jellyfin only
+
+users:
+  rushil:
+    disabled: false
+    displayname: 'Rushil'
+    email: 'rushil@ragnalab.xyz'
+    groups:
+      - admin
+      - powerusers
+      - family
+    # Password hash will be set by Task 2
+    password: 'PLACEHOLDER_HASH'

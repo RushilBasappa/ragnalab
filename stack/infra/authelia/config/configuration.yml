@@ -1,0 +1,155 @@
+# Authelia Configuration
+# Documentation: https://www.authelia.com/configuration/
+
+# =============================================================================
+# Server Configuration
+# =============================================================================
+server:
+  address: 'tcp://:9091'
+
+# =============================================================================
+# Logging
+# =============================================================================
+log:
+  level: 'debug'  # Set to 'info' after initial troubleshooting
+  format: 'text'
+
+# =============================================================================
+# Theme
+# =============================================================================
+theme: 'auto'
+
+# =============================================================================
+# Default 2FA Method
+# =============================================================================
+default_2fa_method: 'webauthn'
+
+# =============================================================================
+# WebAuthn Configuration (CRITICAL - RP ID cannot be changed after passkey registration)
+# =============================================================================
+webauthn:
+  disable: false
+  display_name: 'RagnaLab'
+  rp_id: 'ragnalab.xyz'
+  attestation_conveyance_preference: 'indirect'
+  user_verification: 'preferred'
+
+# =============================================================================
+# TOTP Configuration (backup 2FA method)
+# =============================================================================
+totp:
+  disable: false
+  issuer: 'ragnalab.xyz'
+  algorithm: 'sha1'
+  digits: 6
+  period: 30
+  skew: 1
+
+# =============================================================================
+# Session Configuration (CRITICAL - cookie domain for SSO)
+# =============================================================================
+session:
+  cookies:
+    - name: 'authelia_session'
+      domain: 'ragnalab.xyz'
+      authelia_url: 'https://auth.ragnalab.xyz'
+      default_redirection_url: 'https://home.ragnalab.xyz'
+      expiration: '1h'
+      inactivity: '5m'
+      remember_me: '1M'
+      same_site: 'lax'
+
+# =============================================================================
+# Storage Configuration (SQLite - simple, no Redis needed for 4 users)
+# =============================================================================
+storage:
+  local:
+    path: '/config/db.sqlite3'
+
+# =============================================================================
+# Authentication Backend (file-based)
+# =============================================================================
+authentication_backend:
+  file:
+    path: '/config/users_database.yml'
+    watch: true
+    password:
+      algorithm: argon2id
+      argon2:
+        variant: argon2id
+        iterations: 1
+        memory: 256  # Reduced for ARM64 performance
+        parallelism: 2  # Reduced for ARM64 performance
+        key_length: 32
+        salt_length: 16
+
+# =============================================================================
+# Access Control Rules (order matters - first match wins)
+# =============================================================================
+access_control:
+  default_policy: deny
+
+  rules:
+    # 1. Bypass: Plex completely (breaks client apps otherwise)
+    - domain: 'plex.ragnalab.xyz'
+      policy: bypass
+
+    # 2. Bypass: API endpoints for mobile apps and widgets
+    - domain: '*.ragnalab.xyz'
+      resources:
+        - '^/api(/.*)?$'
+        - '^/socket(/.*)?$'
+        - '^/System/Info.*'
+        - '^/Users/AuthenticateByName.*'
+        - '^/notifications(/.*)?$'
+        - '^/identity(/.*)?$'
+      policy: bypass
+
+    # 3. Admin services (two_factor required) - ACL-01
+    - domain:
+        - 'traefik.ragnalab.xyz'
+        - 'backups.ragnalab.xyz'
+        - 'pihole.ragnalab.xyz'
+      subject: 'group:admin'
+      policy: two_factor
+
+    # 4. Power user services (one_factor) - ACL-02
+    - domain:
+        - 'sonarr.ragnalab.xyz'
+        - 'radarr.ragnalab.xyz'
+        - 'prowlarr.ragnalab.xyz'
+        - 'bazarr.ragnalab.xyz'
+        - 'qbit.ragnalab.xyz'
+        - 'maintainerr.ragnalab.xyz'
+      subject:
+        - 'group:admin'
+        - 'group:powerusers'
+      policy: one_factor
+
+    # 5. Family services (one_factor) - ACL-03
+    - domain:
+        - 'jellyfin.ragnalab.xyz'
+        - 'requests.ragnalab.xyz'
+      subject:
+        - 'group:admin'
+        - 'group:powerusers'
+        - 'group:family'
+      policy: one_factor
+
+    # 6. Guest access to Jellyfin only - ACL-05 (partial)
+    - domain: 'jellyfin.ragnalab.xyz'
+      subject: 'group:guests'
+      policy: one_factor
+
+    # 7. General admin access to everything else
+    - domain: '*.ragnalab.xyz'
+      subject: 'group:admin'
+      policy: one_factor
+
+# =============================================================================
+# Notifier (filesystem for now - no email needed)
+# =============================================================================
+notifier:
+  disable_startup_check: false
+  filesystem:
+    filename: '/config/notification.txt'
