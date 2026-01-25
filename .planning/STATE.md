@@ -2,20 +2,20 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-01-20)
+See: .planning/PROJECT.md (updated 2026-01-24)
 
 **Core value:** Secure, private-only access to self-hosted applications with professional-grade HTTPS, automatic service discovery, and dead-simple process for adding new apps.
-**Current focus:** v3.0 SSO & Access Control — planning next milestone
+**Current focus:** v3.0 SSO & Apps — defining requirements
 
 ## Current Position
 
-Milestone: v3.0 SSO & Access Control - NOT STARTED
-Phase: None (milestone not yet planned)
-Plan: None
-Status: Ready to plan v3.0 roadmap
-Last activity: 2026-01-20 - v2.0 milestone completed and archived
+Milestone: v3.0 SSO & Apps
+Phase: Not started (run /gsd:define-requirements then /gsd:create-roadmap)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-01-24 — Milestone v3.0 started
 
-Progress: [v1.0] ████████ SHIPPED | [v2.0] ████████ SHIPPED | [v3.0] ░░░░░░░░ NOT STARTED
+Progress: [v1.0] ████████ SHIPPED | [v2.0] ████████ SHIPPED | [v3.0] ░░░░░░░░ STARTED
 
 ## Completed Milestones
 
@@ -65,16 +65,21 @@ Progress: [v1.0] ████████ SHIPPED | [v2.0] ███████
 
 **Total services:** 22
 
-## v3.0 Scope (Planned)
+## v3.0 Scope
 
 **SSO & Access Control:**
 - Authelia SSO with Traefik forward auth
 - Passkey/WebAuthn + password fallback
 - Four access levels: Admin, Power Users, Family, Guests
-- Apps trust external auth
+- Existing apps trust external auth (arr apps, Jellyfin)
 
 **App Expansion (after SSO):**
-- Immich, Paperless-ngx, Tandoor Recipes, ntfy, Dozzle, IT-Tools, Stirling-PDF, Actual Budget, Kavita, Linkding, Memos, Syncthing
+- Paperless-ngx (docs.ragnalab.xyz)
+- Dozzle (logs.ragnalab.xyz)
+- IT-Tools (tools.ragnalab.xyz)
+
+**Deferred to v4.0+:**
+- Immich, Tandoor, ntfy, Stirling-PDF, Actual, Kavita, Linkding, Memos, Syncthing
 
 ## Key Decisions (Cumulative)
 
@@ -92,10 +97,10 @@ Recent v2.0 decisions:
 
 ## Session Continuity
 
-Last session: 2026-01-20
-Stopped at: v2.0 milestone completion
+Last session: 2026-01-24
+Stopped at: v3.0 milestone initialized
 Resume file: None
-Next action: /gsd:discuss-milestone or /gsd:create-roadmap for v3.0
+Next action: /gsd:define-requirements or /gsd:research-project
 
 ## Pending Todos
 

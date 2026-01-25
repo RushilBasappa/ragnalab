@@ -8,9 +8,9 @@ A private, VPN-only homelab platform running on Raspberry Pi 5 that hosts multip
 
 Secure, private-only access to self-hosted applications with professional-grade HTTPS, automatic service discovery, and dead-simple process for adding new apps.
 
-## Current Milestone: v3.0 SSO & Access Control
+## Current Milestone: v3.0 SSO & Apps
 
-**Goal:** Unified single sign-on with passkey support and per-user access control, enabling family and guests to access specific apps without managing individual app credentials.
+**Goal:** Unified single sign-on with passkey support and per-user access control, plus lightweight app expansion (docs, logs, tools).
 
 **Target features:**
 - Authelia SSO with Traefik forward auth integration
@@ -18,7 +18,8 @@ Secure, private-only access to self-hosted applications with professional-grade 
 - Username/password fallback authentication
 - Per-user and per-group access control rules
 - Four access levels: Admin, Power Users, Family, Guests
-- Apps configured to trust external auth (disable built-in login)
+- Existing apps configured to trust external auth (disable built-in login)
+- New apps: Paperless-ngx, Dozzle, IT-Tools (SSO-protected from day one)
 
 ## Requirements
 
@@ -65,18 +66,9 @@ Secure, private-only access to self-hosted applications with professional-grade 
 - [ ] User management documentation for adding/removing users
 
 **App Expansion (after SSO):**
-- [ ] Immich photo backup at photos.ragnalab.xyz
 - [ ] Paperless-ngx document management at docs.ragnalab.xyz
-- [ ] Tandoor Recipes at recipes.ragnalab.xyz
-- [ ] ntfy push notifications at ntfy.ragnalab.xyz
 - [ ] Dozzle log viewer at logs.ragnalab.xyz
 - [ ] IT-Tools at tools.ragnalab.xyz
-- [ ] Stirling-PDF at pdf.ragnalab.xyz
-- [ ] Actual Budget at budget.ragnalab.xyz
-- [ ] Kavita manga/comics at manga.ragnalab.xyz
-- [ ] Linkding bookmarks at links.ragnalab.xyz
-- [ ] Memos quick notes at memos.ragnalab.xyz
-- [ ] Syncthing file sync at sync.ragnalab.xyz
 
 ### Out of Scope
 
@@ -86,6 +78,8 @@ Secure, private-only access to self-hosted applications with professional-grade 
 - Port forwarding or dynamic DNS — Tailscale handles networking
 - LDAP/Active Directory integration — overkill for home use
 - OAuth providers (Google, GitHub login) — users are known, not public
+- Immich photo backup — deferred to v4.0
+- Remaining apps (Tandoor, ntfy, Stirling-PDF, Actual, Kavita, Linkding, Memos, Syncthing) — deferred to future milestones
 
 ## Context
 
@@ -156,4 +150,4 @@ Secure, private-only access to self-hosted applications with professional-grade 
 | SSO-first app deployment | New apps get SSO protection from day one | — Pending v3.0 |
 
 ---
-*Last updated: 2026-01-20 after v2.0 milestone completion*
+*Last updated: 2026-01-24 after v3.0 milestone initialization*
