@@ -25,6 +25,7 @@ services:
       - "traefik.http.routers.homepage.tls=true"
       - "traefik.http.routers.homepage.tls.certresolver=letsencrypt"
       - "traefik.http.services.homepage.loadbalancer.server.port=3000"
+      - "traefik.http.routers.homepage.middlewares=authelia@file"
       - "traefik.docker.network=proxy"
       # --- Autokuma monitoring labels ---
       - "kuma.homepage.http.name=Homepage"
