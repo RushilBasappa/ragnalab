@@ -48,6 +48,7 @@ services:
       - "traefik.http.routers.qbittorrent.tls=true"
       - "traefik.http.routers.qbittorrent.tls.certresolver=letsencrypt"
       - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
+      - "traefik.http.routers.qbittorrent.middlewares=authelia@file"
       - "traefik.docker.network=proxy"
       - "homepage.group=Media"
       - "homepage.name=qBittorrent"
