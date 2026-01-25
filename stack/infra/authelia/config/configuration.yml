@@ -1,5 +1,6 @@
 # Authelia Configuration
 # Documentation: https://www.authelia.com/configuration/
+# Version: 4.39.14
 
 # =============================================================================
 # Server Configuration
@@ -25,14 +26,21 @@ theme: 'auto'
 default_2fa_method: 'webauthn'
 
 # =============================================================================
+# Identity Validation (replaces jwt_secret in 4.38+)
+# =============================================================================
+identity_validation:
+  reset_password:
+    jwt_secret: 'a_]&9sFg2w!=2QK~&jL,IK*?x0rN+f9z'
+
+# =============================================================================
 # WebAuthn Configuration (CRITICAL - RP ID cannot be changed after passkey registration)
+# Minimal config - let Authelia derive RP ID from session cookie domain
 # =============================================================================
 webauthn:
   disable: false
   display_name: 'RagnaLab'
-  rp_id: 'ragnalab.xyz'
   attestation_conveyance_preference: 'indirect'
-  user_verification: 'preferred'
+  timeout: '60s'
 
 # =============================================================================
 # TOTP Configuration (backup 2FA method)
