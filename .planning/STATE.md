@@ -11,11 +11,11 @@ See: .planning/PROJECT.md (updated 2026-01-25)
 
 Milestone: v3.0 SSO & Apps
 Phase: 10 of 11 (Existing App Integration)
-Plan: 03 of 04 complete
-Status: In progress
-Last activity: 2026-01-25 — Completed 10-04 qBittorrent SSO Integration
+Plan: 04 of 04 complete
+Status: Phase complete
+Last activity: 2026-01-25 — Completed 10-02 Uptime Kuma & Backrest SSO
 
-Progress: [v1.0] ████████ SHIPPED | [v2.0] ████████ SHIPPED | [v3.0] ██████░░ 70%
+Progress: [v1.0] ████████ SHIPPED | [v2.0] ████████ SHIPPED | [v3.0] ███████░ 80%
 
 ## Completed Milestones
 
@@ -73,7 +73,7 @@ Progress: [v1.0] ████████ SHIPPED | [v2.0] ███████
 - [x] Passkey/WebAuthn + password fallback
 - [x] Four access levels: Admin, Power Users, Family, Guests
 - [x] Authelia operations: backup, monitoring, documentation
-- [ ] Existing apps trust external auth (arr apps, Jellyfin) - Phase 10
+- [x] Existing apps trust external auth (arr apps, Jellyfin, Uptime Kuma, Backrest) - Phase 10
 
 **App Expansion (after SSO):**
 - Paperless-ngx (docs.ragnalab.xyz)
@@ -108,9 +108,9 @@ Recent v2.0 decisions:
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 10-04-PLAN.md (qBittorrent SSO Integration)
+Stopped at: Completed 10-02-PLAN.md (Uptime Kuma & Backrest SSO)
 Resume file: None
-Next action: Execute 10-02 (Jellyfin/Jellyseerr SSO) - final plan in Phase 10
+Next action: Phase 10 complete - ready for Phase 11 (New Apps)
 
 ## Pending Todos
 
