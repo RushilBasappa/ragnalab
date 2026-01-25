@@ -86,47 +86,47 @@ Explicitly excluded. Documented to prevent scope creep.
 
 ## Traceability
 
-Which phases cover which requirements. Updated by create-roadmap.
+Which phases cover which requirements.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SSO-01 | — | Pending |
-| SSO-02 | — | Pending |
-| SSO-03 | — | Pending |
-| SSO-04 | — | Pending |
-| SSO-05 | — | Pending |
-| SSO-06 | — | Pending |
-| SSO-07 | — | Pending |
-| SSO-08 | — | Pending |
-| ACL-01 | — | Pending |
-| ACL-02 | — | Pending |
-| ACL-03 | — | Pending |
-| ACL-04 | — | Pending |
-| ACL-05 | — | Pending |
-| ACL-06 | — | Pending |
-| APP-01 | — | Pending |
-| APP-02 | — | Pending |
-| APP-03 | — | Pending |
-| APP-04 | — | Pending |
-| APP-05 | — | Pending |
-| APP-06 | — | Pending |
-| APP-07 | — | Pending |
-| APP-08 | — | Pending |
-| APP-09 | — | Pending |
-| NEW-01 | — | Pending |
-| NEW-02 | — | Pending |
-| NEW-03 | — | Pending |
-| NEW-04 | — | Pending |
-| NEW-05 | — | Pending |
-| OPS-01 | — | Pending |
-| OPS-02 | — | Pending |
-| OPS-03 | — | Pending |
+| SSO-01 | Phase 9 | Pending |
+| SSO-02 | Phase 9 | Pending |
+| SSO-03 | Phase 9 | Pending |
+| SSO-04 | Phase 9 | Pending |
+| SSO-05 | Phase 9 | Pending |
+| SSO-06 | Phase 9 | Pending |
+| SSO-07 | Phase 9 | Pending |
+| SSO-08 | Phase 9 | Pending |
+| ACL-01 | Phase 9 | Pending |
+| ACL-02 | Phase 9 | Pending |
+| ACL-03 | Phase 9 | Pending |
+| ACL-04 | Phase 9 | Pending |
+| ACL-05 | Phase 9 | Pending |
+| ACL-06 | Phase 9 | Pending |
+| OPS-01 | Phase 9 | Pending |
+| OPS-02 | Phase 9 | Pending |
+| OPS-03 | Phase 9 | Pending |
+| APP-01 | Phase 10 | Pending |
+| APP-02 | Phase 10 | Pending |
+| APP-03 | Phase 10 | Pending |
+| APP-04 | Phase 10 | Pending |
+| APP-05 | Phase 10 | Pending |
+| APP-06 | Phase 10 | Pending |
+| APP-07 | Phase 10 | Pending |
+| APP-08 | Phase 10 | Pending |
+| APP-09 | Phase 10 | Pending |
+| NEW-01 | Phase 11 | Pending |
+| NEW-02 | Phase 11 | Pending |
+| NEW-03 | Phase 11 | Pending |
+| NEW-04 | Phase 11 | Pending |
+| NEW-05 | Phase 11 | Pending |
 
 **Coverage:**
 - v3.0 requirements: 31 total
-- Mapped to phases: 0
-- Unmapped: 31 (pending roadmap creation)
+- Mapped to phases: 31
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-01-25*
-*Last updated: 2026-01-25 after initial definition*
+*Last updated: 2026-01-25 after roadmap creation*

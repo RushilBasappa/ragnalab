@@ -2,20 +2,20 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-01-24)
+See: .planning/PROJECT.md (updated 2026-01-25)
 
-**Core value:** Secure, private-only access to self-hosted applications with professional-grade HTTPS, automatic service discovery, and dead-simple process for adding new apps.
-**Current focus:** v3.0 SSO & Apps — defining requirements
+**Core value:** Unified single sign-on with passkey support and per-user access control, plus lightweight app expansion.
+**Current focus:** Phase 9 — Authelia SSO Foundation
 
 ## Current Position
 
 Milestone: v3.0 SSO & Apps
-Phase: Not started (run /gsd:define-requirements then /gsd:create-roadmap)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-01-24 — Milestone v3.0 started
+Phase: 9 of 11 (Authelia SSO Foundation)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-01-25 — Roadmap created (3 phases, 31 requirements)
 
-Progress: [v1.0] ████████ SHIPPED | [v2.0] ████████ SHIPPED | [v3.0] ░░░░░░░░ STARTED
+Progress: [v1.0] ████████ SHIPPED | [v2.0] ████████ SHIPPED | [v3.0] ░░░░░░░░ 0%
 
 ## Completed Milestones
 
@@ -97,10 +97,10 @@ Recent v2.0 decisions:
 
 ## Session Continuity
 
-Last session: 2026-01-24
-Stopped at: v3.0 milestone initialized
+Last session: 2026-01-25
+Stopped at: Roadmap created, ready to plan Phase 9
 Resume file: None
-Next action: /gsd:define-requirements or /gsd:research-project
+Next action: /gsd:plan-phase 9
 
 ## Pending Todos
 
