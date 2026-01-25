@@ -11,11 +11,11 @@ See: .planning/PROJECT.md (updated 2026-01-25)
 
 Milestone: v3.0 SSO & Apps
 Phase: 10 of 11 (Existing App Integration)
-Plan: 01 of 02 complete
+Plan: 02 of 04 complete
 Status: In progress
-Last activity: 2026-01-25 — Completed 10-01 Infrastructure SSO (Homepage, Glances, Traefik)
+Last activity: 2026-01-25 — Completed 10-03 *arr Apps SSO (Prowlarr, Sonarr, Radarr)
 
-Progress: [v1.0] ████████ SHIPPED | [v2.0] ████████ SHIPPED | [v3.0] ████░░░░ 60%
+Progress: [v1.0] ████████ SHIPPED | [v2.0] ████████ SHIPPED | [v3.0] █████░░░ 65%
 
 ## Completed Milestones
 
@@ -108,9 +108,9 @@ Recent v2.0 decisions:
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 10-01-PLAN.md (Infrastructure SSO)
+Stopped at: Completed 10-03-PLAN.md (*arr Apps SSO Integration)
 Resume file: None
-Next action: Execute 10-02 (Media Stack SSO) or plan remaining integrations
+Next action: Execute 10-02 (Jellyfin/Jellyseerr SSO) or 10-04 (Bazarr SSO)
 
 ## Pending Todos
 
