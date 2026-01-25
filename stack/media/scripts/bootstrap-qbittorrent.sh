@@ -17,12 +17,16 @@ echo "Found temp password, changing to: $PASSWORD"
 SID=$(docker exec qbittorrent curl -s -c - "http://localhost:8080/api/v2/auth/login" \
   -d "username=admin&password=$TEMP_PASS" | grep SID | awk '{print $NF}')
 
-# Change password and set download path
+# Change password, set download path, and disable seeding
 docker exec qbittorrent curl -s "http://localhost:8080/api/v2/app/setPreferences" \
   -b "SID=$SID" \
-  -d 'json={"web_ui_password":"'"$PASSWORD"'","save_path":"/media/downloads/torrents","temp_path_enabled":false}'
+  -d 'json={"web_ui_password":"'"$PASSWORD"'","save_path":"/media/downloads/torrents","temp_path_enabled":false,"max_ratio_enabled":true,"max_ratio":0,"max_seeding_time_enabled":true,"max_seeding_time":0,"max_ratio_act":1}'
 
-echo "qBittorrent configured (password + download path: /media/downloads/torrents)"
+echo "qBittorrent configured:"
+echo "  - Download path: /media/downloads/torrents"
+echo "  - Seeding: Disabled (ratio=0, time=0)"
+echo "  - After download: Remove torrent + files from downloads"
+echo "  - Library copies preserved via hardlinks"
 echo ""
 echo "=== IMPORTANT: One-time VPN interface binding ==="
 echo "To fix 'firewalled' status with VPN port forwarding:"

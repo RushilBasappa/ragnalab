@@ -1,6 +1,8 @@
 # Recyclarr - Syncs TRaSH Guides quality profiles to Sonarr/Radarr
 # Runs on schedule to keep quality settings optimal
-# Config: /config/recyclarr.yml
+# Config synced from repo: ./config/configs/recyclarr.yml
+#
+# Manual sync: docker exec recyclarr recyclarr sync
 
 services:
   recyclarr:
@@ -10,8 +12,11 @@ services:
     profiles: ["media"]
     environment:
       - TZ=America/Los_Angeles
+      - RADARR_API_KEY=${RADARR_API_KEY}
+      - SONARR_API_KEY=${SONARR_API_KEY}
     volumes:
-      - recyclarr-config:/config
+      - recyclarr-data:/config
+      - ./config/configs/recyclarr.yml:/config/configs/recyclarr.yml:ro
     networks:
       - media
     deploy:
@@ -26,9 +31,8 @@ services:
         max-file: "2"
 
 volumes:
-  recyclarr-config:
-    external: true
-    name: ragnalab_recyclarr-config
+  recyclarr-data:
+    # Runtime data (cache, logs) - not in repo
 
 networks:
   media:
