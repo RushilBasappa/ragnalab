@@ -12,7 +12,7 @@ Deploy Authelia SSO with passkey authentication and per-user access control, int
 - v3.0 SSO & Apps: Phases 9-11 (this milestone)
 
 - [x] **Phase 9: Authelia SSO Foundation** — Deploy Authelia, configure users/groups, enable passkey auth
-- [ ] **Phase 10: Existing App Integration** — Protect existing apps with SSO, configure External auth mode
+- [x] **Phase 10: Existing App Integration** — Protect existing apps with SSO, configure External auth mode
 - [ ] **Phase 11: New App Deployment** — Deploy Paperless-ngx, Dozzle, IT-Tools with SSO
 
 ## Phase Details
@@ -47,10 +47,10 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 10-01-PLAN.md — Simple services: Homepage, Glances, Traefik dashboard with authelia middleware
-- [ ] 10-02-PLAN.md — Auth-disable services: Uptime Kuma, Backrest (disable built-in auth + middleware)
-- [ ] 10-03-PLAN.md — *arr apps: Sonarr, Radarr, Prowlarr with External auth mode + middleware
-- [ ] 10-04-PLAN.md — qBittorrent: reverse proxy config, IP whitelist + middleware
+- [x] 10-01-PLAN.md — Simple services: Homepage, Glances, Traefik dashboard with authelia middleware
+- [x] 10-02-PLAN.md — Auth-disable services: Uptime Kuma, Backrest (disable built-in auth + middleware)
+- [x] 10-03-PLAN.md — *arr apps: Sonarr, Radarr, Prowlarr with External auth mode + middleware
+- [x] 10-04-PLAN.md — qBittorrent: reverse proxy config, IP whitelist + middleware
 
 ### Phase 11: New App Deployment
 **Goal**: Deploy Paperless-ngx, Dozzle, IT-Tools with SSO protection from day one
@@ -76,5 +76,5 @@ Phases execute in numeric order: 9 → 10 → 11
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 9. Authelia SSO Foundation | 2/2 | Complete | 2026-01-25 |
-| 10. Existing App Integration | 0/4 | Planned | — |
+| 10. Existing App Integration | 4/4 | Complete | 2026-01-25 |
 | 11. New App Deployment | 0/? | Not started | — |

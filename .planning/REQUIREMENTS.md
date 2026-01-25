@@ -29,15 +29,15 @@ Requirements for v3.0 milestone. Each maps to roadmap phases.
 
 ### Existing App Integration
 
-- [ ] **APP-01**: Homepage protected via Authelia middleware
-- [ ] **APP-02**: Traefik dashboard protected via Authelia middleware
-- [ ] **APP-03**: Glances protected (no password mode + middleware)
-- [ ] **APP-04**: Uptime Kuma protected (disable built-in auth + middleware)
-- [ ] **APP-05**: Backrest protected (disable built-in auth + middleware)
-- [ ] **APP-06**: Sonarr configured with External auth mode
-- [ ] **APP-07**: Radarr configured with External auth mode
-- [ ] **APP-08**: Prowlarr configured with External auth mode
-- [ ] **APP-09**: qBittorrent configured with IP whitelist + reverse proxy setting
+- [x] **APP-01**: Homepage protected via Authelia middleware
+- [x] **APP-02**: Traefik dashboard protected via Authelia middleware
+- [x] **APP-03**: Glances protected (no password mode + middleware)
+- [x] **APP-04**: Uptime Kuma protected (disable built-in auth + middleware)
+- [x] **APP-05**: Backrest protected (disable built-in auth + middleware)
+- [x] **APP-06**: Sonarr configured with External auth mode
+- [x] **APP-07**: Radarr configured with External auth mode
+- [x] **APP-08**: Prowlarr configured with External auth mode
+- [x] **APP-09**: qBittorrent configured with IP whitelist + reverse proxy setting
 
 ### New App Deployment
 
@@ -107,15 +107,15 @@ Which phases cover which requirements.
 | OPS-01 | Phase 9 | Complete |
 | OPS-02 | Phase 9 | Complete |
 | OPS-03 | Phase 9 | Complete |
-| APP-01 | Phase 10 | Pending |
-| APP-02 | Phase 10 | Pending |
-| APP-03 | Phase 10 | Pending |
-| APP-04 | Phase 10 | Pending |
-| APP-05 | Phase 10 | Pending |
-| APP-06 | Phase 10 | Pending |
-| APP-07 | Phase 10 | Pending |
-| APP-08 | Phase 10 | Pending |
-| APP-09 | Phase 10 | Pending |
+| APP-01 | Phase 10 | Complete |
+| APP-02 | Phase 10 | Complete |
+| APP-03 | Phase 10 | Complete |
+| APP-04 | Phase 10 | Complete |
+| APP-05 | Phase 10 | Complete |
+| APP-06 | Phase 10 | Complete |
+| APP-07 | Phase 10 | Complete |
+| APP-08 | Phase 10 | Complete |
+| APP-09 | Phase 10 | Complete |
 | NEW-01 | Phase 11 | Pending |
 | NEW-02 | Phase 11 | Pending |
 | NEW-03 | Phase 11 | Pending |
@@ -129,4 +129,4 @@ Which phases cover which requirements.
 
 ---
 *Requirements defined: 2026-01-25*
-*Last updated: 2026-01-25 after Phase 9 completion*
+*Last updated: 2026-01-25 after Phase 10 completion*
