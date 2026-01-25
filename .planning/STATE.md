@@ -5,17 +5,17 @@
 See: .planning/PROJECT.md (updated 2026-01-25)
 
 **Core value:** Unified single sign-on with passkey support and per-user access control, plus lightweight app expansion.
-**Current focus:** Phase 9 — Authelia SSO Foundation
+**Current focus:** Phase 10 — Existing App Integration
 
 ## Current Position
 
 Milestone: v3.0 SSO & Apps
-Phase: 9 of 11 (Authelia SSO Foundation)
-Plan: 02 of 02 complete
-Status: Phase complete, ready for Phase 10
-Last activity: 2026-01-25 — Completed 09-02 Authelia Operations Configuration
+Phase: 10 of 11 (Existing App Integration)
+Plan: 01 of 02 complete
+Status: In progress
+Last activity: 2026-01-25 — Completed 10-01 Infrastructure SSO (Homepage, Glances, Traefik)
 
-Progress: [v1.0] ████████ SHIPPED | [v2.0] ████████ SHIPPED | [v3.0] ███░░░░░ 50%
+Progress: [v1.0] ████████ SHIPPED | [v2.0] ████████ SHIPPED | [v3.0] ████░░░░ 60%
 
 ## Completed Milestones
 
@@ -108,9 +108,9 @@ Recent v2.0 decisions:
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Completed 09-02-PLAN.md (Authelia Operations Configuration)
+Stopped at: Completed 10-01-PLAN.md (Infrastructure SSO)
 Resume file: None
-Next action: Plan Phase 10 (Service Integration) - protect services with ForwardAuth middleware
+Next action: Execute 10-02 (Media Stack SSO) or plan remaining integrations
 
 ## Pending Todos
 
