@@ -60,3 +60,24 @@ http:
         average: 10
         burst: 20
         period: 1s
+
+    # Authelia ForwardAuth middleware
+    # Apply to services: traefik.http.routers.X.middlewares=authelia@file
+    authelia:
+      forwardAuth:
+        address: 'http://authelia:9091/api/authz/forward-auth'
+        trustForwardHeader: true
+        authResponseHeaders:
+          - 'Remote-User'
+          - 'Remote-Groups'
+          - 'Remote-Email'
+          - 'Remote-Name'
+
+    # Authelia with basic auth fallback (for API access if needed)
+    authelia-basic:
+      forwardAuth:
+        address: 'http://authelia:9091/api/verify?auth=basic'
+        trustForwardHeader: true
+        authResponseHeaders:
+          - 'Remote-User'
+          - 'Remote-Groups'
