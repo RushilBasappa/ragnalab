@@ -1,339 +1,287 @@
-# Feature Landscape: Homelab Platform
+# Features Research: Authelia SSO & App Integration
 
-**Domain:** Self-hosted homelab infrastructure and applications
-**Researched:** 2026-01-16
-**Confidence:** HIGH
+**Domain:** Homelab SSO/Authentication
+**Researched:** 2026-01-24
+**Confidence:** HIGH (official documentation verified)
 
-## Feature Categories Overview
+## Summary
 
-Homelab features split into four distinct categories:
+Authelia provides comprehensive access control via rules-based policies supporting one-factor, two-factor, bypass, and deny policies. Apps fall into four integration categories: (1) apps supporting header-based SSO (Paperless-ngx, Dozzle), (2) apps supporting OIDC (Jellyseerr, Vaultwarden), (3) apps supporting "External" auth mode (*arr family), and (4) apps requiring bypass or special handling (Plex, Jellyfin mobile, qBittorrent). The critical path is Traefik forwardAuth middleware setup, followed by per-app configuration based on integration method.
 
-1. **Infrastructure Features** - Core technical capabilities that make the platform work
-2. **Core Applications** - Essential self-hosted services most homelabs deploy first
-3. **Advanced Applications** - Nice-to-have services for expansion
-4. **Anti-Features** - Patterns to explicitly avoid
+## Authelia Access Control Features
 
-## Table Stakes: Infrastructure Features
+### Policy Levels
 
-Features users expect from any homelab platform. Missing these = incomplete infrastructure.
+| Policy | Effect | Use Case |
+|--------|--------|----------|
+| `deny` | Blocks access completely | Default policy (recommended) |
+| `bypass` | Skips authentication | Public resources, health checks, API endpoints for mobile apps |
+| `one_factor` | Username/password only | Internal services, low-sensitivity apps |
+| `two_factor` | Requires MFA (WebAuthn/TOTP) | Admin dashboards, sensitive services |
 
-| Feature | Why Expected | Complexity | Dependencies | Notes |
-|---------|--------------|------------|--------------|-------|
-| **Reverse Proxy** | Route traffic to services by domain name, eliminate port numbers | MEDIUM | None | Traefik/Caddy/NPM - automatic SSL is critical |
-| **SSL/TLS Certificates** | Eliminate browser warnings, enable HTTPS everywhere | MEDIUM | Reverse proxy, DNS | Let's Encrypt automation is standard in 2025 |
-| **Container Orchestration** | Deploy and manage services consistently | LOW | Docker installed | Docker Compose is preferred over K3s for simplicity |
-| **VPN Access** | Secure remote access without exposing services publicly | MEDIUM | None | Tailscale/WireGuard are 2025 standards |
-| **DNS Resolution** | Internal domain names for services | LOW | None | Local DNS or hosts file |
-| **Backup System** | Protect against data loss | HIGH | Storage | 3-2-1 rule (3 copies, 2 media, 1 offsite) is non-negotiable |
-| **Service Discovery** | Automatically detect and configure new services | MEDIUM | Reverse proxy | Label-based discovery (Traefik) or file-based config |
-| **Health Monitoring** | Know when services are down | LOW | None | Uptime Kuma is 2025 standard for simple checks |
-| **Dashboard/Homepage** | Single entry point to all services | LOW | None | Homepage or Homarr in 2025 |
-| **Log Management** | Debug issues and track events | MEDIUM | Storage | Centralized logging (file-based acceptable for small labs) |
+### Rule Matching Criteria
 
-### Infrastructure Complexity Notes
+Rules are evaluated sequentially - first match wins. Available criteria:
 
-- **LOW**: 1-2 hours setup, minimal ongoing maintenance
-- **MEDIUM**: 4-8 hours initial setup, periodic configuration updates
-- **HIGH**: 1-2 days setup, ongoing maintenance required
+| Criteria | Example | Notes |
+|----------|---------|-------|
+| `domain` | `*.ragnalab.xyz`, `sonarr.ragnalab.xyz` | Supports wildcards |
+| `domain_regex` | `^(?P<user>[a-z]+)\.ragnalab\.xyz$` | Extract user/group from subdomain |
+| `resources` | `^/api/.*` | Regex matching path and query |
+| `subject` | `user:rushil`, `group:admin` | Requires prior authentication |
+| `networks` | `10.0.0.0/8`, `internal` | Named network definitions supported |
+| `methods` | `GET`, `OPTIONS` | Useful for CORS preflight bypass |
 
-## Core Applications: First Deployments
+**Critical constraint:** Subject-based rules cannot use `bypass` policy (authentication must happen first to identify subject).
 
-Services most homelabs deploy in first 30 days. Common initial use cases.
+### Second Factor Options
 
-| Application | Category | Why Core | Complexity | Notes |
-|------------|----------|----------|------------|-------|
-| **Dashboard** (Homepage/Homarr) | Management | Entry point to all services | LOW | Homepage = YAML config, Homarr = GUI |
-| **Password Manager** (Vaultwarden) | Security | Most wanted self-hosted app, immediate value | LOW | Vaultwarden uses <50MB RAM, Bitwarden-compatible |
-| **Ad Blocker** (AdGuard Home/Pi-hole) | Network | Network-wide ad blocking | LOW | AdGuard Home preferred in 2026 |
-| **File Storage** (Nextcloud/Syncthing) | Productivity | Replace Dropbox/Google Drive | MEDIUM | Nextcloud=full suite, Syncthing=sync only |
-| **Media Server** (Jellyfin) | Media | Replace Plex, fully open source | MEDIUM | Jellyfin won vs Plex in 2025 due to monetization issues |
-| **Container Management** (Portainer) | Management | GUI for Docker if not using CLI | LOW | Portainer CE for beginners, pros use CLI |
-| **Monitoring** (Uptime Kuma) | Observability | Status checks with notifications | LOW | Clean UI, push notifications standard |
+| Method | Support | Notes |
+|--------|---------|-------|
+| WebAuthn/Passkeys | Full | Passwordless login supported (v4.39+) |
+| TOTP | Full | Standard authenticator apps |
+| Duo Push | Full | Mobile push notifications |
+| Multiple credentials | Full | Multiple WebAuthn devices per user (v4.38+) |
 
-### Application Priority Tiers
+### User/Group Management
 
-**P1 (Deploy Week 1):**
-- Dashboard - needs to exist before other apps make sense
-- Password Manager - immediate security value
-- Uptime Kuma - know when things break
+- File-based user database (YAML) - perfect for homelab scale
+- Groups defined per user
+- Password hashing via `authelia hash-password` command
+- No LDAP required for simple deployments
 
-**P2 (Deploy Month 1):**
-- Ad Blocker - quality of life improvement
-- File Storage - practical daily use
-- Container Management - if using GUI approach
+## App Integration Matrix
 
-**P3 (Post-MVP):**
-- Media Server - high value but not critical
-- Additional services based on use case
+| App | External Auth Support | Integration Method | Complexity | Native Auth Disable | Notes |
+|-----|----------------------|-------------------|------------|---------------------|-------|
+| **Sonarr** | Yes | External auth mode | Low | Yes (`AuthenticationMethod: External`) | Edit config.xml |
+| **Radarr** | Yes | External auth mode | Low | Yes (`AuthenticationMethod: External`) | Same as Sonarr |
+| **Prowlarr** | Yes | External auth mode | Low | Yes (`AuthenticationMethod: External`) | Same as Sonarr |
+| **Bazarr** | Partial | Forms/Basic only | Medium | No direct option | May need auth enabled |
+| **Jellyfin** | Plugin required | SSO plugin (OIDC) | High | No | Requires plugin installation, manual account linking |
+| **Jellyseerr** | Yes (preview) | OIDC | Medium | Optional | Use `preview-OIDC` Docker tag |
+| **Plex** | No | Bypass required | N/A | N/A | Interferes with client apps - use bypass |
+| **qBittorrent** | Partial | IP whitelist | Medium | Yes (whitelist 0.0.0.0/0) | Must configure reverse proxy IP for X-Forwarded-For |
+| **Homepage** | N/A | ForwardAuth only | Low | N/A | No built-in auth to disable |
+| **Uptime Kuma** | Yes | Disable auth setting | Low | Yes (Settings > Advanced) | Must create account first, then disable |
+| **Traefik Dashboard** | N/A | ForwardAuth only | Low | N/A | Protected via middleware |
+| **Backrest** | Yes | Disable auth | Low | Yes (first login option) | Works on subpaths only |
+| **Vaultwarden** | Yes | OIDC (SSO) | Medium | Optional (`SSO_ONLY=true`) | Mobile app issues with 2FA reported |
+| **Pi-hole** | Problematic | Issues in v6 | High | Password removal only | v6 has reverse proxy auth issues |
+| **Paperless-ngx** | Yes | Trusted headers | Low | Yes (`PAPERLESS_ENABLE_HTTP_REMOTE_USER`) | Excellent SSO support |
+| **Dozzle** | Yes | Forward proxy | Low | N/A | `DOZZLE_AUTH_PROVIDER=forward-proxy` |
+| **IT-Tools** | N/A | ForwardAuth only | Low | N/A | Static app, no built-in auth |
+| **Glances** | Partial | No password flag | Low | Yes (omit `--password`) | Run without password, rely on proxy |
 
-## Differentiators: Advanced Features
+### Integration Method Details
 
-Features that make homelabs powerful. Not expected, but highly valued by experienced users.
+**1. Traefik ForwardAuth (all apps)**
+```yaml
+# Authelia middleware definition (on Authelia container)
+traefik.http.middlewares.authelia.forwardAuth.address: 'http://authelia:9091/api/authz/forward-auth'
+traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader: 'true'
+traefik.http.middlewares.authelia.forwardAuth.authResponseHeaders: 'Remote-User,Remote-Groups,Remote-Email,Remote-Name'
 
-| Feature | Value Proposition | Complexity | Dependencies | Notes |
-|---------|-------------------|------------|--------------|-------|
-| **GitOps Workflow** | Infrastructure as code, version controlled configs | MEDIUM | Git repo | Homepage/Traefik configs in Git |
-| **Single Sign-On** (Authentik/Authelia) | One login for all services, proper 2FA | HIGH | Reverse proxy | Authentik=full features, Authelia=lighter |
-| **Observability Stack** (Prometheus + Grafana) | Deep metrics and dashboards | HIGH | Storage, monitoring | Beyond simple uptime checks |
-| **Intrusion Prevention** (CrowdSec) | Share threat intel, block bad actors | MEDIUM | Reverse proxy | Modernizes fail2ban approach in 2025 |
-| **AI/LLM Integration** (Ollama) | Run local language models | HIGH | GPU recommended | 2026 trend - local AI for homelabs |
-| **Photo Management** (Immich) | Self-hosted Google Photos replacement | MEDIUM | Storage, ML | ML features without cloud privacy concerns |
-| **Document Management** (Paperless-ngx) | OCR and searchable document archive | MEDIUM | Storage | Transform physical docs to digital |
-| **Network Segmentation** (VLANs) | Isolate IoT, guests, services | HIGH | Managed switch | 3 VLANs minimum (trusted, IoT, guest) |
-| **Automated Backups** | Scheduled, tested, verified backups | MEDIUM | Backup system | Proxmox Backup Server for VM-level |
-| **Cloud Tunnel** (Cloudflare Tunnel) | Public access without exposing IP | MEDIUM | Domain, Cloudflare account | Alternative to port forwarding |
-
-### Differentiator Categories
-
-**Security Focused:**
-- SSO (consolidate authentication)
-- Intrusion Prevention (protect against threats)
-- Network Segmentation (isolate attack surface)
-
-**Developer Experience:**
-- GitOps (infrastructure as code)
-- Observability Stack (deep visibility)
-
-**Capability Expansion:**
-- AI/LLM (local models)
-- Photo Management (family use case)
-- Document Management (paperless office)
-
-**Advanced Networking:**
-- Cloud Tunnel (selective public access)
-- Network Segmentation (proper isolation)
-
-## Anti-Features: Deliberately Avoid
-
-Patterns that seem valuable but create problems in homelab context.
-
-| Anti-Feature | Why It Seems Good | Why Problematic | What To Do Instead |
-|--------------|-------------------|-----------------|-------------------|
-| **Kubernetes (K8s/K3s) for Small Labs** | "Industry standard, good to learn" | Massive complexity overhead for <20 services, requires constant maintenance | Docker Compose - simpler, adequate for 99% of homelabs |
-| **Public Internet Exposure** | "Makes services accessible anywhere" | Security nightmare, constant attack surface, management overhead | Tailscale/WireGuard VPN - secure remote access without exposure |
-| **Everything on One VLAN** | "Simple, just works" | IoT devices can reach sensitive services, no security boundaries | Minimum 3 VLANs (trusted/IoT/guest), firewall rules between |
-| **No Backup Strategy** | "Can rebuild from scratch" | Data loss inevitable, hours of reconfiguration after failure | 3-2-1 backup rule from day one, test restores |
-| **GUI-Only Configuration** | "Easier than config files" | Can't version control, hard to replicate, click-ops doesn't scale | Config files in Git (GitOps), GUI for visualization only |
-| **Mixed Docker Networks** | "Default bridge works fine" | Services find each other unexpectedly, unclear dependencies | Custom Docker networks per service group, explicit networking |
-| **Traefik + Nginx + Caddy** | "Use best tool for each job" | Multiple reverse proxies = complexity, cert conflicts, confused routing | Pick ONE reverse proxy, stick with it |
-| **Self-Signed Certificates** | "Avoid Let's Encrypt complexity" | Browser warnings forever, trust issues, doesn't solve problem | Let's Encrypt automation (built into modern proxies) |
-| **Portainer + Dockge + Docker CLI** | "Multiple management tools" | Conflicts between tools, state drift, confusion about source of truth | Pick ONE management approach (preferably CLI + compose files) |
-| **200 Services From Day One** | "Deploy everything awesome" | Can't maintain, don't use 90%, overwhelming when broken | Start with 5-10 core services, add gradually with purpose |
-| **RAID as Backup** | "Redundancy = backup" | RAID protects against drive failure, NOT data corruption, deletion, ransomware | RAID for uptime, separate backup for data protection |
-| **No Documentation** | "I'll remember my setup" | Forget IP ranges, VLAN purposes, service dependencies after 2 months | Document as you build - IPs, VLANs, dependencies, decisions |
-| **Temporary Quick Fixes** | "Just for today, will fix later" | Temporary ports, VMs, firewall rules become permanent technical debt | Do it right the first time, or schedule proper fix immediately |
-| **WiFi for Critical Services** | "Wireless is convenient" | Inconsistent latency, unpredictable throughput, services flap | Wired Ethernet for Pi-hole, Home Assistant, NAS, servers |
-
-### Anti-Feature Principles
-
-1. **Complexity Budget**: Every feature has maintenance cost. Small homelabs can't afford K8s overhead.
-2. **Security By Default**: Never expose services publicly when VPN exists. Never flat network when VLANs exist.
-3. **Single Responsibility**: One reverse proxy. One container manager. One monitoring solution.
-4. **Automation > Clicks**: If you can't commit it to Git, it's not infrastructure as code.
-5. **Start Small, Grow Deliberately**: 5 well-maintained services > 50 neglected services.
-
-## Feature Dependencies
-
-```
-Infrastructure Foundation:
-[Docker]
-    ├──> [Docker Compose] ──> [All Applications]
-    └──> [Container Management] (optional GUI)
-
-Networking Layer:
-[Reverse Proxy]
-    ├──> [SSL Certificates] ──> [HTTPS everywhere]
-    ├──> [Service Discovery] ──> [Auto-configuration]
-    └──> [Intrusion Prevention] (optional enhancement)
-
-Access Layer:
-[VPN] ──> [Remote Access to all services]
-    └──enhances──> [Dashboard] (access from anywhere)
-
-[DNS] ──> [Internal domain names]
-    └──requires──> [Reverse Proxy] (for routing)
-
-Observability:
-[Health Monitoring] ──> [Know what's down]
-[Log Management] ──> [Debug issues]
-[Observability Stack] ──> [Deep metrics] (optional advanced)
-
-Data Protection:
-[Backup System] ──> [3-2-1 Rule]
-    ├──> [Local Backups]
-    ├──> [Different Media]
-    └──> [Offsite Storage]
-
-Advanced Security:
-[Network Segmentation] ──> [VLANs + Firewall]
-[SSO] ──> [Unified Authentication]
-    └──requires──> [Reverse Proxy] (for auth forwarding)
+# Apply to any service
+traefik.http.routers.myapp.middlewares: 'authelia@docker'
 ```
 
-### Dependency Notes
+**2. External Auth Mode (*arr apps)**
+Edit `config.xml` before starting container:
+```xml
+<AuthenticationMethod>External</AuthenticationMethod>
+<AuthenticationType>DisabledForLocalAddresses</AuthenticationType>
+```
 
-- **Docker Compose is the foundation**: All applications depend on this being stable
-- **Reverse Proxy is the gateway**: Most features flow through or enhance this
-- **VPN enables everything**: Without it, must expose services publicly (anti-pattern)
-- **Backup is independent**: Can implement anytime, but should be day-one priority
-- **SSO is late-stage**: Only makes sense after 5+ services deployed
+**3. Trusted Header SSO (Paperless-ngx)**
+```yaml
+environment:
+  PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
+  PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: "HTTP_REMOTE_USER"
+  PAPERLESS_LOGOUT_REDIRECT_URL: "https://auth.ragnalab.xyz/logout"
+```
 
-## Infrastructure vs Application Split
+**4. Forward Proxy Auth (Dozzle)**
+```yaml
+environment:
+  DOZZLE_AUTH_PROVIDER: forward-proxy
+  DOZZLE_AUTH_HEADER_USER: Remote-User
+  DOZZLE_AUTH_HEADER_EMAIL: Remote-Email
+```
 
-### Infrastructure (Platform Features)
-- Built once, benefit all services
-- High impact on operations
-- Changes require careful planning
-- Examples: Reverse proxy, VPN, backup system, monitoring
+**5. OIDC Integration (Jellyseerr, Vaultwarden)**
+Requires Authelia OIDC client configuration + app-side OIDC setup.
 
-### Applications (Services)
-- Can be added/removed independently
-- Low impact on other services
-- Easy to experiment
-- Examples: Password manager, media server, file storage, dashboard
+## Table Stakes Features
 
-**Implication for Roadmap**: Infrastructure must be solid before scaling applications.
+Must have for v3.0 SSO to be useful:
 
-## MVP Recommendation
+| Feature | Why Required | Complexity |
+|---------|--------------|------------|
+| Traefik forwardAuth middleware | Foundation for all SSO | Medium |
+| User/group file configuration | Define admin, powerusers, family, guests | Low |
+| Access control rules per group | Different access levels per user type | Low |
+| WebAuthn/Passkey support | Primary auth method per requirements | Low |
+| Password fallback | Compatibility for devices without passkey | Low |
+| Session management | Remember logged-in users | Built-in |
+| *Arr apps External auth | Core media management tools | Low |
+| Uptime Kuma auth disable | Monitoring must work | Low |
+| Homepage protection | Dashboard access control | Low |
 
-For RagnaLab specifically (expert DevOps engineer, values modularity):
+## Nice to Have
 
-### Launch With (Phase 1 - Infrastructure Foundation)
-- [ ] Docker Compose orchestration
-- [ ] Traefik reverse proxy (expert-friendly, label-based)
-- [ ] Let's Encrypt SSL automation
-- [ ] Tailscale VPN access
-- [ ] Uptime Kuma monitoring
-- [ ] 3-2-1 backup strategy defined (not all implemented)
+Can defer if complex or blocked:
 
-**Rationale**: Infrastructure must be solid. Traefik fits expert profile better than NPM.
+| Feature | Value | Complexity | Deferral Reason |
+|---------|-------|------------|-----------------|
+| Jellyfin SSO plugin | Single login for media | High | Requires plugin install, account linking, mobile app testing |
+| Jellyseerr OIDC | Single login for requests | Medium | Preview branch only |
+| Vaultwarden OIDC | SSO for password vault | Medium | Mobile app 2FA issues reported |
+| Pi-hole auth integration | Admin protection | High | v6 has known reverse proxy issues |
+| Per-service 2FA policies | Granular security | Low | Can start with global policy |
+| TOTP as backup MFA | Alternative to passkeys | Low | Passkeys sufficient initially |
 
-### Launch With (Phase 1 - Initial Apps)
-- [ ] Homepage dashboard (YAML = GitOps-friendly)
-- [ ] Vaultwarden password manager (stated requirement)
+## Anti-Features
 
-**Rationale**: Minimal app set to validate infrastructure works.
+Things to deliberately NOT configure:
 
-### Add After Validation (Phase 2)
-- [ ] AdGuard Home (network-level benefit)
-- [ ] 2-3 additional services based on use case (media/productivity)
-- [ ] GitOps workflow for configs
-- [ ] Prometheus + Grafana observability stack (expert-level visibility)
+| Anti-Feature | Why Avoid | What to Do Instead |
+|--------------|-----------|-------------------|
+| Plex behind forwardAuth | Breaks client apps (Roku, phones, etc.) | Use Authelia bypass policy for Plex |
+| Double authentication | Annoying UX (Authelia + app login) | Disable app auth when using External mode |
+| LDAP backend | Overkill for 4 users, adds complexity | Use file-based user database |
+| OAuth providers (Google/GitHub) | Users are known family, not public | Local user accounts only |
+| API endpoints behind 2FA | Breaks automation (Homepage widgets, Autokuma) | Bypass policy for `/api/*` paths |
+| Basic auth middleware for everything | Poor UX vs forms | Use basic auth only for specific services (monitoring exporters) |
+| Jellyfin native auth + SSO | Creates duplicate accounts | Pick one method |
+| qBittorrent without reverse proxy IP config | Auth bypass won't work | Configure WebUI > Reverse Proxy IP setting |
 
-**Rationale**: Infrastructure proven, expand capabilities deliberately.
+## Integration Dependencies
 
-### Future Consideration (Phase 3+)
-- [ ] Authentik SSO (only valuable after 5+ services)
-- [ ] CrowdSec intrusion prevention
-- [ ] Network segmentation with VLANs
-- [ ] AI/LLM integration (Ollama)
+```
+Phase 1: Foundation (must be first)
+    Authelia deployment
+         |
+         v
+    Traefik forwardAuth middleware
+         |
+         v
+    User/group configuration
+         |
+         v
+    Access control rules
+         |
+    +----+----+----+----+
+    |    |    |    |    |
+    v    v    v    v    v
 
-**Rationale**: Advanced features, high complexity, defer until platform mature.
+Phase 2: Simple integrations (parallel)
+    - Homepage (just add middleware)
+    - Traefik dashboard (just add middleware)
+    - IT-Tools (just add middleware)
+    - Dozzle (forward-proxy mode)
+    - Glances (no password + middleware)
+    - Uptime Kuma (disable auth + middleware)
+    - Backrest (disable auth + middleware)
 
-## Feature Prioritization Matrix
+Phase 3: Config file apps (parallel)
+    - Sonarr (config.xml edit)
+    - Radarr (config.xml edit)
+    - Prowlarr (config.xml edit)
+    - Bazarr (may keep native auth)
 
-| Feature | User Value | Implementation Cost | Priority | Phase |
-|---------|------------|---------------------|----------|-------|
-| Docker Compose | HIGH | LOW | P1 | 1 |
-| Traefik Proxy | HIGH | MEDIUM | P1 | 1 |
-| SSL Automation | HIGH | LOW | P1 | 1 |
-| Tailscale VPN | HIGH | MEDIUM | P1 | 1 |
-| Homepage Dashboard | HIGH | LOW | P1 | 1 |
-| Vaultwarden | HIGH | LOW | P1 | 1 |
-| Uptime Kuma | MEDIUM | LOW | P1 | 1 |
-| Backup Strategy | HIGH | MEDIUM | P1 | 1 |
-| AdGuard Home | MEDIUM | LOW | P2 | 2 |
-| GitOps Workflow | HIGH | MEDIUM | P2 | 2 |
-| Prometheus + Grafana | MEDIUM | HIGH | P2 | 2 |
-| Media Server (Jellyfin) | MEDIUM | MEDIUM | P2 | 2 |
-| File Storage | MEDIUM | MEDIUM | P2 | 2 |
-| Authentik SSO | LOW | HIGH | P3 | 3+ |
-| CrowdSec | LOW | MEDIUM | P3 | 3+ |
-| Network Segmentation | MEDIUM | HIGH | P3 | 3+ |
-| Ollama AI | LOW | HIGH | P3 | 3+ |
-| Immich Photos | MEDIUM | MEDIUM | P3 | 3+ |
-| Paperless-ngx | LOW | MEDIUM | P3 | 3+ |
+Phase 4: Special handling (sequential, careful testing)
+    - qBittorrent (whitelist + reverse proxy IP)
+    - Plex (bypass policy - DO NOT protect)
+    - Paperless-ngx (trusted headers + new deploy)
 
-**Priority Key:**
-- **P1**: Must have for MVP - core infrastructure + initial validation
-- **P2**: Should have - expand capabilities after infrastructure proven
-- **P3**: Nice to have - advanced features for mature platform
+Phase 5: Complex integrations (optional, defer if problematic)
+    - Jellyfin (SSO plugin)
+    - Jellyseerr (OIDC preview branch)
+    - Vaultwarden (OIDC)
+    - Pi-hole (evaluate v6 issues)
+```
 
-## Expert-Level Considerations
+## Access Control Rules Structure
 
-For DevOps engineers specifically:
+Recommended rule ordering for RagnaLab:
 
-### Infrastructure as Code
-- Homepage YAML config in Git (not Homarr GUI)
-- Traefik labels in docker-compose files
-- All configs version controlled
-- Declarative > imperative
+```yaml
+access_control:
+  default_policy: deny
 
-### Modularity Requirements
-- Custom Docker networks per service group
-- Clear service boundaries
-- Easy to add/remove services
-- No hidden dependencies
+  rules:
+    # 1. Bypass rules (no auth required)
+    - domain: plex.ragnalab.xyz
+      policy: bypass
 
-### Operational Excellence
-- Prometheus metrics from day one (even before Grafana)
-- Structured logging (JSON logs)
-- Health checks on every container
-- Automated backup verification
+    - domain: "*.ragnalab.xyz"
+      resources: "^/api/.*"
+      policy: bypass  # For mobile apps, widgets
 
-### Anti-Patterns for Experts
-- Don't use Portainer (GUI doesn't fit workflow)
-- Don't use Homarr (YAML > GUI for version control)
-- Don't use NPM (Traefik label-based is superior)
-- Don't skip monitoring "until later" (build it in from start)
+    # 2. Admin-only services (two_factor)
+    - domain:
+        - traefik.ragnalab.xyz
+        - backups.ragnalab.xyz
+        - pihole.ragnalab.xyz
+        - logs.ragnalab.xyz
+      subject: "group:admin"
+      policy: two_factor
+
+    # 3. Power users (media management)
+    - domain:
+        - sonarr.ragnalab.xyz
+        - radarr.ragnalab.xyz
+        - prowlarr.ragnalab.xyz
+        - torrents.ragnalab.xyz
+      subject:
+        - "group:admin"
+        - "group:powerusers"
+      policy: one_factor
+
+    # 4. Family (media consumption + requests)
+    - domain:
+        - jellyfin.ragnalab.xyz
+        - requests.ragnalab.xyz
+      subject:
+        - "group:admin"
+        - "group:powerusers"
+        - "group:family"
+      policy: one_factor
+
+    # 5. Guest access (view only)
+    - domain: jellyfin.ragnalab.xyz
+      subject: "group:guests"
+      policy: one_factor
+
+    # 6. General authenticated access
+    - domain: "*.ragnalab.xyz"
+      subject:
+        - "group:admin"
+      policy: one_factor
+```
 
 ## Sources
 
-### Essential Homelab Services
-- [TechHut: MUST HAVE Homelab Services](https://techhut.tv/must-have-home-server-services-2025/)
-- [Virtualization Howto: Ultimate Home Lab Starter Stack for 2026](https://www.virtualizationhowto.com/2025/12/ultimate-home-lab-starter-stack-for-2026-key-recommendations/)
-- [Hostbor: 25+ Must-Have Home Server Services for 2025](https://hostbor.com/25-must-have-home-server-services/)
-- [Elest.io: The 2026 Homelab Stack](https://blog.elest.io/the-2026-homelab-stack-what-self-hosters-are-actually-running-this-year/)
+### HIGH Confidence (Official Documentation)
+- [Authelia Access Control Configuration](https://www.authelia.com/configuration/security/access-control/)
+- [Authelia Traefik Integration](https://www.authelia.com/integration/proxies/traefik/)
+- [Authelia WebAuthn Configuration](https://www.authelia.com/configuration/second-factor/webauthn/)
+- [Authelia Paperless Integration](https://www.authelia.com/integration/trusted-header-sso/paperless/)
+- [Dozzle Authentication](https://dozzle.dev/guide/authentication)
+- [Paperless-ngx Configuration](https://docs.paperless-ngx.com/configuration/)
+- [Servarr Wiki - Prowlarr Settings](https://wiki.servarr.com/prowlarr/settings)
+- [Sonarr v4 FAQ](https://wiki.servarr.com/sonarr/faq-v4)
 
-### Infrastructure & Networking
-- [Virtualization Howto: Why Zoraxy Might Be the Best Reverse Proxy](https://www.virtualizationhowto.com/2025/12/why-zoraxy-might-be-the-best-reverse-proxy-for-home-labs/)
-- [TheOrangeOne: Exposing your Homelab](https://theorangeone.net/posts/exposing-your-homelab/)
-- [Lobsters: How do you secure access to your self-hosted services?](https://lobste.rs/s/rmenr4/how_do_you_secure_access_your_self_hosted)
+### MEDIUM Confidence (Verified Community Sources)
+- [Authelia + Traefik Setup Guide](https://www.authelia.com/blog/authelia--traefik-setup-guide/)
+- [Jellyfin SSO Plugin](https://github.com/9p4/jellyfin-plugin-sso)
+- [Jellyseerr OIDC PR](https://github.com/Fallenbagel/jellyseerr/pull/184)
+- [qBittorrent Reverse Proxy Whitelist Fix](https://github.com/qbittorrent/qBittorrent/pull/9176)
+- [Uptime Kuma Authentik Integration](https://integrations.goauthentik.io/monitoring/uptime-kuma/)
+- [Vaultwarden Authelia OIDC](https://www.authelia.com/integration/openid-connect/clients/vaultwarden/)
 
-### Docker Applications
-- [Kextcache: Top 25 Must-Have Docker Apps for Your Home Server (2025)](https://kextcache.com/top-docker-apps-home-server/)
-- [GitHub: jgwehr/homelab-docker](https://github.com/jgwehr/homelab-docker)
-- [BitDoze: Best 100+ Docker Containers for Home Server](https://www.bitdoze.com/docker-containers-home-server/)
-- [Virtualization Howto: 15 Docker Containers That Make Your Home Lab Instantly Better](https://www.virtualizationhowto.com/2025/11/15-docker-containers-that-make-your-home-lab-instantly-better/)
-
-### Common Mistakes & Anti-Patterns
-- [XDA: 4 homelab mistakes I'll never make again in 2026](https://www.xda-developers.com/4-homelab-mistakes-ill-never-make-again-in-2026/)
-- [Virtualization Howto: Top Home lab Networking Mistakes to Avoid in 2025](https://www.virtualizationhowto.com/2025/08/top-home-lab-networking-mistakes-to-avoid-in-2025/)
-- [Geeky Gadgets: 10 Common Home Lab Mistakes to Avoid in 2025](https://www.geeky-gadgets.com/common-home-lab-mistakes-to-avoid/)
-- [Virtualization Howto: 10 Home Lab Mistakes I Made (So You Don't Have To)](https://www.virtualizationhowto.com/2025/09/10-home-lab-mistakes-i-made-so-you-dont-have-to/)
-
-### Monitoring & Observability
-- [Grafana Labs: How to monitor your homelab with eBPF and OpenTelemetry](https://grafana.com/blog/2025/08/22/how-to-monitor-your-homelab-with-beyla-ebpf-and-opentelemetry/)
-- [Simple Observability: Home Lab Monitoring Made Simple](https://simpleobservability.com/homelab)
-
-### Backup & Disaster Recovery
-- [Virtualization Howto: Ultimate Home Lab Backup Strategy (2025 Edition)](https://www.virtualizationhowto.com/2025/10/ultimate-home-lab-backup-strategy-2025-edition/)
-- [KenBinLab: Implementing a 3-2-1 Backup Strategy for Your Homelab](https://kenbinlab.com/backup-strategy-for-homelab/)
-- [Excalibur's Sheath: Designing a Resilient Homelab](https://excalibursheath.com/guide/2025/08/10/designing-resilient-homelab-redundancy-availability.html)
-
-### Specific Applications
-- [Kubedo: Best Self-Hosted Password Managers 2025](https://kubedo.com/blog-best-self-hosted-password-managers-2025/)
-- [XDA: I self-host Bitwarden and you should consider it too](https://www.xda-developers.com/i-self-host-bitwarden-and-heres-why-you-should-too/)
-- [Road to Homelab: The Ultimate Homelab Homepage Guide](https://roadtohomelab.blog/homelab-homepage-guide/)
-- [How To Geek: Homelab Dashboard: What It Is and Why You Need One](https://www.howtogeek.com/homelab-dashboard-what-it-is-and-why-you-need-one/)
-
-### Reverse Proxy Comparisons
-- [Programonaut: Reverse Proxy Comparison: Traefik vs. Caddy vs. Nginx](https://www.programonaut.com/reverse-proxies-compared-traefik-vs-caddy-vs-nginx-docker/)
-- [Virtualization Howto: I Replaced Nginx Proxy Manager with Traefik](https://www.virtualizationhowto.com/2025/09/i-replaced-nginx-proxy-manager-with-traefik-in-my-home-lab-and-it-changed-everything/)
-- [HomelabSec: Nginx vs Caddy vs Traefik Benchmark Results](https://homelabsec.com/posts/nginx-vs-caddy-vs-traefik-benchmark-results/)
-- [Medium: NPM, Traefik, or Caddy? How to pick the reverse proxy you'll still like in months](https://medium.com/@thomas.byern/npm-traefik-or-caddy-how-to-pick-the-reverse-proxy-youll-still-like-in-6-months-1e1101815e07)
-
----
-*Feature research for: RagnaLab Homelab Platform*
-*Researched: 2026-01-16*
-*Confidence: HIGH (based on current 2025-2026 homelab ecosystem sources)*
+### LOW Confidence (Community Reports - Verify Before Use)
+- Pi-hole v6 reverse proxy issues (multiple GitHub issues)
+- Vaultwarden mobile app 2FA loops (GitHub discussions)
+- Radarr config.xml duplication bug (GitHub issue #9353)
