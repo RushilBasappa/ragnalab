@@ -40,6 +40,12 @@ services:
       # Bind mounts
       - /home/rushil/workspace/ragnalab/stack/infra/pihole/etc-pihole:/sources/pihole
       - /home/rushil/workspace/ragnalab/stack/infra/traefik/config/acme:/sources/traefik-acme
+      # Authelia (SSO)
+      # - configuration.yml (Authelia settings)
+      # - users_database.yml (user accounts and groups)
+      # - db.sqlite3 (sessions, WebAuthn devices, TOTP secrets)
+      # - notification.txt (password reset notifications)
+      - /home/rushil/workspace/ragnalab/stack/infra/authelia/config:/sources/authelia
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backrest.rule=Host(`backups.ragnalab.xyz`)"
