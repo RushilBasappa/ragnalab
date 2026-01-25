@@ -19,6 +19,7 @@ services:
       - "traefik.http.routers.uptime-kuma.tls=true"
       - "traefik.http.routers.uptime-kuma.tls.certresolver=letsencrypt"
       - "traefik.http.services.uptime-kuma.loadbalancer.server.port=3001"
+      - "traefik.http.routers.uptime-kuma.middlewares=authelia@file"
       - "traefik.docker.network=proxy"
       # --- Autokuma monitoring labels ---
       - "kuma.uptime-kuma.http.name=Uptime Kuma"
