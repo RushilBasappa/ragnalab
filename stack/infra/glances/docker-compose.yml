@@ -25,6 +25,7 @@ services:
       - "traefik.http.routers.glances.tls=true"
       - "traefik.http.routers.glances.tls.certresolver=letsencrypt"
       - "traefik.http.services.glances.loadbalancer.server.port=61208"
+      - "traefik.http.routers.glances.middlewares=authelia@file"
       - "traefik.docker.network=proxy"
       # Homepage dashboard
       - "homepage.group=Infrastructure"
