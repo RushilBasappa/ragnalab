@@ -19,5 +19,4 @@ users:
       - admin
       - powerusers
       - family
-    # Password hash will be set by Task 2
-    password: 'PLACEHOLDER_HASH'
+    password: '$argon2id$v=19$m=65536,t=3,p=4$xUdMU8tC/2wRbv/Xo9yDUw$wwXTPZIoDXFxMz5lpD/+HB0LEpO+JcknGB2op+mPwVM'

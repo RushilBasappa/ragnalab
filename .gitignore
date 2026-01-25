@@ -8,6 +8,11 @@ stack/infra/homepage/config/proxmox.yaml
 # ACME/Let's Encrypt certificate storage (contains private keys)
 stack/infra/traefik/config/acme/*.json
 
+# Authelia secrets and database (contains sensitive data)
+stack/infra/authelia/config/secrets/
+stack/infra/authelia/config/db.sqlite3
+stack/infra/authelia/config/notification.txt
+
 # Environment files with credentials (use .env.example as template)
 .env
 *.env
