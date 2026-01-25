@@ -11,11 +11,11 @@ See: .planning/PROJECT.md (updated 2026-01-25)
 
 Milestone: v3.0 SSO & Apps
 Phase: 9 of 11 (Authelia SSO Foundation)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-01-25 — Roadmap created (3 phases, 31 requirements)
+Plan: 01 of 01 complete
+Status: Plan complete, ready for next phase
+Last activity: 2026-01-25 — Completed 09-01 Authelia SSO Foundation
 
-Progress: [v1.0] ████████ SHIPPED | [v2.0] ████████ SHIPPED | [v3.0] ░░░░░░░░ 0%
+Progress: [v1.0] ████████ SHIPPED | [v2.0] ████████ SHIPPED | [v3.0] ██░░░░░░ 33%
 
 ## Completed Milestones
 
@@ -62,16 +62,17 @@ Progress: [v1.0] ████████ SHIPPED | [v2.0] ███████
 | Maintainerr | maintainerr.ragnalab.xyz | v2.0 |
 | Autokuma | (headless, no UI) | v2.0 |
 | Backrest | backups.ragnalab.xyz | v2.0 |
+| Authelia | auth.ragnalab.xyz | v3.0 |
 
-**Total services:** 22
+**Total services:** 23
 
 ## v3.0 Scope
 
 **SSO & Access Control:**
-- Authelia SSO with Traefik forward auth
-- Passkey/WebAuthn + password fallback
-- Four access levels: Admin, Power Users, Family, Guests
-- Existing apps trust external auth (arr apps, Jellyfin)
+- [x] Authelia SSO with Traefik forward auth
+- [x] Passkey/WebAuthn + password fallback
+- [x] Four access levels: Admin, Power Users, Family, Guests
+- [ ] Existing apps trust external auth (arr apps, Jellyfin) - Phase 10
 
 **App Expansion (after SSO):**
 - Paperless-ngx (docs.ragnalab.xyz)
@@ -84,6 +85,14 @@ Progress: [v1.0] ████████ SHIPPED | [v2.0] ███████
 ## Key Decisions (Cumulative)
 
 See PROJECT.md Key Decisions table for full history.
+
+Recent v3.0 decisions:
+- SQLite storage for Authelia (no Redis needed for 4 users)
+- Argon2id m=256, t=1, p=2 for ARM64 performance
+- Passkeys as 2FA (passwordless not in 4.39.14)
+- Filesystem notifier (no email needed)
+- WebAuthn rp_id=ragnalab.xyz (immutable)
+- Session cookie domain=ragnalab.xyz (parent for SSO)
 
 Recent v2.0 decisions:
 - DNS-only mode for Pi-hole (gateway locked)
@@ -98,9 +107,9 @@ Recent v2.0 decisions:
 ## Session Continuity
 
 Last session: 2026-01-25
-Stopped at: Roadmap created, ready to plan Phase 9
+Stopped at: Completed 09-01-PLAN.md (Authelia SSO Foundation)
 Resume file: None
-Next action: /gsd:plan-phase 9
+Next action: Plan Phase 10 (Service Integration) or continue with 09-02 if exists
 
 ## Pending Todos
 
