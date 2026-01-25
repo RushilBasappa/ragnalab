@@ -52,6 +52,7 @@ services:
       - "traefik.http.routers.backrest.entrypoints=websecure"
       - "traefik.http.routers.backrest.tls.certresolver=letsencrypt"
       - "traefik.http.services.backrest.loadbalancer.server.port=9898"
+      - "traefik.http.routers.backrest.middlewares=authelia@file"
       - "traefik.docker.network=proxy"
       # --- Autokuma monitoring labels ---
       - "kuma.backrest.http.name=Backrest"
