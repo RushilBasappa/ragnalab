@@ -11,11 +11,11 @@ See: .planning/PROJECT.md (updated 2026-01-25)
 
 Milestone: v3.0 SSO & Apps
 Phase: 11 of 11 (New App Deployment)
-Plan: 01 of 03 complete
+Plan: 02 of 03 complete
 Status: In progress
-Last activity: 2026-01-26 — Completed 11-01-PLAN.md (IT-Tools & ACL Rules)
+Last activity: 2026-01-26 — Completed 11-02-PLAN.md (Dozzle & Paperless-ngx)
 
-Progress: [v1.0] ████████ SHIPPED | [v2.0] ████████ SHIPPED | [v3.0] ████████░ 90%
+Progress: [v1.0] ████████ SHIPPED | [v2.0] ████████ SHIPPED | [v3.0] █████████ 95%
 
 ## Completed Milestones
 
@@ -64,8 +64,10 @@ Progress: [v1.0] ████████ SHIPPED | [v2.0] ███████
 | Backrest | backups.ragnalab.xyz | v2.0 |
 | Authelia | auth.ragnalab.xyz | v3.0 |
 | IT-Tools | tools.ragnalab.xyz | v3.0 |
+| Dozzle | logs.ragnalab.xyz | v3.0 |
+| Paperless-ngx | docs.ragnalab.xyz | v3.0 |
 
-**Total services:** 24
+**Total services:** 26
 
 ## v3.0 Scope
 
@@ -77,8 +79,8 @@ Progress: [v1.0] ████████ SHIPPED | [v2.0] ███████
 - [x] Existing apps trust external auth (arr apps, Jellyfin, Uptime Kuma, Backrest) - Phase 10
 
 **App Expansion (after SSO):**
-- Paperless-ngx (docs.ragnalab.xyz)
-- Dozzle (logs.ragnalab.xyz)
+- [x] Paperless-ngx (docs.ragnalab.xyz) - Phase 11-02
+- [x] Dozzle (logs.ragnalab.xyz) - Phase 11-02
 - [x] IT-Tools (tools.ragnalab.xyz) - Phase 11-01
 
 **Deferred to v4.0+:**
@@ -109,9 +111,9 @@ Recent v2.0 decisions:
 ## Session Continuity
 
 Last session: 2026-01-26
-Stopped at: Completed 11-01-PLAN.md (IT-Tools & ACL Rules)
+Stopped at: Completed 11-02-PLAN.md (Dozzle & Paperless-ngx)
 Resume file: None
-Next action: Execute 11-02-PLAN.md (Dozzle) or 11-03-PLAN.md (Paperless-ngx)
+Next action: Execute 11-03-PLAN.md (Phase completion/docs) or mark v3.0 as shipped
 
 ## Pending Todos
 
