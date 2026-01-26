@@ -2,22 +2,29 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-01-25)
+See: .planning/PROJECT.md (updated 2026-01-26)
 
-**Core value:** Unified single sign-on with passkey support and per-user access control, plus lightweight app expansion.
-**Current focus:** Phase 11 in progress — New App Deployment
+**Core value:** Secure, private-only access to self-hosted applications with professional-grade HTTPS, automatic service discovery, and dead-simple process for adding new apps.
+**Current focus:** Planning next milestone (v4.0)
 
 ## Current Position
 
-Milestone: v3.0 SSO & Apps
-Phase: 11 of 11 (New App Deployment)
-Plan: 02 of 03 complete
-Status: In progress
-Last activity: 2026-01-26 — Completed 11-02-PLAN.md (Dozzle & Paperless-ngx)
+Milestone: v3.0 SSO & Apps — SHIPPED
+Phase: Complete
+Plan: Complete
+Status: Ready to plan next milestone
+Last activity: 2026-01-26 — v3.0 milestone shipped
 
-Progress: [v1.0] ████████ SHIPPED | [v2.0] ████████ SHIPPED | [v3.0] █████████ 95%
+Progress: [v1.0] SHIPPED | [v2.0] SHIPPED | [v3.0] SHIPPED
 
 ## Completed Milestones
+
+**v3.0 SSO & Apps (Shipped 2026-01-26):**
+- Authelia SSO with WebAuthn passkey 2FA
+- Four access levels (Admin 2FA, Power Users 1FA, Family 1FA, Guests)
+- 17 services protected with SSO middleware
+- *arr apps use External auth mode (no double login)
+- New apps: Paperless-ngx, Dozzle, IT-Tools
 
 **v2.0 Network Services (Shipped 2026-01-20):**
 - Pi-hole DNS-based ad blocking (DNS-only mode)
@@ -69,51 +76,29 @@ Progress: [v1.0] ████████ SHIPPED | [v2.0] ███████
 
 **Total services:** 26
 
-## v3.0 Scope
+## v4.0 Ideas (Not Yet Scoped)
 
-**SSO & Access Control:**
-- [x] Authelia SSO with Traefik forward auth
-- [x] Passkey/WebAuthn + password fallback
-- [x] Four access levels: Admin, Power Users, Family, Guests
-- [x] Authelia operations: backup, monitoring, documentation
-- [x] Existing apps trust external auth (arr apps, Jellyfin, Uptime Kuma, Backrest) - Phase 10
+**Complex SSO Integrations:**
+- Jellyfin SSO plugin (requires plugin install + account linking)
+- Jellyseerr OIDC (preview branch stability unknown)
+- Vaultwarden OIDC (mobile app 2FA issues)
 
-**App Expansion (after SSO):**
-- [x] Paperless-ngx (docs.ragnalab.xyz) - Phase 11-02
-- [x] Dozzle (logs.ragnalab.xyz) - Phase 11-02
-- [x] IT-Tools (tools.ragnalab.xyz) - Phase 11-01
-
-**Deferred to v4.0+:**
-- Immich, Tandoor, ntfy, Stirling-PDF, Actual, Kavita, Linkding, Memos, Syncthing
+**App Expansion:**
+- Immich photo backup
+- Tandoor recipes
+- ntfy notifications
+- Stirling-PDF tools
 
 ## Key Decisions (Cumulative)
 
 See PROJECT.md Key Decisions table for full history.
 
-Recent v3.0 decisions:
-- SQLite storage for Authelia (no Redis needed for 4 users)
-- Argon2id m=256, t=1, p=2 for ARM64 performance
-- Passkeys as 2FA (passwordless not in 4.39.14)
-- Filesystem notifier (no email needed)
-- WebAuthn rp_id=ragnalab.xyz (immutable)
-- Session cookie domain=ragnalab.xyz (parent for SSO)
-
-Recent v2.0 decisions:
-- DNS-only mode for Pi-hole (gateway locked)
-- ProtonVPN WireGuard for torrents
-- Direct-play only for Jellyfin
-- stack/ nested includes pattern
-- Socket-proxy for Docker API
-- Autokuma for automatic monitoring
-- Backrest over script-based backup
-- SSO-first app deployment approach
-
 ## Session Continuity
 
 Last session: 2026-01-26
-Stopped at: Completed 11-02-PLAN.md (Dozzle & Paperless-ngx)
+Stopped at: v3.0 milestone completed
 Resume file: None
-Next action: Execute 11-03-PLAN.md (Phase completion/docs) or mark v3.0 as shipped
+Next action: `/gsd:discuss-milestone` to plan v4.0
 
 ## Pending Todos
 

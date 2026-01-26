@@ -23,6 +23,7 @@ services:
       - "traefik.http.routers.maintainerr.tls=true"
       - "traefik.http.routers.maintainerr.tls.certresolver=letsencrypt"
       - "traefik.http.services.maintainerr.loadbalancer.server.port=6246"
+      - "traefik.http.routers.maintainerr.middlewares=authelia@file"
       - "traefik.docker.network=proxy"
       # Homepage dashboard
       - "homepage.group=Media"

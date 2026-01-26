@@ -1,5 +1,36 @@
 # Project Milestones: RagnaLab
 
+## v3.0 SSO & Apps (Shipped: 2026-01-26)
+
+**Delivered:** Unified single sign-on with passkey authentication, per-user access control, SSO protection for all services, and three new applications (Paperless-ngx, Dozzle, IT-Tools).
+
+**Phases completed:** 9-11 (8 plans total)
+
+**Key accomplishments:**
+
+- Authelia SSO with WebAuthn passkey 2FA and password fallback
+- Four access levels configured (Admin 2FA, Power Users 1FA, Family 1FA, Guests)
+- 17 services protected with forwardAuth middleware
+- *arr apps use External auth mode (no double login)
+- Paperless-ngx document management with trusted header SSO
+- Dozzle container log viewer with forward-proxy auth
+- IT-Tools utility suite with forwardAuth middleware
+- API bypass rules for mobile apps and widgets
+
+**Stats:**
+
+- 3 phases, 8 plans, 31 requirements
+- 3 new services deployed (IT-Tools, Dozzle, Paperless-ngx)
+- 17 services with SSO protection
+- 36 files modified, +4,005 lines
+- 2 days from milestone start to ship
+
+**Git range:** `feat(09-01)` → `feat(11-02)`
+
+**What's next:** v4.0 — Complex SSO integrations (Jellyfin plugin, Jellyseerr OIDC), app expansion (Immich, Tandoor, ntfy)
+
+---
+
 ## v2.0 Network Services (Shipped: 2026-01-20)
 
 **Delivered:** Extended homelab with network-wide ad blocking, complete media automation stack, operational hardening, and modern backup infrastructure.

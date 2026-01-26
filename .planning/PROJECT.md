@@ -8,22 +8,15 @@ A private, VPN-only homelab platform running on Raspberry Pi 5 that hosts multip
 
 Secure, private-only access to self-hosted applications with professional-grade HTTPS, automatic service discovery, and dead-simple process for adding new apps.
 
-## Current Milestone: v3.0 SSO & Apps
+## Current State
 
-**Goal:** Unified single sign-on with passkey support and per-user access control, plus lightweight app expansion (docs, logs, tools).
-
-**Target features:**
-- Authelia SSO with Traefik forward auth integration
-- Passkey/fingerprint authentication (WebAuthn)
-- Username/password fallback authentication
-- Per-user and per-group access control rules
-- Four access levels: Admin, Power Users, Family, Guests
-- Existing apps configured to trust external auth (disable built-in login)
-- New apps: Paperless-ngx, Dozzle, IT-Tools (SSO-protected from day one)
+**Latest Milestone:** v3.0 SSO & Apps (Shipped 2026-01-26)
+**Services:** 26 deployed, 17 with SSO protection
+**Next Milestone:** Planning v4.0
 
 ## Requirements
 
-### Validated (v1.0 + v2.0)
+### Validated (v1.0 + v2.0 + v3.0)
 
 **v1.0 Foundation:**
 - [x] Traefik reverse proxy infrastructure with Let's Encrypt DNS-01 via Cloudflare
@@ -49,26 +42,32 @@ Secure, private-only access to self-hosted applications with professional-grade 
 - [x] Backrest web UI backup system at backups.ragnalab.xyz
 - [x] Recyclarr, Flaresolverr, Maintainerr media tools
 
-### Active (v3.0)
+**v3.0 SSO & Apps:**
+- [x] Authelia SSO with Traefik forward auth middleware at auth.ragnalab.xyz
+- [x] Passkey/WebAuthn 2FA authentication enabled
+- [x] Username/password fallback authentication
+- [x] Access control rules for four user groups (admin, powerusers, family, guests)
+- [x] 17 services protected with SSO middleware
+- [x] *arr apps configured with External auth mode (no double login)
+- [x] API bypass rules for mobile apps and widgets
+- [x] Authelia config included in automated backup system
+- [x] User management documentation for adding/removing users
+- [x] Paperless-ngx document management at docs.ragnalab.xyz
+- [x] Dozzle log viewer at logs.ragnalab.xyz
+- [x] IT-Tools at tools.ragnalab.xyz
 
-**SSO & Access Control:**
-- [ ] Authelia deployed with Traefik forward auth middleware
-- [ ] Passkey/WebAuthn authentication enabled
-- [ ] Username/password authentication as fallback
-- [ ] Access control rules for four user groups (admin, powerusers, family, guests)
-- [ ] Admin group: full access to all services
-- [ ] Power users group: access to Sonarr, Radarr, Prowlarr, qBittorrent
-- [ ] Family group: access to Jellyfin, Jellyseerr
-- [ ] Guests group: access to Jellyfin only
-- [ ] Arr apps configured with "External" authentication (trust Authelia)
-- [ ] Jellyfin configured to trust proxy authentication
-- [ ] Authelia config included in automated backup system
-- [ ] User management documentation for adding/removing users
+### Active (v4.0 — Planning)
 
-**App Expansion (after SSO):**
-- [ ] Paperless-ngx document management at docs.ragnalab.xyz
-- [ ] Dozzle log viewer at logs.ragnalab.xyz
-- [ ] IT-Tools at tools.ragnalab.xyz
+**Complex SSO Integrations:**
+- [ ] Jellyfin SSO plugin (requires plugin install + account linking)
+- [ ] Jellyseerr OIDC (preview branch stability unknown)
+- [ ] Vaultwarden OIDC (mobile app 2FA issues)
+
+**App Expansion:**
+- [ ] Immich photo backup
+- [ ] Tandoor recipes
+- [ ] ntfy notifications
+- [ ] Stirling-PDF tools
 
 ### Out of Scope
 
@@ -78,8 +77,7 @@ Secure, private-only access to self-hosted applications with professional-grade 
 - Port forwarding or dynamic DNS — Tailscale handles networking
 - LDAP/Active Directory integration — overkill for home use
 - OAuth providers (Google, GitHub login) — users are known, not public
-- Immich photo backup — deferred to v4.0
-- Remaining apps (Tandoor, ntfy, Stirling-PDF, Actual, Kavita, Linkding, Memos, Syncthing) — deferred to future milestones
+- Remaining apps (Actual, Kavita, Linkding, Memos, Syncthing) — deferred to future milestones
 
 ## Context
 
@@ -98,20 +96,20 @@ Secure, private-only access to self-hosted applications with professional-grade 
 - DNS managed in Cloudflare
 - Cloudflare API access available for Let's Encrypt DNS-01 challenges
 
-**Deployed Services (v2.0 — 20+ services):**
-- Infrastructure: Traefik, Socket-proxy, Autokuma
-- Monitoring: Uptime Kuma (status.ragnalab.xyz), Glances (glances.ragnalab.xyz)
+**Deployed Services (v3.0 — 26 services):**
+- Infrastructure: Traefik, Socket-proxy, Autokuma, Authelia
+- Monitoring: Uptime Kuma (status.ragnalab.xyz), Glances (glances.ragnalab.xyz), Dozzle (logs.ragnalab.xyz)
 - Dashboard: Homepage (home.ragnalab.xyz)
-- Apps: Vaultwarden (vault.ragnalab.xyz), RustDesk
+- Apps: Vaultwarden (vault.ragnalab.xyz), RustDesk, IT-Tools (tools.ragnalab.xyz), Paperless-ngx (docs.ragnalab.xyz)
 - Network: Pi-hole (pihole.ragnalab.xyz)
 - Media: Gluetun, qBittorrent, Prowlarr, Sonarr, Radarr, Bazarr, Unpackerr, Jellyfin, Jellyseerr, Plex, Recyclarr, Flaresolverr, Maintainerr
 - Backup: Backrest (backups.ragnalab.xyz)
 
-**Users (v3.0 context):**
-- Admin (owner): Full access to everything
-- Power users: Media management (arr apps)
-- Family: Media consumption (Jellyfin + requests)
-- Guests: View-only media access (Jellyfin only)
+**Users:**
+- Admin (owner): Full access to everything (2FA required for admin services)
+- Power users: Media management (arr apps, 1FA)
+- Family: Media consumption (Jellyfin + requests, 1FA)
+- Guests: View-only media access (Jellyfin only, 1FA)
 
 **User Experience Level:**
 - Expert with Docker and Traefik
@@ -145,9 +143,13 @@ Secure, private-only access to self-hosted applications with professional-grade 
 | Socket-proxy for Docker API | Security hardening, no direct docker.sock exposure | ✓ Validated v2.0 |
 | Autokuma for automatic monitoring | Docker labels auto-create Uptime Kuma monitors | ✓ Validated v2.0 |
 | Backrest over script-based backup | Web UI, better deduplication, easier restores | ✓ Validated v2.0 |
-| Authelia over Authentik | Lightweight (~30MB), config-file based, better for Pi resources | — Pending v3.0 |
-| Passkeys + password fallback | Modern auth with backup option for compatibility | — Pending v3.0 |
-| SSO-first app deployment | New apps get SSO protection from day one | — Pending v3.0 |
+| Authelia over Authentik | Lightweight (~30MB), config-file based, better for Pi resources | ✓ Validated v3.0 |
+| Passkeys + password fallback | Modern auth with backup option for compatibility | ✓ Validated v3.0 |
+| SSO-first app deployment | New apps get SSO protection from day one | ✓ Validated v3.0 |
+| SQLite for Authelia storage | Sufficient for 4 users, no Redis complexity needed | ✓ Validated v3.0 |
+| ARM64-tuned argon2id (m=256, t=1, p=2) | Prevents slow logins on Pi 5 | ✓ Validated v3.0 |
+| Forward-proxy pattern for Dozzle | Native support, reads Remote-User header directly | ✓ Validated v3.0 |
+| Trusted header SSO for Paperless | Django's HTTP_REMOTE_USER for auto-login | ✓ Validated v3.0 |
 
 ---
-*Last updated: 2026-01-24 after v3.0 milestone initialization*
+*Last updated: 2026-01-26 after v3.0 milestone shipped*

@@ -39,6 +39,7 @@ services:
       - "traefik.http.routers.pihole.tls=true"
       - "traefik.http.routers.pihole.tls.certresolver=letsencrypt"
       - "traefik.http.services.pihole.loadbalancer.server.port=80"
+      - "traefik.http.routers.pihole.middlewares=authelia@file"
       - "traefik.docker.network=proxy"
       # Homepage dashboard
       - "homepage.group=Network"

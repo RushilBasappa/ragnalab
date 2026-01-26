@@ -26,6 +26,7 @@ services:
       - "traefik.http.routers.bazarr.tls=true"
       - "traefik.http.routers.bazarr.tls.certresolver=letsencrypt"
       - "traefik.http.services.bazarr.loadbalancer.server.port=6767"
+      - "traefik.http.routers.bazarr.middlewares=authelia@file"
       - "traefik.docker.network=proxy"
       # Homepage dashboard
       - "homepage.group=Media"
