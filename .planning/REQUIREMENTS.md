@@ -41,11 +41,11 @@ Requirements for v3.0 milestone. Each maps to roadmap phases.
 
 ### New App Deployment
 
-- [ ] **NEW-01**: Paperless-ngx deployed at docs.ragnalab.xyz with trusted header SSO
-- [ ] **NEW-02**: Dozzle deployed at logs.ragnalab.xyz with forward-proxy auth
-- [ ] **NEW-03**: IT-Tools deployed at tools.ragnalab.xyz with forwardAuth
-- [ ] **NEW-04**: New apps added to Homepage dashboard
-- [ ] **NEW-05**: New apps have Autokuma monitoring labels
+- [x] **NEW-01**: Paperless-ngx deployed at docs.ragnalab.xyz with trusted header SSO
+- [x] **NEW-02**: Dozzle deployed at logs.ragnalab.xyz with forward-proxy auth
+- [x] **NEW-03**: IT-Tools deployed at tools.ragnalab.xyz with forwardAuth
+- [x] **NEW-04**: New apps added to Homepage dashboard
+- [x] **NEW-05**: New apps have Autokuma monitoring labels
 
 ### Operations
 
@@ -116,11 +116,11 @@ Which phases cover which requirements.
 | APP-07 | Phase 10 | Complete |
 | APP-08 | Phase 10 | Complete |
 | APP-09 | Phase 10 | Complete |
-| NEW-01 | Phase 11 | Pending |
-| NEW-02 | Phase 11 | Pending |
-| NEW-03 | Phase 11 | Pending |
-| NEW-04 | Phase 11 | Pending |
-| NEW-05 | Phase 11 | Pending |
+| NEW-01 | Phase 11 | Complete |
+| NEW-02 | Phase 11 | Complete |
+| NEW-03 | Phase 11 | Complete |
+| NEW-04 | Phase 11 | Complete |
+| NEW-05 | Phase 11 | Complete |
 
 **Coverage:**
 - v3.0 requirements: 31 total
@@ -129,4 +129,4 @@ Which phases cover which requirements.
 
 ---
 *Requirements defined: 2026-01-25*
-*Last updated: 2026-01-25 after Phase 10 completion*
+*Last updated: 2026-01-25 after Phase 11 completion*

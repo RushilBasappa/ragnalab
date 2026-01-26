@@ -13,7 +13,7 @@ Deploy Authelia SSO with passkey authentication and per-user access control, int
 
 - [x] **Phase 9: Authelia SSO Foundation** — Deploy Authelia, configure users/groups, enable passkey auth
 - [x] **Phase 10: Existing App Integration** — Protect existing apps with SSO, configure External auth mode
-- [ ] **Phase 11: New App Deployment** — Deploy Paperless-ngx, Dozzle, IT-Tools with SSO
+- [x] **Phase 11: New App Deployment** — Deploy Paperless-ngx, Dozzle, IT-Tools with SSO
 
 ## Phase Details
 
@@ -65,8 +65,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 11-01-PLAN.md — Authelia ACL update + IT-Tools deployment (simple forwardAuth pattern)
-- [ ] 11-02-PLAN.md — Dozzle (forward-proxy auth) + Paperless-ngx (trusted header SSO)
+- [x] 11-01-PLAN.md — Authelia ACL update + IT-Tools deployment (simple forwardAuth pattern)
+- [x] 11-02-PLAN.md — Dozzle (forward-proxy auth) + Paperless-ngx (trusted header SSO)
 
 ## Progress
 
@@ -77,4 +77,4 @@ Phases execute in numeric order: 9 → 10 → 11
 |-------|----------------|--------|-----------|
 | 9. Authelia SSO Foundation | 2/2 | Complete | 2026-01-25 |
 | 10. Existing App Integration | 4/4 | Complete | 2026-01-25 |
-| 11. New App Deployment | 0/2 | Not started | — |
+| 11. New App Deployment | 2/2 | Complete | 2026-01-25 |
