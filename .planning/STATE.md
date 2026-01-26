@@ -5,17 +5,17 @@
 See: .planning/PROJECT.md (updated 2026-01-25)
 
 **Core value:** Unified single sign-on with passkey support and per-user access control, plus lightweight app expansion.
-**Current focus:** Phase 10 complete — Ready for Phase 11
+**Current focus:** Phase 11 in progress — New App Deployment
 
 ## Current Position
 
 Milestone: v3.0 SSO & Apps
-Phase: 10 of 11 (Existing App Integration)
-Plan: 04 of 04 complete
-Status: Phase complete
-Last activity: 2026-01-25 — Completed 10-02 Uptime Kuma & Backrest SSO
+Phase: 11 of 11 (New App Deployment)
+Plan: 01 of 03 complete
+Status: In progress
+Last activity: 2026-01-26 — Completed 11-01-PLAN.md (IT-Tools & ACL Rules)
 
-Progress: [v1.0] ████████ SHIPPED | [v2.0] ████████ SHIPPED | [v3.0] ███████░ 80%
+Progress: [v1.0] ████████ SHIPPED | [v2.0] ████████ SHIPPED | [v3.0] ████████░ 90%
 
 ## Completed Milestones
 
@@ -63,8 +63,9 @@ Progress: [v1.0] ████████ SHIPPED | [v2.0] ███████
 | Autokuma | (headless, no UI) | v2.0 |
 | Backrest | backups.ragnalab.xyz | v2.0 |
 | Authelia | auth.ragnalab.xyz | v3.0 |
+| IT-Tools | tools.ragnalab.xyz | v3.0 |
 
-**Total services:** 23
+**Total services:** 24
 
 ## v3.0 Scope
 
@@ -78,7 +79,7 @@ Progress: [v1.0] ████████ SHIPPED | [v2.0] ███████
 **App Expansion (after SSO):**
 - Paperless-ngx (docs.ragnalab.xyz)
 - Dozzle (logs.ragnalab.xyz)
-- IT-Tools (tools.ragnalab.xyz)
+- [x] IT-Tools (tools.ragnalab.xyz) - Phase 11-01
 
 **Deferred to v4.0+:**
 - Immich, Tandoor, ntfy, Stirling-PDF, Actual, Kavita, Linkding, Memos, Syncthing
@@ -107,10 +108,10 @@ Recent v2.0 decisions:
 
 ## Session Continuity
 
-Last session: 2026-01-25
-Stopped at: Phase 10 complete (all 4 plans executed, verified)
+Last session: 2026-01-26
+Stopped at: Completed 11-01-PLAN.md (IT-Tools & ACL Rules)
 Resume file: None
-Next action: Plan Phase 11 (New App Deployment)
+Next action: Execute 11-02-PLAN.md (Dozzle) or 11-03-PLAN.md (Paperless-ngx)
 
 ## Pending Todos
 
