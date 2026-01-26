@@ -1,0 +1,67 @@
+# stack/apps/dozzle/docker-compose.yml
+# Dozzle - Real-time Docker container log viewer
+# Source: https://dozzle.dev/guide/authentication
+# Access at: https://logs.ragnalab.xyz
+
+services:
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    restart: unless-stopped
+    profiles: ["apps"]
+    environment:
+      # Forward proxy authentication via Authelia
+      # Reads Remote-User, Remote-Email, Remote-Name headers automatically
+      DOZZLE_AUTH_PROVIDER: "forward-proxy"
+      DOZZLE_AUTH_LOGOUT_URL: "https://auth.ragnalab.xyz/logout"
+      # Docker API via socket-proxy (not raw socket for security)
+      DOCKER_HOST: "tcp://socket-proxy:2375"
+      # Disable analytics
+      DOZZLE_NO_ANALYTICS: "true"
+    volumes:
+      - dozzle-data:/data
+    networks:
+      - proxy
+      - socket_proxy_network
+    labels:
+      # Traefik routing
+      - "traefik.enable=true"
+      - "traefik.http.routers.dozzle.rule=Host(`logs.ragnalab.xyz`)"
+      - "traefik.http.routers.dozzle.entrypoints=websecure"
+      - "traefik.http.routers.dozzle.tls=true"
+      - "traefik.http.routers.dozzle.tls.certresolver=letsencrypt"
+      - "traefik.http.services.dozzle.loadbalancer.server.port=8080"
+      - "traefik.http.routers.dozzle.middlewares=authelia@file"
+      - "traefik.docker.network=proxy"
+      # Homepage dashboard
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Dozzle"
+      - "homepage.icon=dozzle.png"
+      - "homepage.href=https://logs.ragnalab.xyz"
+      - "homepage.description=Container Logs"
+      - "homepage.server=ragnalab-docker"
+      # Autokuma monitoring (internal URL to bypass auth)
+      - "kuma.dozzle.http.name=Dozzle"
+      - "kuma.dozzle.http.url=http://dozzle:8080"
+      - "kuma.dozzle.http.parent_name=infra-group"
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.25'
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  dozzle-data:
+    external: true
+    name: ragnalab_dozzle-data
+
+networks:
+  proxy:
+    external: true
+  socket_proxy_network:
+    external: true
