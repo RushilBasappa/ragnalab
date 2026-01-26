@@ -1,14 +1,4 @@
 # Authelia Users Database
-# Documentation: https://www.authelia.com/reference/guides/passwords/
-#
-# Password hashes generated with:
-#   docker run --rm authelia/authelia:4.39.14 authelia crypto hash generate argon2 --password 'YourPassword'
-#
-# Groups:
-#   - admin: Full access to all services, two_factor required for sensitive services
-#   - powerusers: Access to *arr apps and media management
-#   - family: Access to Jellyfin and Jellyseerr
-#   - guests: Limited access to Jellyfin only
 
 users:
   rushil:
@@ -19,4 +9,4 @@ users:
       - admin
       - powerusers
       - family
-    password: '$argon2id$v=19$m=65536,t=3,p=4$xUdMU8tC/2wRbv/Xo9yDUw$wwXTPZIoDXFxMz5lpD/+HB0LEpO+JcknGB2op+mPwVM'
+    password: '$argon2id$v=19$m=256,t=1,p=2$lnSkWpCaAWaCqPMEVEECRw$dYqQNq4YGNbJQpPjYRZXUi72i915yE2R/jQjtHSvJSo'
