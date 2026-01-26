@@ -149,7 +149,21 @@ access_control:
       subject: 'group:guests'
       policy: one_factor
 
-    # 7. General admin access to everything else
+    # 7. Admin services - new apps requiring two_factor
+    - domain:
+        - 'docs.ragnalab.xyz'
+        - 'logs.ragnalab.xyz'
+      subject: 'group:admin'
+      policy: two_factor
+
+    # 8. Power user services - IT-Tools with one_factor
+    - domain: 'tools.ragnalab.xyz'
+      subject:
+        - 'group:admin'
+        - 'group:powerusers'
+      policy: one_factor
+
+    # 9. General admin access to everything else
     - domain: '*.ragnalab.xyz'
       subject: 'group:admin'
       policy: one_factor
