@@ -1,0 +1,48 @@
+# stack/apps/it-tools/docker-compose.yml
+# IT-Tools - Collection of developer utilities
+# Source: https://github.com/CorentinTh/it-tools
+# Access at: https://tools.ragnalab.xyz
+
+services:
+  it-tools:
+    image: corentinth/it-tools:latest
+    container_name: it-tools
+    restart: unless-stopped
+    profiles: ["apps"]
+    networks:
+      - proxy
+    labels:
+      # Traefik routing
+      - "traefik.enable=true"
+      - "traefik.http.routers.it-tools.rule=Host(`tools.ragnalab.xyz`)"
+      - "traefik.http.routers.it-tools.entrypoints=websecure"
+      - "traefik.http.routers.it-tools.tls=true"
+      - "traefik.http.routers.it-tools.tls.certresolver=letsencrypt"
+      - "traefik.http.services.it-tools.loadbalancer.server.port=80"
+      - "traefik.http.routers.it-tools.middlewares=authelia@file"
+      - "traefik.docker.network=proxy"
+      # Homepage dashboard
+      - "homepage.group=Apps"
+      - "homepage.name=IT Tools"
+      - "homepage.icon=it-tools.png"
+      - "homepage.href=https://tools.ragnalab.xyz"
+      - "homepage.description=Developer Utilities"
+      - "homepage.server=ragnalab-docker"
+      # Autokuma monitoring (internal URL to bypass auth)
+      - "kuma.it-tools.http.name=IT Tools"
+      - "kuma.it-tools.http.url=http://it-tools:80"
+      - "kuma.it-tools.http.parent_name=apps-group"
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+          cpus: '0.1'
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  proxy:
+    external: true
