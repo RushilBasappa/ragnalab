@@ -62,11 +62,11 @@ Plans:
   3. IT-Tools deployed at tools.ragnalab.xyz with forwardAuth middleware
   4. All new apps visible on Homepage dashboard
   5. All new apps have Autokuma monitoring
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 11-01: TBD
-- [ ] 11-02: TBD
+- [ ] 11-01-PLAN.md — Authelia ACL update + IT-Tools deployment (simple forwardAuth pattern)
+- [ ] 11-02-PLAN.md — Dozzle (forward-proxy auth) + Paperless-ngx (trusted header SSO)
 
 ## Progress
 
@@ -77,4 +77,4 @@ Phases execute in numeric order: 9 → 10 → 11
 |-------|----------------|--------|-----------|
 | 9. Authelia SSO Foundation | 2/2 | Complete | 2026-01-25 |
 | 10. Existing App Integration | 4/4 | Complete | 2026-01-25 |
-| 11. New App Deployment | 0/? | Not started | — |
+| 11. New App Deployment | 0/2 | Not started | — |
