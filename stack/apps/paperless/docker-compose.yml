@@ -1,0 +1,121 @@
+# stack/apps/paperless/docker-compose.yml
+# Paperless-ngx - Document management system with OCR
+# Source: https://docs.paperless-ngx.com/setup/
+# SSO: https://www.authelia.com/integration/trusted-header-sso/paperless/
+# Access at: https://docs.ragnalab.xyz
+
+services:
+  paperless-redis:
+    image: redis:7
+    container_name: paperless-redis
+    restart: unless-stopped
+    profiles: ["apps"]
+    volumes:
+      - paperless-redis-data:/data
+    networks:
+      - paperless-internal
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+          cpus: '0.1'
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+  paperless:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    container_name: paperless
+    restart: unless-stopped
+    profiles: ["apps"]
+    depends_on:
+      - paperless-redis
+    environment:
+      # User/permissions
+      USERMAP_UID: 1000
+      USERMAP_GID: 1000
+      # Redis broker (required for task queue)
+      PAPERLESS_REDIS: "redis://paperless-redis:6379"
+      # URL configuration for reverse proxy
+      PAPERLESS_URL: "https://docs.ragnalab.xyz"
+      # SSO via Authelia trusted header
+      # Header "Remote-User" becomes "HTTP_REMOTE_USER" in Django
+      PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
+      PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: "HTTP_REMOTE_USER"
+      PAPERLESS_LOGOUT_REDIRECT_URL: "https://auth.ragnalab.xyz/logout"
+      # Initial admin (username MUST match Authelia username for SSO)
+      PAPERLESS_ADMIN_USER: ${PAPERLESS_ADMIN_USER}
+      PAPERLESS_ADMIN_PASSWORD: ${PAPERLESS_ADMIN_PASSWORD}
+      # Performance tuning for Raspberry Pi
+      PAPERLESS_WEBSERVER_WORKERS: 1
+      PAPERLESS_TASK_WORKERS: 1
+      PAPERLESS_THREADS_PER_WORKER: 1
+      # OCR disabled by default (heavy on Pi, enable if needed)
+      PAPERLESS_OCR_MODE: "skip"
+      PAPERLESS_OCR_SKIP_ARCHIVE_FILE: "with_text"
+      # Timezone
+      PAPERLESS_TIME_ZONE: "America/Los_Angeles"
+    volumes:
+      - paperless-data:/usr/src/paperless/data
+      - paperless-media:/usr/src/paperless/media
+      - paperless-consume:/usr/src/paperless/consume
+    networks:
+      - proxy
+      - paperless-internal
+    labels:
+      # Traefik routing
+      - "traefik.enable=true"
+      - "traefik.http.routers.paperless.rule=Host(`docs.ragnalab.xyz`)"
+      - "traefik.http.routers.paperless.entrypoints=websecure"
+      - "traefik.http.routers.paperless.tls=true"
+      - "traefik.http.routers.paperless.tls.certresolver=letsencrypt"
+      - "traefik.http.services.paperless.loadbalancer.server.port=8000"
+      - "traefik.http.routers.paperless.middlewares=authelia@file"
+      - "traefik.docker.network=proxy"
+      # Homepage dashboard (widget requires API key - add after first login)
+      - "homepage.group=Apps"
+      - "homepage.name=Paperless"
+      - "homepage.icon=paperless-ngx.png"
+      - "homepage.href=https://docs.ragnalab.xyz"
+      - "homepage.description=Documents"
+      - "homepage.server=ragnalab-docker"
+      # Autokuma monitoring (internal URL to bypass auth)
+      - "kuma.paperless.http.name=Paperless"
+      - "kuma.paperless.http.url=http://paperless:8000"
+      - "kuma.paperless.http.parent_name=apps-group"
+      # Backup - stop container for consistent SQLite state
+      - "docker-volume-backup.stop-during-backup=paperless"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '1.0'
+        reservations:
+          memory: 256M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  paperless-redis-data:
+    external: true
+    name: ragnalab_paperless-redis-data
+  paperless-data:
+    external: true
+    name: ragnalab_paperless-data
+  paperless-media:
+    external: true
+    name: ragnalab_paperless-media
+  paperless-consume:
+    external: true
+    name: ragnalab_paperless-consume
+
+networks:
+  proxy:
+    external: true
+  paperless-internal:
+    # Internal network for Redis communication
