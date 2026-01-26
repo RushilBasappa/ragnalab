@@ -8,6 +8,8 @@ include:
   - path: vaultwarden/docker-compose.yml
   - path: rustdesk/docker-compose.yml
   - path: it-tools/docker-compose.yml
+  - path: dozzle/docker-compose.yml
+  - path: paperless/docker-compose.yml
 
 # Networks defined in root docker-compose.yml
 # Service composes reference them as external: true
