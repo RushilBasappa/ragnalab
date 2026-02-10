@@ -1,0 +1,32 @@
+---
+# GitHub SSH key + config setup
+
+- name: Generate SSH key for GitHub
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    generate_ssh_key: true
+    ssh_key_type: ed25519
+    ssh_key_file: "{{ github_ssh_key }}"
+    ssh_key_comment: "{{ github_email }}"
+  register: ssh_key
+
+- name: Configure SSH for GitHub
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.ssh/config"
+    create: true
+    mode: "0600"
+    marker: "# {mark} github"
+    block: |
+      Host github.com
+        HostName github.com
+        User git
+        IdentityFile {{ ansible_env.HOME }}/{{ github_ssh_key }}
+        IdentitiesOnly yes
+
+- name: Print public key to add to GitHub
+  ansible.builtin.debug:
+    msg: |
+      Add this key to https://github.com/settings/ssh/new
+
+      {{ lookup('file', ansible_env.HOME + '/' + github_ssh_key + '.pub') }}
+  when: ssh_key.changed

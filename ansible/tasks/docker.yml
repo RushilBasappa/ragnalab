@@ -1,0 +1,43 @@
+---
+# Docker CE + cgroup memory limits for Pi 5
+
+- name: Check if Docker is installed
+  ansible.builtin.stat:
+    path: /usr/bin/docker
+  register: docker_bin
+
+- name: Install Docker
+  ansible.builtin.shell: curl -fsSL https://get.docker.com | sh
+  when: not docker_bin.stat.exists
+  become: true
+
+- name: Add user to docker group
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    groups: docker
+    append: true
+  become: true
+
+- name: Read cmdline.txt
+  ansible.builtin.slurp:
+    src: /boot/firmware/cmdline.txt
+  register: cmdline_content
+  become: true
+
+- name: Check if cgroup params present
+  ansible.builtin.set_fact:
+    cgroup_present: "{{ 'cgroup_enable=memory' in (cmdline_content.content | b64decode) }}"
+
+- name: Add cgroup parameters
+  ansible.builtin.copy:
+    content: "{{ (cmdline_content.content | b64decode | trim) }} cgroup_enable=memory swapaccount=1 cgroup_memory=1 cgroup_enable=cpuset\n"
+    dest: /boot/firmware/cmdline.txt
+    mode: "0755"
+  become: true
+  when: not cgroup_present
+  register: cmdline_changed
+
+- name: Reboot required for cgroup changes
+  ansible.builtin.debug:
+    msg: "cgroup params added. Run: sudo reboot"
+  when: cmdline_changed is changed

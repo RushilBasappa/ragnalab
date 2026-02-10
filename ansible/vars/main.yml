@@ -1,0 +1,10 @@
+# RagnaLab Configuration
+domain: ragnalab.xyz
+timezone: America/Los_Angeles
+puid: 1000
+pgid: 1000
+
+# GitHub SSH
+github_email: rushil.basappa@gmail.com
+github_ssh_key: .ssh/github_ragnapi
+tailscale_ip: 100.110.120.130

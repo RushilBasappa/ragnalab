@@ -1,0 +1,23 @@
+---
+- name: RagnaLab Bootstrap
+  hosts: ragnalab
+  become: false
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    - name: GitHub SSH setup
+      ansible.builtin.import_tasks: tasks/github-ssh.yml
+      tags: [github-ssh]
+
+    - name: Tailscale VPN
+      ansible.builtin.import_tasks: tasks/tailscale.yml
+      tags: [tailscale]
+
+    - name: Docker
+      ansible.builtin.import_tasks: tasks/docker.yml
+      tags: [docker]
+
+    - name: RustDesk
+      ansible.builtin.import_tasks: tasks/rustdesk.yml
+      tags: [rustdesk]

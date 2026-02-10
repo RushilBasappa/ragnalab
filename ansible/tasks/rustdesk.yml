@@ -1,0 +1,28 @@
+---
+# RustDesk Server (hbbs + hbbr)
+
+- name: Create rustdesk volume
+  community.docker.docker_volume:
+    name: rustdesk_data
+
+- name: Start rustdesk
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose/rustdesk"
+    state: present
+
+- name: Copy public key from container
+  ansible.builtin.command: docker cp rustdesk-hbbs:/root/id_ed25519.pub /tmp/rustdesk_pubkey
+  retries: 5
+  delay: 3
+  register: rustdesk_cp
+  until: rustdesk_cp is succeeded
+  changed_when: false
+
+- name: Read public key
+  ansible.builtin.slurp:
+    src: /tmp/rustdesk_pubkey
+  register: rustdesk_pubkey
+
+- name: Show RustDesk public key
+  ansible.builtin.debug:
+    msg: "RustDesk public key: {{ rustdesk_pubkey.content | b64decode | trim }}"

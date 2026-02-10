@@ -1,0 +1,41 @@
+---
+# Tailscale VPN setup
+
+- name: Check if Tailscale is installed
+  ansible.builtin.stat:
+    path: /usr/bin/tailscale
+  register: tailscale_bin
+
+- name: Install Tailscale
+  ansible.builtin.shell: curl -fsSL https://tailscale.com/install.sh | sh
+  when: not tailscale_bin.stat.exists
+  become: true
+
+- name: Check Tailscale status
+  ansible.builtin.command: tailscale status
+  register: tailscale_status
+  changed_when: false
+  failed_when: false
+
+- name: Remind to authenticate Tailscale
+  ansible.builtin.debug:
+    msg: "Run: sudo tailscale up"
+  when: tailscale_status.rc != 0
+
+- name: Get Tailscale IP
+  ansible.builtin.command: tailscale ip -4
+  register: tailscale_ip
+  changed_when: false
+  when: tailscale_status.rc == 0
+
+- name: Save Tailscale IP to vars
+  ansible.builtin.lineinfile:
+    path: "{{ playbook_dir }}/vars/main.yml"
+    regexp: '^tailscale_ip:'
+    line: "tailscale_ip: {{ tailscale_ip.stdout }}"
+  when: tailscale_status.rc == 0
+
+- name: Show Tailscale IP
+  ansible.builtin.debug:
+    msg: "Tailscale IP: {{ tailscale_ip.stdout }}"
+  when: tailscale_status.rc == 0
