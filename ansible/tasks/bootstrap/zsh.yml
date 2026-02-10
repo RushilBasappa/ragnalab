@@ -1,0 +1,31 @@
+---
+# Zsh + Starship prompt setup
+
+- name: Install zsh
+  ansible.builtin.apt:
+    name: zsh
+    state: present
+  become: true
+
+- name: Set zsh as default shell
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    shell: /usr/bin/zsh
+  become: true
+
+- name: Check if Starship is installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/starship
+  register: starship_bin
+
+- name: Install Starship
+  ansible.builtin.shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
+  when: not starship_bin.stat.exists
+  become: true
+
+- name: Ensure zshrc contains starship init
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: 'eval "$(starship init zsh)"'
+    create: true
+    mode: "0644"

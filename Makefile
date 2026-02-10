@@ -1,4 +1,4 @@
-PLAYBOOK = ansible-playbook ansible/site.yml -i ansible/inventory/hosts.yml
+PLAYBOOK = ANSIBLE_CONFIG=ansible/ansible.cfg ansible-playbook ansible/site.yml -i ansible/inventory/hosts.yml
 
 # First-time setup
 fix-locale:
@@ -8,6 +8,9 @@ install-ansible: fix-locale
 	sudo apt update && sudo apt install -y ansible
 
 # Bootstrap
+system-update:
+	$(PLAYBOOK) --tags system-update
+
 github-ssh:
 	$(PLAYBOOK) --tags github-ssh
 
@@ -16,6 +19,9 @@ tailscale:
 
 docker:
 	$(PLAYBOOK) --tags docker
+
+zsh:
+	$(PLAYBOOK) --tags zsh
 
 # Services
 rustdesk:

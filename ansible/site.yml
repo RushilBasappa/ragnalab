@@ -7,6 +7,10 @@
 
   tasks:
     # Bootstrap
+    - name: System update
+      ansible.builtin.import_tasks: tasks/bootstrap/system-update.yml
+      tags: [system-update]
+
     - name: GitHub SSH setup
       ansible.builtin.import_tasks: tasks/bootstrap/github-ssh.yml
       tags: [github-ssh]
@@ -18,6 +22,10 @@
     - name: Docker
       ansible.builtin.import_tasks: tasks/bootstrap/docker.yml
       tags: [docker]
+
+    - name: Zsh + Starship
+      ansible.builtin.import_tasks: tasks/bootstrap/zsh.yml
+      tags: [zsh]
 
     # Apps
     - name: RustDesk

@@ -3,7 +3,7 @@
 ## Bootstrap (Ansible tasks)
 - [x] GitHub SSH setup
 - [x] Tailscale VPN
-- [ ] System packages (git, curl, jq, python3-pip, python3-docker)
+- [ ] System packages
 - [ ] Zsh + Starship prompt
 - [ ] Docker CE + cgroup memory limits
 - [ ] Init (networks, volumes, media dirs, .env generation)

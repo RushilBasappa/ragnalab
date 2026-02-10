@@ -1,0 +1,53 @@
+---
+# Update, upgrade, essential packages, timezone & locale
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+  become: true
+
+- name: Upgrade all packages
+  ansible.builtin.apt:
+    upgrade: dist
+  become: true
+
+- name: Install essential packages
+  ansible.builtin.apt:
+    name:
+      - curl
+      - wget
+      - git
+      - jq
+      - unzip
+      - htop
+      - net-tools
+      - ca-certificates
+      - gnupg
+    state: present
+  become: true
+
+- name: Set timezone
+  community.general.timezone:
+    name: "{{ timezone }}"
+  become: true
+
+- name: Set locale to en_US.UTF-8
+  ansible.builtin.locale_gen:
+    name: en_US.UTF-8
+    state: present
+  become: true
+
+- name: Set default locale
+  ansible.builtin.copy:
+    content: |
+      LANG=en_US.UTF-8
+      LC_ALL=en_US.UTF-8
+    dest: /etc/default/locale
+    mode: "0644"
+  become: true
+
+- name: Enable NTP for time sync
+  ansible.builtin.command: timedatectl set-ntp true
+  changed_when: false
+  become: true
