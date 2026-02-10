@@ -7,7 +7,7 @@
 
 - name: Start rustdesk
   community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose/rustdesk"
+    project_src: "{{ playbook_dir }}/../compose/apps/rustdesk"
     state: present
 
 - name: Copy public key from container

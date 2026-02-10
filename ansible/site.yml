@@ -6,18 +6,20 @@
     - vars/main.yml
 
   tasks:
+    # Bootstrap
     - name: GitHub SSH setup
-      ansible.builtin.import_tasks: tasks/github-ssh.yml
+      ansible.builtin.import_tasks: tasks/bootstrap/github-ssh.yml
       tags: [github-ssh]
 
     - name: Tailscale VPN
-      ansible.builtin.import_tasks: tasks/tailscale.yml
+      ansible.builtin.import_tasks: tasks/bootstrap/tailscale.yml
       tags: [tailscale]
 
     - name: Docker
-      ansible.builtin.import_tasks: tasks/docker.yml
+      ansible.builtin.import_tasks: tasks/bootstrap/docker.yml
       tags: [docker]
 
+    # Apps
     - name: RustDesk
-      ansible.builtin.import_tasks: tasks/rustdesk.yml
+      ansible.builtin.import_tasks: tasks/apps/rustdesk.yml
       tags: [rustdesk]
