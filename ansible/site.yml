@@ -27,6 +27,11 @@
       ansible.builtin.import_tasks: tasks/bootstrap/zsh.yml
       tags: [zsh]
 
+    # Services
+    - name: Socket Proxy
+      ansible.builtin.import_tasks: tasks/services/socket-proxy.yml
+      tags: [socket-proxy]
+
     # Apps
     - name: RustDesk
       ansible.builtin.import_tasks: tasks/apps/rustdesk.yml

@@ -24,5 +24,9 @@ zsh:
 	$(PLAYBOOK) --tags zsh
 
 # Services
+socket-proxy:
+	$(PLAYBOOK) --tags socket-proxy
+
+# Apps
 rustdesk:
 	$(PLAYBOOK) --tags rustdesk

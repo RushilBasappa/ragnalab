@@ -1,0 +1,14 @@
+---
+# Docker Socket Proxy (read-only access for Traefik)
+
+- name: Create socket_proxy network
+  community.docker.docker_network:
+    name: socket_proxy
+    driver: bridge
+
+- name: Start socket-proxy
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - socket-proxy
+    state: present
