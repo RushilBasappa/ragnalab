@@ -1,0 +1,18 @@
+---
+- Services:
+    - Traefik:
+        href: https://traefik.ragnalab.xyz
+        description: Reverse proxy
+        server: socket-proxy
+        container: traefik
+    - Authelia:
+        href: https://auth.ragnalab.xyz
+        description: SSO authentication
+        server: socket-proxy
+        container: authelia
+
+- Apps:
+    - RustDesk:
+        description: Remote desktop server
+        server: socket-proxy
+        container: rustdesk-hbbs

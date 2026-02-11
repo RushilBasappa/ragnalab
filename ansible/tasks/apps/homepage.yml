@@ -1,0 +1,9 @@
+---
+# Homepage Dashboard
+
+- name: Start Homepage
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - homepage
+    state: present

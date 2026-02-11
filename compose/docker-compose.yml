@@ -3,3 +3,4 @@ include:
   - services/authelia/docker-compose.yml
   - services/traefik/docker-compose.yml
   - apps/rustdesk/docker-compose.yml
+  - apps/homepage/docker-compose.yml

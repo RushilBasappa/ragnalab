@@ -44,3 +44,7 @@
     - name: RustDesk
       ansible.builtin.import_tasks: tasks/apps/rustdesk.yml
       tags: [rustdesk]
+
+    - name: Homepage
+      ansible.builtin.import_tasks: tasks/apps/homepage.yml
+      tags: [homepage]

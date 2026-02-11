@@ -1,0 +1,28 @@
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: home.ragnalab.xyz
+    volumes:
+      - ./config/settings.yaml:/app/config/settings.yaml:ro
+      - ./config/services.yaml:/app/config/services.yaml:ro
+      - ./config/docker.yaml:/app/config/docker.yaml:ro
+      - ./config/bookmarks.yaml:/app/config/bookmarks.yaml:ro
+      - ./config/widgets.yaml:/app/config/widgets.yaml:ro
+    networks:
+      - traefik_public
+      - socket_proxy
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.homepage.rule: "Host(`home.ragnalab.xyz`)"
+      traefik.http.routers.homepage.entrypoints: websecure
+      traefik.http.services.homepage.loadbalancer.server.port: "3000"
+      traefik.http.routers.homepage.middlewares: authelia@docker
+    restart: unless-stopped
+
+networks:
+  traefik_public:
+    external: true
+  socket_proxy:
+    external: true

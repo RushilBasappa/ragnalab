@@ -49,3 +49,6 @@ traefik:
 # Apps
 rustdesk:
 	$(PLAYBOOK) --tags rustdesk
+
+homepage:
+	$(PLAYBOOK) --tags homepage

@@ -41,6 +41,7 @@ make traefik
 ## 5. Apps
 ```bash
 make rustdesk
+make homepage
 ```
 
 ## Managing secrets
