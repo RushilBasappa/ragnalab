@@ -1,0 +1,35 @@
+services:
+  traefik:
+    image: traefik:v3
+    container_name: traefik
+    environment:
+      CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN}
+      CF_API_EMAIL: ${CF_API_EMAIL}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - traefik_acme:/acme
+    networks:
+      - socket_proxy
+      - traefik_public
+    depends_on:
+      - socket-proxy
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.dashboard.rule: "Host(`traefik.ragnalab.xyz`)"
+      traefik.http.routers.dashboard.entrypoints: websecure
+      traefik.http.routers.dashboard.service: api@internal
+    restart: unless-stopped
+
+volumes:
+  traefik_acme:
+    external: true
+
+networks:
+  socket_proxy:
+    external: true
+  traefik_public:
+    external: true

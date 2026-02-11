@@ -32,6 +32,10 @@
       ansible.builtin.import_tasks: tasks/services/socket-proxy.yml
       tags: [socket-proxy]
 
+    - name: Traefik
+      ansible.builtin.import_tasks: tasks/services/traefik.yml
+      tags: [traefik]
+
     # Apps
     - name: RustDesk
       ansible.builtin.import_tasks: tasks/apps/rustdesk.yml

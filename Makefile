@@ -1,4 +1,17 @@
 PLAYBOOK = ANSIBLE_CONFIG=ansible/ansible.cfg ansible-playbook ansible/site.yml -i ansible/inventory/hosts.yml
+ENV_FILE = compose/.env
+SECRETS_FILE = ansible/vars/secrets.yml
+VAULT = --vault-password-file .vault_pass
+
+# Secrets
+sync:
+	ansible-vault encrypt $(ENV_FILE) --output $(SECRETS_FILE) $(VAULT)
+
+init:
+	ansible-vault decrypt $(SECRETS_FILE) --output $(ENV_FILE) $(VAULT)
+
+hooks:
+	ln -sf ../../hooks/pre-commit .git/hooks/pre-commit
 
 # First-time setup
 fix-locale:
@@ -26,6 +39,9 @@ zsh:
 # Services
 socket-proxy:
 	$(PLAYBOOK) --tags socket-proxy
+
+traefik:
+	$(PLAYBOOK) --tags traefik
 
 # Apps
 rustdesk:

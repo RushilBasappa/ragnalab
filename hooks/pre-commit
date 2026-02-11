@@ -1,0 +1,12 @@
+#!/bin/sh
+# Auto-sync .env → encrypted secrets.yml only when .env actually changed
+
+if [ -f compose/.env ]; then
+    CURRENT=$(cat compose/.env)
+    STORED=$(ansible-vault decrypt ansible/vars/secrets.yml --output - --vault-password-file .vault_pass 2>/dev/null)
+
+    if [ "$CURRENT" != "$STORED" ]; then
+        make sync
+        git add ansible/vars/secrets.yml
+    fi
+fi
