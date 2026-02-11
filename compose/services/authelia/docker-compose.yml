@@ -1,0 +1,31 @@
+services:
+  authelia:
+    image: authelia/authelia:latest
+    container_name: authelia
+    environment:
+      AUTHELIA_JWT_SECRET: ${AUTHELIA_JWT_SECRET}
+      AUTHELIA_SESSION_SECRET: ${AUTHELIA_SESSION_SECRET}
+      AUTHELIA_STORAGE_ENCRYPTION_KEY: ${AUTHELIA_STORAGE_ENCRYPTION_KEY}
+    volumes:
+      - ./configuration.yml:/config/configuration.yml:ro
+      - ./users_database.yml:/config/users_database.yml:ro
+      - authelia_data:/data
+    networks:
+      - traefik_public
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.authelia.rule: "Host(`auth.ragnalab.xyz`)"
+      traefik.http.routers.authelia.entrypoints: websecure
+      traefik.http.services.authelia.loadbalancer.server.port: "9091"
+      traefik.http.middlewares.authelia.forwardAuth.address: "http://authelia:9091/api/authz/forward-auth"
+      traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader: "true"
+      traefik.http.middlewares.authelia.forwardAuth.authResponseHeaders: "Remote-User,Remote-Groups,Remote-Email,Remote-Name"
+    restart: unless-stopped
+
+volumes:
+  authelia_data:
+    external: true
+
+networks:
+  traefik_public:
+    external: true

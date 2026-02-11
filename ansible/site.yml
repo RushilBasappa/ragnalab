@@ -32,6 +32,10 @@
       ansible.builtin.import_tasks: tasks/services/socket-proxy.yml
       tags: [socket-proxy]
 
+    - name: Authelia
+      ansible.builtin.import_tasks: tasks/services/authelia.yml
+      tags: [authelia]
+
     - name: Traefik
       ansible.builtin.import_tasks: tasks/services/traefik.yml
       tags: [traefik]

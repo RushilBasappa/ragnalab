@@ -34,6 +34,7 @@ make sync
 ## 4. Services
 ```bash
 make socket-proxy
+make authelia
 make traefik
 ```
 

@@ -1,0 +1,8 @@
+---
+users:
+  rushil:
+    displayname: Rushil
+    password: "$argon2id$v=19$m=65536,t=3,p=4$lcvIDiBYyomeTEgRhd0a9g$jRQLbM66FNIlLF9ZKVFplZvkmN/4CEjTHtpT5GKnVgE"
+    email: rushil.basappa@gmail.com
+    groups:
+      - admins

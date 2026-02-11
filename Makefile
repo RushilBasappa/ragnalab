@@ -40,6 +40,9 @@ zsh:
 socket-proxy:
 	$(PLAYBOOK) --tags socket-proxy
 
+authelia:
+	$(PLAYBOOK) --tags authelia
+
 traefik:
 	$(PLAYBOOK) --tags traefik
 

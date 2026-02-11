@@ -1,0 +1,13 @@
+---
+# Authelia SSO
+
+- name: Create authelia_data volume
+  community.docker.docker_volume:
+    name: authelia_data
+
+- name: Start Authelia
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - authelia
+    state: present
