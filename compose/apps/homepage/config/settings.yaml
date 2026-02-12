@@ -1,8 +1,57 @@
 ---
+# Homepage global settings
+
+# Page configuration
 title: RagnaLab
+favicon: https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/homelab.png
+background:
+  image: https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000
+  blur: sm
+  saturate: 50
+  brightness: 50
+  opacity: 20
+
+# Layout options
+layout:
+  Media:
+    style: row
+    columns: 3
+    icon: mdi-filmstrip
+  Infrastructure:
+    style: row
+    columns: 2
+    icon: mdi-server-network
+  Productivity:
+    style: row
+    columns: 2
+    icon: mdi-briefcase
+  Monitoring:
+    style: row
+    columns: 3
+    icon: mdi-chart-line
+  Remote Access:
+    style: row
+    columns: 1
+    icon: mdi-remote-desktop
+
+# Display options
+theme: dark
+color: slate
 useEqualHeights: true
+cardBlur: md
+headerStyle: boxed
 
-statusStyle: compact
-
+# Status indicators
+statusStyle: dot
+showStats: true
 hideVersion: true
 disableCollapse: true
+
+# Quick launch
+quicklaunch:
+  searchDescriptions: true
+  hideInternetSearch: false
+  hideVisitURL: false
+
+# Performance
+fiveColumns: false

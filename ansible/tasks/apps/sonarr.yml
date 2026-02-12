@@ -78,6 +78,33 @@
   delay: 5
   changed_when: false
 
+- name: Check existing root folders
+  ansible.builtin.command: >
+    docker exec sonarr curl -sf
+    -H 'X-Api-Key: {{ sonarr_api_key }}'
+    http://localhost:8989/api/v3/rootfolder
+  register: sonarr_rootfolders
+  changed_when: false
+
+- name: Add TV root folder
+  ansible.builtin.command: >
+    docker exec sonarr curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -H 'X-Api-Key: {{ sonarr_api_key }}'
+    -d '{"path":"/data/media/tv"}'
+    http://localhost:8989/api/v3/rootfolder
+  when: "'/data/media/tv' not in sonarr_rootfolders.stdout"
+  changed_when: true
+
+- name: Configure 4K Minimal quality profile
+  ansible.builtin.shell:
+    cmd: >
+      python3 {{ playbook_dir }}/../ansible/scripts/configure-arr-quality.py
+      sonarr 8989 {{ sonarr_api_key }}
+  register: sonarr_quality
+  changed_when: sonarr_quality.rc == 2
+  failed_when: sonarr_quality.rc not in [0, 2]
+
 - name: Check existing download clients
   ansible.builtin.command: >
     docker exec sonarr curl -sf

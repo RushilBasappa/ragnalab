@@ -62,6 +62,9 @@
     - { section: BitTorrent, key: 'Session\TempPath', value: '/data/torrents/incomplete/' }
     - { section: Preferences, key: 'Downloads\SavePath', value: '/data/torrents/' }
     - { section: Preferences, key: 'Downloads\TempPath', value: '/data/torrents/incomplete/' }
+    - { section: BitTorrent, key: 'Session\Interface', value: 'tun0' }
+    - { section: BitTorrent, key: 'Session\InterfaceAddress', value: '' }
+    - { section: BitTorrent, key: 'Session\InterfaceName', value: 'tun0' }
   become: true
 
 - name: Create media directory structure
@@ -91,3 +94,34 @@
     services:
       - qbittorrent
     state: present
+
+- name: Wait for Gluetun port forwarding
+  ansible.builtin.command: >
+    docker exec gluetun wget -qO- http://127.0.0.1:8000/v1/openvpn/portforwarded
+  register: port_result
+  until: (port_result.stdout | from_json).port | int > 0
+  retries: 30
+  delay: 5
+  changed_when: false
+
+- name: Parse forwarded port
+  ansible.builtin.set_fact:
+    vpn_port: "{{ (port_result.stdout | from_json).port }}"
+
+- name: Set qBittorrent listening port and interface
+  ansible.builtin.command: >
+    docker exec qbittorrent curl -sf -X POST
+    http://localhost:8080/api/v2/app/setPreferences
+    -d 'json={"listen_port":{{ vpn_port }},"current_network_interface":"tun0","current_interface_address":"10.2.0.2"}'
+  changed_when: true
+
+- name: Set seeding limit (pause after 1 minute)
+  ansible.builtin.command: >
+    docker exec qbittorrent curl -sf -X POST
+    http://localhost:8080/api/v2/app/setPreferences
+    -d 'json={"max_seeding_time_enabled":true,"max_seeding_time":1,"max_ratio_act":0}'
+  changed_when: true
+
+- name: Verify connection status
+  ansible.builtin.debug:
+    msg: "VPN port {{ vpn_port }} forwarded and set in qBittorrent"

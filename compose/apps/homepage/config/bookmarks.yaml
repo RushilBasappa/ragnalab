@@ -1,1 +1,53 @@
 ---
+# Quick access bookmarks organized by category
+
+- Documentation:
+    - Homepage Docs:
+        - abbr: HP
+          href: https://gethomepage.dev/
+          icon: https://gethomepage.dev/img/banner_light@2x.png
+          description: Homepage configuration guide
+
+    - Docker Docs:
+        - abbr: DC
+          href: https://docs.docker.com/
+          icon: docker.png
+          description: Docker documentation
+
+    - Traefik Docs:
+        - abbr: TF
+          href: https://doc.traefik.io/traefik/
+          icon: traefik.png
+          description: Traefik proxy documentation
+
+- Self-Hosted Resources:
+    - Awesome Selfhosted:
+        - abbr: ASH
+          href: https://awesome-selfhosted.net/
+          icon: https://awesome-selfhosted.net/icons/icon-512x512.png
+          description: Curated list of self-hosted software
+
+    - LinuxServer.io:
+        - abbr: LS
+          href: https://www.linuxserver.io/
+          icon: linuxserver.png
+          description: Quality container images
+
+    - r/selfhosted:
+        - abbr: SSH
+          href: https://reddit.com/r/selfhosted
+          icon: reddit.png
+          description: Self-hosting community
+
+- Media Resources:
+    - TRaSH Guides:
+        - abbr: TG
+          href: https://trash-guides.info/
+          icon: https://trash-guides.info/assets/img/site/TRaSH-logo.png
+          description: Media server setup guides
+
+    - ServarrWiki:
+        - abbr: SW
+          href: https://wiki.servarr.com/
+          icon: https://wiki.servarr.com/assets/img/logo.png
+          description: Arr stack documentation

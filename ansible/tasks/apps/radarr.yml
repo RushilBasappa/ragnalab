@@ -78,6 +78,33 @@
   delay: 5
   changed_when: false
 
+- name: Check existing root folders
+  ansible.builtin.command: >
+    docker exec radarr curl -sf
+    -H 'X-Api-Key: {{ radarr_api_key }}'
+    http://localhost:7878/api/v3/rootfolder
+  register: radarr_rootfolders
+  changed_when: false
+
+- name: Add movies root folder
+  ansible.builtin.command: >
+    docker exec radarr curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -H 'X-Api-Key: {{ radarr_api_key }}'
+    -d '{"path":"/data/media/movies"}'
+    http://localhost:7878/api/v3/rootfolder
+  when: "'/data/media/movies' not in radarr_rootfolders.stdout"
+  changed_when: true
+
+- name: Configure 4K Minimal quality profile
+  ansible.builtin.shell:
+    cmd: >
+      python3 {{ playbook_dir }}/../ansible/scripts/configure-arr-quality.py
+      radarr 7878 {{ radarr_api_key }}
+  register: radarr_quality
+  changed_when: radarr_quality.rc == 2
+  failed_when: radarr_quality.rc not in [0, 2]
+
 - name: Check existing download clients
   ansible.builtin.command: >
     docker exec radarr curl -sf

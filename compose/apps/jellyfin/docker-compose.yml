@@ -2,9 +2,13 @@ services:
   jellyfin:
     image: jellyfin/jellyfin:latest
     container_name: jellyfin
+    devices:
+      - /dev/video19:/dev/video19
     volumes:
       - jellyfin_config:/config
       - media_data:/data
+    ports:
+      - "8096:8096"
     networks:
       - traefik_public
     labels:

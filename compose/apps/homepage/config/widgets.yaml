@@ -1,4 +1,38 @@
 ---
+# Top bar widgets - Quick access and system overview
+- logo:
+    icon: https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/homelab.png
+
 - search:
     provider: google
     target: _blank
+    showSearchSuggestions: true
+
+- datetime:
+    text_size: xl
+    format:
+      dateStyle: short
+      timeStyle: short
+      hour12: false
+
+- openmeteo:
+    label: Weather
+    latitude: 37.7749
+    longitude: -122.4194
+    units: metric
+    cache: 5
+
+# Resource widgets - System health monitoring
+- resources:
+    label: System
+    cpu: true
+    memory: true
+    disk: /
+    expanded: true
+    diskUnits: bytes
+
+- resources:
+    label: Storage
+    disk: /data
+    expanded: false
+    diskUnits: bytes

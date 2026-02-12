@@ -1,6 +1,104 @@
 ---
 # Homepage Dashboard
 
+- name: Set .env path
+  ansible.builtin.set_fact:
+    env_file: "{{ playbook_dir }}/../compose/.env"
+
+# --- Extract API keys from running containers ---
+
+- name: Extract Radarr API key
+  ansible.builtin.shell:
+    cmd: docker exec radarr cat /config/config.xml | grep -oP '<ApiKey>\K[^<]+'
+  register: radarr_key
+  changed_when: false
+  failed_when: false
+
+- name: Extract Sonarr API key
+  ansible.builtin.shell:
+    cmd: docker exec sonarr cat /config/config.xml | grep -oP '<ApiKey>\K[^<]+'
+  register: sonarr_key
+  changed_when: false
+  failed_when: false
+
+- name: Extract Prowlarr API key
+  ansible.builtin.shell:
+    cmd: docker exec prowlarr cat /config/config.xml | grep -oP '<ApiKey>\K[^<]+'
+  register: prowlarr_key
+  changed_when: false
+  failed_when: false
+
+- name: Extract Bazarr API key
+  ansible.builtin.shell:
+    cmd: docker exec bazarr cat /config/config/config.yaml | grep -oP -m1 'apikey:\s*\K\S+'
+  register: bazarr_key
+  changed_when: false
+  failed_when: false
+
+- name: Extract Jellyseerr API key
+  ansible.builtin.shell:
+    cmd: >
+      docker exec jellyseerr cat /app/config/settings.json |
+      python3 -c "import json,sys; print(json.load(sys.stdin)['main']['apiKey'])"
+  register: jellyseerr_key
+  changed_when: false
+  failed_when: false
+
+- name: Create or retrieve Jellyfin API key for Homepage
+  ansible.builtin.shell:
+    cmd: |
+      # Authenticate
+      TOKEN=$(docker exec jellyfin curl -sf -X POST \
+        -H 'Content-Type: application/json' \
+        -H 'X-Emby-Authorization: MediaBrowser Client="Homepage", Device="Ansible", DeviceId="ansible-setup", Version="1.0"' \
+        -d '{"Username":"{{ jellyfin_user }}","Pw":"{{ jellyfin_pass }}"}' \
+        http://localhost:8096/Users/AuthenticateByName | \
+        python3 -c "import json,sys; print(json.load(sys.stdin)['AccessToken'])")
+      # Check for existing Homepage key
+      EXISTING=$(docker exec jellyfin curl -sf \
+        -H "X-Emby-Token: $TOKEN" \
+        http://localhost:8096/Auth/Keys | \
+        python3 -c "import json,sys; keys=json.load(sys.stdin)['Items']; print(next((k['AccessToken'] for k in keys if k['AppName']=='Homepage'),''))")
+      if [ -n "$EXISTING" ]; then
+        echo "$EXISTING"
+        exit 0
+      fi
+      # Create new key
+      docker exec jellyfin curl -sf -X POST \
+        -H "X-Emby-Token: $TOKEN" \
+        "http://localhost:8096/Auth/Keys?app=Homepage"
+      # Retrieve it
+      docker exec jellyfin curl -sf \
+        -H "X-Emby-Token: $TOKEN" \
+        http://localhost:8096/Auth/Keys | \
+        python3 -c "import json,sys; keys=json.load(sys.stdin)['Items']; print(next(k['AccessToken'] for k in keys if k['AppName']=='Homepage'))"
+  vars:
+    jellyfin_user: "{{ lookup('ini', 'JELLYFIN_ADMIN_USER', type='properties', file=env_file) }}"
+    jellyfin_pass: "{{ lookup('ini', 'JELLYFIN_ADMIN_PASSWORD', type='properties', file=env_file) }}"
+  register: jellyfin_key
+  changed_when: false
+  failed_when: false
+
+# --- Write keys to .env ---
+
+- name: Populate widget API keys in .env
+  ansible.builtin.lineinfile:
+    path: "{{ env_file }}"
+    regexp: "^{{ item.var }}="
+    line: "{{ item.var }}={{ item.value }}"
+  loop:
+    - { var: RADARR_API_KEY, value: "{{ radarr_key.stdout }}" }
+    - { var: SONARR_API_KEY, value: "{{ sonarr_key.stdout }}" }
+    - { var: PROWLARR_API_KEY, value: "{{ prowlarr_key.stdout }}" }
+    - { var: BAZARR_API_KEY, value: "{{ bazarr_key.stdout }}" }
+    - { var: JELLYSEERR_API_KEY, value: "{{ jellyseerr_key.stdout }}" }
+    - { var: JELLYFIN_API_KEY, value: "{{ jellyfin_key.stdout }}" }
+  when: item.value | length > 0
+  loop_control:
+    label: "{{ item.var }}"
+
+# --- Deploy Homepage ---
+
 - name: Start Homepage
   community.docker.docker_compose_v2:
     project_src: "{{ playbook_dir }}/../compose"
