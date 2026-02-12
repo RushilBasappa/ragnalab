@@ -3,6 +3,11 @@ ENV_FILE = compose/.env
 SECRETS_FILE = ansible/vars/secrets.yml
 VAULT = --vault-password-file .vault_pass
 
+# app(tag, containers, volumes) — deploy or tear down with v=1
+define app
+$(if $(v),docker rm -f $(2)$(if $(3), && docker volume rm $(3),),$(PLAYBOOK) --tags $(1))
+endef
+
 # Secrets
 sync:
 	ansible-vault encrypt $(ENV_FILE) --output $(SECRETS_FILE) $(VAULT)
@@ -49,24 +54,24 @@ traefik:
 pihole:
 	$(PLAYBOOK) --tags pihole
 
-# Apps
+# Apps — pass v=1 to tear down and delete volumes (e.g. make ntfy v=1)
 rustdesk:
-	$(PLAYBOOK) --tags rustdesk
+	$(call app,rustdesk,rustdesk-hbbs rustdesk-hbbr,rustdesk_data)
 
 homepage:
-	$(PLAYBOOK) --tags homepage
+	$(call app,homepage,homepage,)
 
 uptime-kuma:
-	$(PLAYBOOK) --tags uptime-kuma
+	$(call app,uptime-kuma,uptime-kuma autokuma,uptime_kuma_data)
 
 vaultwarden:
-	$(PLAYBOOK) --tags vaultwarden
+	$(call app,vaultwarden,vaultwarden,vaultwarden_data)
 
 paperless-ngx:
-	$(PLAYBOOK) --tags paperless-ngx
+	$(call app,paperless-ngx,paperless-ngx paperless-redis,paperless_data paperless_media paperless_export paperless_consume paperless_redis_data)
 
 ntfy:
-	$(PLAYBOOK) --tags ntfy
+	$(call app,ntfy,ntfy,ntfy_cache)
 
 tandoor:
-	$(PLAYBOOK) --tags tandoor
+	$(call app,tandoor,tandoor tandoor-db,tandoor_postgres_data tandoor_static tandoor_media)

@@ -1,4 +1,6 @@
 base-url: https://ntfy.ragnalab.xyz
 cache-file: /var/cache/ntfy/cache.db
+auth-file: /var/cache/ntfy/user.db
 behind-proxy: true
 auth-default-access: deny-all
+enable-login: true
