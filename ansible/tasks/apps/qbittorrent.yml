@@ -1,0 +1,72 @@
+---
+# Gluetun VPN + qBittorrent
+
+- name: Create volumes
+  community.docker.docker_volume:
+    name: "{{ item }}"
+  loop:
+    - gluetun_data
+    - qbittorrent_config
+    - media_data
+
+- name: Start Gluetun + qBittorrent
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - gluetun
+      - qbittorrent
+    state: present
+
+- name: Wait for Gluetun to be healthy
+  ansible.builtin.command: docker inspect --format '{{ '{{' }}.State.Health.Status{{ '}}' }}' gluetun
+  register: gluetun_health
+  until: gluetun_health.stdout == "healthy"
+  retries: 30
+  delay: 5
+  changed_when: false
+
+- name: Get qbittorrent_config volume mountpoint
+  community.docker.docker_volume_info:
+    name: qbittorrent_config
+  register: qbit_volume
+
+- name: Set config path
+  ansible.builtin.set_fact:
+    qbit_conf: "{{ qbit_volume.volume.Mountpoint }}/qBittorrent/qBittorrent.conf"
+
+- name: Wait for qBittorrent config to exist
+  ansible.builtin.wait_for:
+    path: "{{ qbit_conf }}"
+    timeout: 60
+  become: true
+
+- name: Stop qBittorrent before patching config
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - qbittorrent
+    state: stopped
+
+- name: Patch qBittorrent config
+  community.general.ini_file:
+    path: "{{ qbit_conf }}"
+    section: "{{ item.section }}"
+    option: "{{ item.key }}"
+    value: "{{ item.value }}"
+    no_extra_spaces: true
+  loop:
+    - { section: Preferences, key: 'WebUI\AuthSubnetWhitelistEnabled', value: 'true' }
+    - { section: Preferences, key: 'WebUI\AuthSubnetWhitelist', value: '0.0.0.0/0' }
+    - { section: Preferences, key: 'WebUI\LocalHostAuth', value: 'false' }
+    - { section: BitTorrent, key: 'Session\DefaultSavePath', value: '/data/torrents/' }
+    - { section: BitTorrent, key: 'Session\TempPath', value: '/data/torrents/incomplete/' }
+    - { section: Preferences, key: 'Downloads\SavePath', value: '/data/torrents/' }
+    - { section: Preferences, key: 'Downloads\TempPath', value: '/data/torrents/incomplete/' }
+  become: true
+
+- name: Start qBittorrent with patched config
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - qbittorrent
+    state: present

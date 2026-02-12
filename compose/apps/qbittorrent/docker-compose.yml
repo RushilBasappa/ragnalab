@@ -1,0 +1,54 @@
+services:
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      VPN_SERVICE_PROVIDER: ${VPN_SERVICE_PROVIDER}
+      VPN_TYPE: ${VPN_TYPE}
+      WIREGUARD_PRIVATE_KEY: ${WIREGUARD_PRIVATE_KEY}
+      WIREGUARD_ADDRESSES: ${WIREGUARD_ADDRESS}
+      SERVER_COUNTRIES: ${SERVER_COUNTRIES}
+    volumes:
+      - gluetun_data:/gluetun
+    networks:
+      - traefik_public
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.qbittorrent.rule: "Host(`qbit.ragnalab.xyz`)"
+      traefik.http.routers.qbittorrent.entrypoints: websecure
+      traefik.http.services.qbittorrent.loadbalancer.server.port: "8080"
+      kuma.qbittorrent.http.name: qBittorrent
+      kuma.qbittorrent.http.url: https://qbit.ragnalab.xyz
+    restart: unless-stopped
+
+  qbittorrent:
+    image: linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    network_mode: service:gluetun
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Etc/UTC
+      WEBUI_PORT: "8080"
+    volumes:
+      - qbittorrent_config:/config
+      - media_data:/data
+    depends_on:
+      - gluetun
+    restart: unless-stopped
+
+volumes:
+  gluetun_data:
+    external: true
+  qbittorrent_config:
+    external: true
+  media_data:
+    external: true
+
+networks:
+  traefik_public:
+    external: true
