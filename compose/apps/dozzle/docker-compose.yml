@@ -1,0 +1,24 @@
+services:
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    environment:
+      DOZZLE_REMOTE_HOST: tcp://socket-proxy:2375
+    networks:
+      - traefik_public
+      - socket_proxy
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.dozzle.rule: "Host(`logs.ragnalab.xyz`)"
+      traefik.http.routers.dozzle.entrypoints: websecure
+      traefik.http.services.dozzle.loadbalancer.server.port: "8080"
+      traefik.http.routers.dozzle.middlewares: authelia@docker
+      kuma.dozzle.http.name: Dozzle
+      kuma.dozzle.http.url: https://logs.ragnalab.xyz
+    restart: unless-stopped
+
+networks:
+  traefik_public:
+    external: true
+  socket_proxy:
+    external: true

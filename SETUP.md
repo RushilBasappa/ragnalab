@@ -48,6 +48,7 @@ make vaultwarden
 make paperless-ngx
 make ntfy
 make tandoor
+make dozzle
 ```
 
 ## Managing secrets

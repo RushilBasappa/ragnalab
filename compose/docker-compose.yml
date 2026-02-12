@@ -10,3 +10,4 @@ include:
   - apps/paperless-ngx/docker-compose.yml
   - apps/ntfy/docker-compose.yml
   - apps/tandoor/docker-compose.yml
+  - apps/dozzle/docker-compose.yml

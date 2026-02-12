@@ -3,7 +3,7 @@ ENV_FILE = compose/.env
 SECRETS_FILE = ansible/vars/secrets.yml
 VAULT = --vault-password-file .vault_pass
 
-# app(tag, containers, volumes) — deploy or tear down with v=1
+# app(tag, containers, volumes) - deploy or tear down with v=1
 define app
 $(if $(v),docker rm -f $(2)$(if $(3), && docker volume rm $(3),),$(PLAYBOOK) --tags $(1))
 endef
@@ -75,3 +75,6 @@ ntfy:
 
 tandoor:
 	$(call app,tandoor,tandoor tandoor-db,tandoor_postgres_data tandoor_static tandoor_media)
+
+dozzle:
+	$(call app,dozzle,dozzle,)

@@ -46,3 +46,8 @@
         description: Recipe manager
         server: socket-proxy
         container: tandoor
+    - Dozzle:
+        href: https://logs.ragnalab.xyz
+        description: Docker log viewer
+        server: socket-proxy
+        container: dozzle

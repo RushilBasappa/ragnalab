@@ -72,3 +72,7 @@
     - name: Tandoor Recipes
       ansible.builtin.import_tasks: tasks/apps/tandoor.yml
       tags: [tandoor]
+
+    - name: Dozzle
+      ansible.builtin.import_tasks: tasks/apps/dozzle.yml
+      tags: [dozzle]
