@@ -44,6 +44,10 @@ make pihole
 make rustdesk
 make homepage
 make uptime-kuma
+make vaultwarden
+make paperless-ngx
+make ntfy
+make tandoor
 ```
 
 ## Managing secrets

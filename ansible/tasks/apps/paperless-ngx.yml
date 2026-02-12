@@ -1,0 +1,30 @@
+---
+# Paperless-ngx
+
+- name: Create paperless_data volume
+  community.docker.docker_volume:
+    name: paperless_data
+
+- name: Create paperless_media volume
+  community.docker.docker_volume:
+    name: paperless_media
+
+- name: Create paperless_export volume
+  community.docker.docker_volume:
+    name: paperless_export
+
+- name: Create paperless_consume volume
+  community.docker.docker_volume:
+    name: paperless_consume
+
+- name: Create paperless_redis_data volume
+  community.docker.docker_volume:
+    name: paperless_redis_data
+
+- name: Start Paperless-ngx
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - paperless-ngx
+      - paperless-redis
+    state: present

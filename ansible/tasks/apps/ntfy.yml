@@ -1,0 +1,13 @@
+---
+# Ntfy
+
+- name: Create ntfy_cache volume
+  community.docker.docker_volume:
+    name: ntfy_cache
+
+- name: Start Ntfy
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - ntfy
+    state: present

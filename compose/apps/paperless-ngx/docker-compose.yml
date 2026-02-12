@@ -1,0 +1,55 @@
+services:
+  paperless-ngx:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    container_name: paperless-ngx
+    environment:
+      PAPERLESS_REDIS: redis://paperless-redis:6379
+      PAPERLESS_SECRET_KEY: ${PAPERLESS_SECRET_KEY}
+      PAPERLESS_ADMIN_USER: ${PAPERLESS_ADMIN_USER}
+      PAPERLESS_ADMIN_PASSWORD: ${PAPERLESS_ADMIN_PASSWORD}
+      PAPERLESS_URL: https://paperless.ragnalab.xyz
+      PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
+      PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: HTTP_REMOTE_USER
+    volumes:
+      - paperless_data:/usr/src/paperless/data
+      - paperless_media:/usr/src/paperless/media
+      - paperless_export:/usr/src/paperless/export
+      - paperless_consume:/usr/src/paperless/consume
+    networks:
+      - traefik_public
+    depends_on:
+      - paperless-redis
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.paperless-ngx.rule: "Host(`paperless.ragnalab.xyz`)"
+      traefik.http.routers.paperless-ngx.entrypoints: websecure
+      traefik.http.services.paperless-ngx.loadbalancer.server.port: "8000"
+      traefik.http.routers.paperless-ngx.middlewares: authelia@docker
+      kuma.paperless-ngx.http.name: Paperless-ngx
+      kuma.paperless-ngx.http.url: https://paperless.ragnalab.xyz
+    restart: unless-stopped
+
+  paperless-redis:
+    image: redis:7-alpine
+    container_name: paperless-redis
+    volumes:
+      - paperless_redis_data:/data
+    networks:
+      - traefik_public
+    restart: unless-stopped
+
+volumes:
+  paperless_data:
+    external: true
+  paperless_media:
+    external: true
+  paperless_export:
+    external: true
+  paperless_consume:
+    external: true
+  paperless_redis_data:
+    external: true
+
+networks:
+  traefik_public:
+    external: true

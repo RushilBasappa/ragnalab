@@ -58,3 +58,15 @@ homepage:
 
 uptime-kuma:
 	$(PLAYBOOK) --tags uptime-kuma
+
+vaultwarden:
+	$(PLAYBOOK) --tags vaultwarden
+
+paperless-ngx:
+	$(PLAYBOOK) --tags paperless-ngx
+
+ntfy:
+	$(PLAYBOOK) --tags ntfy
+
+tandoor:
+	$(PLAYBOOK) --tags tandoor

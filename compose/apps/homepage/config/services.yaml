@@ -26,3 +26,23 @@
         description: Uptime monitoring
         server: socket-proxy
         container: uptime-kuma
+    - Vaultwarden:
+        href: https://vault.ragnalab.xyz
+        description: Password manager
+        server: socket-proxy
+        container: vaultwarden
+    - Paperless-ngx:
+        href: https://paperless.ragnalab.xyz
+        description: Document management
+        server: socket-proxy
+        container: paperless-ngx
+    - Ntfy:
+        href: https://ntfy.ragnalab.xyz
+        description: Push notifications
+        server: socket-proxy
+        container: ntfy
+    - Tandoor Recipes:
+        href: https://recipes.ragnalab.xyz
+        description: Recipe manager
+        server: socket-proxy
+        container: tandoor

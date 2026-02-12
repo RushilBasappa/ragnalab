@@ -6,3 +6,7 @@ include:
   - apps/rustdesk/docker-compose.yml
   - apps/uptime-kuma/docker-compose.yml
   - apps/homepage/docker-compose.yml
+  - apps/vaultwarden/docker-compose.yml
+  - apps/paperless-ngx/docker-compose.yml
+  - apps/ntfy/docker-compose.yml
+  - apps/tandoor/docker-compose.yml

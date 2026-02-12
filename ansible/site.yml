@@ -56,3 +56,19 @@
     - name: Uptime Kuma
       ansible.builtin.import_tasks: tasks/apps/uptime-kuma.yml
       tags: [uptime-kuma]
+
+    - name: Vaultwarden
+      ansible.builtin.import_tasks: tasks/apps/vaultwarden.yml
+      tags: [vaultwarden]
+
+    - name: Paperless-ngx
+      ansible.builtin.import_tasks: tasks/apps/paperless-ngx.yml
+      tags: [paperless-ngx]
+
+    - name: Ntfy
+      ansible.builtin.import_tasks: tasks/apps/ntfy.yml
+      tags: [ntfy]
+
+    - name: Tandoor Recipes
+      ansible.builtin.import_tasks: tasks/apps/tandoor.yml
+      tags: [tandoor]

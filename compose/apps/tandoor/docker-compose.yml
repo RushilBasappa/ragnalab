@@ -1,0 +1,54 @@
+services:
+  tandoor:
+    image: ghcr.io/tandoorrecipes/recipes:latest
+    container_name: tandoor
+    environment:
+      SECRET_KEY: ${TANDOOR_SECRET_KEY}
+      DB_ENGINE: django.db.backends.postgresql
+      POSTGRES_HOST: tandoor-db
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: tandoor
+      POSTGRES_PASSWORD: ${TANDOOR_DB_PASSWORD}
+      POSTGRES_DB: tandoor
+      REMOTE_USER_AUTH: "1"
+    volumes:
+      - tandoor_static:/opt/recipes/staticfiles
+      - tandoor_media:/opt/recipes/mediafiles
+    networks:
+      - traefik_public
+    depends_on:
+      - tandoor-db
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.tandoor.rule: "Host(`recipes.ragnalab.xyz`)"
+      traefik.http.routers.tandoor.entrypoints: websecure
+      traefik.http.services.tandoor.loadbalancer.server.port: "8080"
+      traefik.http.routers.tandoor.middlewares: authelia@docker
+      kuma.tandoor.http.name: Tandoor Recipes
+      kuma.tandoor.http.url: https://recipes.ragnalab.xyz
+    restart: unless-stopped
+
+  tandoor-db:
+    image: postgres:16-alpine
+    container_name: tandoor-db
+    environment:
+      POSTGRES_USER: tandoor
+      POSTGRES_PASSWORD: ${TANDOOR_DB_PASSWORD}
+      POSTGRES_DB: tandoor
+    volumes:
+      - tandoor_postgres_data:/var/lib/postgresql/data
+    networks:
+      - traefik_public
+    restart: unless-stopped
+
+volumes:
+  tandoor_postgres_data:
+    external: true
+  tandoor_static:
+    external: true
+  tandoor_media:
+    external: true
+
+networks:
+  traefik_public:
+    external: true

@@ -1,0 +1,22 @@
+---
+# Tandoor Recipes
+
+- name: Create tandoor_postgres_data volume
+  community.docker.docker_volume:
+    name: tandoor_postgres_data
+
+- name: Create tandoor_static volume
+  community.docker.docker_volume:
+    name: tandoor_static
+
+- name: Create tandoor_media volume
+  community.docker.docker_volume:
+    name: tandoor_media
+
+- name: Start Tandoor Recipes
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - tandoor
+      - tandoor-db
+    state: present
