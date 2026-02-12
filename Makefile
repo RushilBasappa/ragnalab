@@ -46,9 +46,15 @@ authelia:
 traefik:
 	$(PLAYBOOK) --tags traefik
 
+pihole:
+	$(PLAYBOOK) --tags pihole
+
 # Apps
 rustdesk:
 	$(PLAYBOOK) --tags rustdesk
 
 homepage:
 	$(PLAYBOOK) --tags homepage
+
+uptime-kuma:
+	$(PLAYBOOK) --tags uptime-kuma

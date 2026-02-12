@@ -20,6 +20,8 @@ services:
       traefik.http.middlewares.authelia.forwardAuth.address: "http://authelia:9091/api/authz/forward-auth"
       traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader: "true"
       traefik.http.middlewares.authelia.forwardAuth.authResponseHeaders: "Remote-User,Remote-Groups,Remote-Email,Remote-Name"
+      kuma.authelia.http.name: Authelia
+      kuma.authelia.http.url: https://auth.ragnalab.xyz
     restart: unless-stopped
 
 volumes:

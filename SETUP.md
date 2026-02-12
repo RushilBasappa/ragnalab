@@ -36,12 +36,14 @@ make sync
 make socket-proxy
 make authelia
 make traefik
+make pihole
 ```
 
 ## 5. Apps
 ```bash
 make rustdesk
 make homepage
+make uptime-kuma
 ```
 
 ## Managing secrets

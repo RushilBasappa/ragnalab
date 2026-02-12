@@ -40,6 +40,10 @@
       ansible.builtin.import_tasks: tasks/services/traefik.yml
       tags: [traefik]
 
+    - name: Pi-hole
+      ansible.builtin.import_tasks: tasks/services/pihole.yml
+      tags: [pihole]
+
     # Apps
     - name: RustDesk
       ansible.builtin.import_tasks: tasks/apps/rustdesk.yml
@@ -48,3 +52,7 @@
     - name: Homepage
       ansible.builtin.import_tasks: tasks/apps/homepage.yml
       tags: [homepage]
+
+    - name: Uptime Kuma
+      ansible.builtin.import_tasks: tasks/apps/uptime-kuma.yml
+      tags: [uptime-kuma]

@@ -1,0 +1,14 @@
+---
+# Uptime Kuma + AutoKuma
+
+- name: Create uptime_kuma_data volume
+  community.docker.docker_volume:
+    name: uptime_kuma_data
+
+- name: Start Uptime Kuma + AutoKuma
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - uptime-kuma
+      - autokuma
+    state: present

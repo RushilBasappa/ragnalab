@@ -1,0 +1,17 @@
+---
+# Pi-hole DNS
+
+- name: Create pihole_etc volume
+  community.docker.docker_volume:
+    name: pihole_etc
+
+- name: Create pihole_dnsmasq volume
+  community.docker.docker_volume:
+    name: pihole_dnsmasq
+
+- name: Start Pi-hole
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - pihole
+    state: present

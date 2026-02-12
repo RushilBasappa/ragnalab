@@ -51,3 +51,10 @@
   ansible.builtin.command: timedatectl set-ntp true
   changed_when: false
   become: true
+
+- name: Install Claude Code CLI
+  ansible.builtin.shell: |
+    curl -fsSL https://claude.ai/install.sh | bash
+  args:
+    creates: /usr/local/bin/claude
+  become: true

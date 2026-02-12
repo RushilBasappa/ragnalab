@@ -1,0 +1,42 @@
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:2
+    container_name: uptime-kuma
+    volumes:
+      - uptime_kuma_data:/app/data
+    networks:
+      - traefik_public
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.uptime-kuma.rule: "Host(`uptime.ragnalab.xyz`)"
+      traefik.http.routers.uptime-kuma.entrypoints: websecure
+      traefik.http.services.uptime-kuma.loadbalancer.server.port: "3001"
+      traefik.http.routers.uptime-kuma.middlewares: authelia@docker
+      kuma.uptime-kuma.http.name: Uptime Kuma
+      kuma.uptime-kuma.http.url: https://uptime.ragnalab.xyz
+    restart: unless-stopped
+
+  autokuma:
+    image: ghcr.io/bigboot/autokuma:latest
+    container_name: autokuma
+    environment:
+      AUTOKUMA__KUMA__URL: http://uptime-kuma:3001
+      AUTOKUMA__KUMA__USERNAME: ${AUTOKUMA_USERNAME}
+      AUTOKUMA__KUMA__PASSWORD: ${AUTOKUMA_PASSWORD}
+      AUTOKUMA__DOCKER__HOSTS: tcp://socket-proxy:2375
+    networks:
+      - traefik_public
+      - socket_proxy
+    depends_on:
+      - uptime-kuma
+    restart: unless-stopped
+
+volumes:
+  uptime_kuma_data:
+    external: true
+
+networks:
+  traefik_public:
+    external: true
+  socket_proxy:
+    external: true

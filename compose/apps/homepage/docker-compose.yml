@@ -19,6 +19,8 @@ services:
       traefik.http.routers.homepage.entrypoints: websecure
       traefik.http.services.homepage.loadbalancer.server.port: "3000"
       traefik.http.routers.homepage.middlewares: authelia@docker
+      kuma.homepage.http.name: Homepage
+      kuma.homepage.http.url: https://home.ragnalab.xyz
     restart: unless-stopped
 
 networks:

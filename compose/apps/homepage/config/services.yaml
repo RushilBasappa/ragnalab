@@ -10,9 +10,19 @@
         description: SSO authentication
         server: socket-proxy
         container: authelia
+    - Pi-hole:
+        href: https://pihole.ragnalab.xyz
+        description: DNS ad-blocking
+        server: socket-proxy
+        container: pihole
 
 - Apps:
     - RustDesk:
         description: Remote desktop server
         server: socket-proxy
         container: rustdesk-hbbs
+    - Uptime Kuma:
+        href: https://uptime.ragnalab.xyz
+        description: Uptime monitoring
+        server: socket-proxy
+        container: uptime-kuma

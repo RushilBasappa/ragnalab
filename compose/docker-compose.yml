@@ -2,5 +2,7 @@ include:
   - services/socket-proxy/docker-compose.yml
   - services/authelia/docker-compose.yml
   - services/traefik/docker-compose.yml
+  - services/pihole/docker-compose.yml
   - apps/rustdesk/docker-compose.yml
+  - apps/uptime-kuma/docker-compose.yml
   - apps/homepage/docker-compose.yml
