@@ -1,14 +1,27 @@
 ---
 # Docker CE + cgroup memory limits for Pi 5
 
-- name: Check if Docker is installed
-  ansible.builtin.stat:
-    path: /usr/bin/docker
-  register: docker_bin
+- name: Add Docker GPG key
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+  become: true
+
+- name: Add Docker APT repository
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=arm64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+    state: present
+  become: true
 
 - name: Install Docker
-  ansible.builtin.shell: curl -fsSL https://get.docker.com | sh
-  when: not docker_bin.stat.exists
+  ansible.builtin.apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-compose-plugin
+    state: present
+    update_cache: true
   become: true
 
 - name: Add user to docker group

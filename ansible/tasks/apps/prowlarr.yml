@@ -1,0 +1,121 @@
+---
+# Prowlarr
+
+- name: Create prowlarr_config volume
+  community.docker.docker_volume:
+    name: prowlarr_config
+
+- name: Start Prowlarr
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - prowlarr
+    state: present
+
+- name: Wait for Prowlarr to be ready
+  ansible.builtin.command: docker exec prowlarr curl -sf http://localhost:9696/ping
+  register: result
+  until: result.rc == 0
+  retries: 30
+  delay: 5
+  changed_when: false
+
+- name: Get prowlarr_config volume mountpoint
+  community.docker.docker_volume_info:
+    name: prowlarr_config
+  register: prowlarr_volume
+
+- name: Set config path
+  ansible.builtin.set_fact:
+    prowlarr_conf: "{{ prowlarr_volume.volume.Mountpoint }}/config.xml"
+
+- name: Read Prowlarr config
+  ansible.builtin.slurp:
+    src: "{{ prowlarr_conf }}"
+  register: prowlarr_config_raw
+  become: true
+
+- name: Extract Prowlarr API key
+  ansible.builtin.set_fact:
+    prowlarr_api_key: "{{ (prowlarr_config_raw.content | b64decode) | regex_search('<ApiKey>(.*)</ApiKey>', '\\1') | first }}"
+
+- name: Show Prowlarr API key
+  ansible.builtin.debug:
+    msg: "Prowlarr API key: {{ prowlarr_api_key }}"
+
+- name: Stop Prowlarr before patching config
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - prowlarr
+    state: stopped
+
+- name: Set Prowlarr auth to External
+  ansible.builtin.replace:
+    path: "{{ prowlarr_conf }}"
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
+  loop:
+    - { regexp: '<AuthenticationMethod>.*</AuthenticationMethod>', replace: '<AuthenticationMethod>External</AuthenticationMethod>' }
+    - { regexp: '<AuthenticationRequired>.*</AuthenticationRequired>', replace: '<AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>' }
+  become: true
+
+- name: Start Prowlarr with patched config
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - prowlarr
+    state: present
+
+- name: Wait for Prowlarr to be ready after config patch
+  ansible.builtin.command: docker exec prowlarr curl -sf http://localhost:9696/ping
+  register: result
+  until: result.rc == 0
+  retries: 30
+  delay: 5
+  changed_when: false
+
+- name: Read Sonarr API key
+  ansible.builtin.slurp:
+    src: /var/lib/docker/volumes/sonarr_config/_data/config.xml
+  register: sonarr_config_raw
+  become: true
+
+- name: Read Radarr API key
+  ansible.builtin.slurp:
+    src: /var/lib/docker/volumes/radarr_config/_data/config.xml
+  register: radarr_config_raw
+  become: true
+
+- name: Set Sonarr and Radarr API keys
+  ansible.builtin.set_fact:
+    sonarr_api_key: "{{ (sonarr_config_raw.content | b64decode) | regex_search('<ApiKey>(.*)</ApiKey>', '\\1') | first }}"
+    radarr_api_key: "{{ (radarr_config_raw.content | b64decode) | regex_search('<ApiKey>(.*)</ApiKey>', '\\1') | first }}"
+
+- name: Check existing Prowlarr applications
+  ansible.builtin.command: >
+    docker exec prowlarr curl -sf
+    -H 'X-Api-Key: {{ prowlarr_api_key }}'
+    http://localhost:9696/api/v1/applications
+  register: prowlarr_apps
+  changed_when: false
+
+- name: Add Sonarr to Prowlarr
+  ansible.builtin.command: >
+    docker exec prowlarr curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -H 'X-Api-Key: {{ prowlarr_api_key }}'
+    -d '{"name":"Sonarr","implementation":"Sonarr","configContract":"SonarrSettings","syncLevel":"fullSync","fields":[{"name":"prowlarrUrl","value":"http://prowlarr:9696"},{"name":"baseUrl","value":"http://sonarr:8989"},{"name":"apiKey","value":"{{ sonarr_api_key }}"}]}'
+    http://localhost:9696/api/v1/applications
+  when: "'Sonarr' not in prowlarr_apps.stdout"
+  changed_when: true
+
+- name: Add Radarr to Prowlarr
+  ansible.builtin.command: >
+    docker exec prowlarr curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -H 'X-Api-Key: {{ prowlarr_api_key }}'
+    -d '{"name":"Radarr","implementation":"Radarr","configContract":"RadarrSettings","syncLevel":"fullSync","fields":[{"name":"prowlarrUrl","value":"http://prowlarr:9696"},{"name":"baseUrl","value":"http://radarr:7878"},{"name":"apiKey","value":"{{ radarr_api_key }}"}]}'
+    http://localhost:9696/api/v1/applications
+  when: "'Radarr' not in prowlarr_apps.stdout"
+  changed_when: true

@@ -76,3 +76,36 @@
     - name: Dozzle
       ansible.builtin.import_tasks: tasks/apps/dozzle.yml
       tags: [dozzle]
+
+    - name: Watchtower
+      ansible.builtin.import_tasks: tasks/apps/watchtower.yml
+      tags: [watchtower]
+
+    # Media
+    - name: qBittorrent + Gluetun
+      ansible.builtin.import_tasks: tasks/apps/qbittorrent.yml
+      tags: [qbittorrent]
+
+    - name: Sonarr
+      ansible.builtin.import_tasks: tasks/apps/sonarr.yml
+      tags: [sonarr]
+
+    - name: Radarr
+      ansible.builtin.import_tasks: tasks/apps/radarr.yml
+      tags: [radarr]
+
+    - name: Prowlarr
+      ansible.builtin.import_tasks: tasks/apps/prowlarr.yml
+      tags: [prowlarr]
+
+    - name: Bazarr
+      ansible.builtin.import_tasks: tasks/apps/bazarr.yml
+      tags: [bazarr]
+
+    - name: Jellyfin
+      ansible.builtin.import_tasks: tasks/apps/jellyfin.yml
+      tags: [jellyfin]
+
+    - name: Jellyseerr
+      ansible.builtin.import_tasks: tasks/apps/jellyseerr.yml
+      tags: [jellyseerr]

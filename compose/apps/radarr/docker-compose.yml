@@ -1,0 +1,32 @@
+services:
+  radarr:
+    image: linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Etc/UTC
+    volumes:
+      - radarr_config:/config
+      - media_data:/data
+    networks:
+      - traefik_public
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.radarr.rule: "Host(`radarr.ragnalab.xyz`)"
+      traefik.http.routers.radarr.entrypoints: websecure
+      traefik.http.services.radarr.loadbalancer.server.port: "7878"
+      traefik.http.routers.radarr.middlewares: authelia@docker
+      kuma.radarr.http.name: Radarr
+      kuma.radarr.http.url: https://radarr.ragnalab.xyz
+    restart: unless-stopped
+
+volumes:
+  radarr_config:
+    external: true
+  media_data:
+    external: true
+
+networks:
+  traefik_public:
+    external: true

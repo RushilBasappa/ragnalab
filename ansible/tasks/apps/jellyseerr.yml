@@ -1,0 +1,17 @@
+---
+# Jellyseerr
+
+- name: Create jellyseerr_config volume
+  community.docker.docker_volume:
+    name: jellyseerr_config
+
+- name: Start Jellyseerr
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - jellyseerr
+    state: present
+
+- name: Jellyseerr post-deploy
+  ansible.builtin.debug:
+    msg: "Jellyseerr deployed. Complete the setup wizard at https://requests.ragnalab.xyz"

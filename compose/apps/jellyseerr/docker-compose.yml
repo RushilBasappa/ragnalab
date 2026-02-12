@@ -1,0 +1,26 @@
+services:
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    environment:
+      TZ: Etc/UTC
+    volumes:
+      - jellyseerr_config:/app/config
+    networks:
+      - traefik_public
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.jellyseerr.rule: "Host(`requests.ragnalab.xyz`)"
+      traefik.http.routers.jellyseerr.entrypoints: websecure
+      traefik.http.services.jellyseerr.loadbalancer.server.port: "5055"
+      kuma.jellyseerr.http.name: Jellyseerr
+      kuma.jellyseerr.http.url: https://requests.ragnalab.xyz
+    restart: unless-stopped
+
+volumes:
+  jellyseerr_config:
+    external: true
+
+networks:
+  traefik_public:
+    external: true

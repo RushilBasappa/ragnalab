@@ -51,3 +51,40 @@
         description: Docker log viewer
         server: socket-proxy
         container: dozzle
+
+- Media:
+    - Jellyfin:
+        href: https://jellyfin.ragnalab.xyz
+        description: Media server
+        server: socket-proxy
+        container: jellyfin
+    - Jellyseerr:
+        href: https://requests.ragnalab.xyz
+        description: Media requests
+        server: socket-proxy
+        container: jellyseerr
+    - Sonarr:
+        href: https://sonarr.ragnalab.xyz
+        description: TV show management
+        server: socket-proxy
+        container: sonarr
+    - Radarr:
+        href: https://radarr.ragnalab.xyz
+        description: Movie management
+        server: socket-proxy
+        container: radarr
+    - Bazarr:
+        href: https://bazarr.ragnalab.xyz
+        description: Subtitle management
+        server: socket-proxy
+        container: bazarr
+    - Prowlarr:
+        href: https://prowlarr.ragnalab.xyz
+        description: Indexer management
+        server: socket-proxy
+        container: prowlarr
+    - qBittorrent:
+        href: https://qbit.ragnalab.xyz
+        description: Torrent client
+        server: socket-proxy
+        container: gluetun

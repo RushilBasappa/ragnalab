@@ -1,0 +1,32 @@
+services:
+  bazarr:
+    image: linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Etc/UTC
+    volumes:
+      - bazarr_config:/config
+      - media_data:/data
+    networks:
+      - traefik_public
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.bazarr.rule: "Host(`bazarr.ragnalab.xyz`)"
+      traefik.http.routers.bazarr.entrypoints: websecure
+      traefik.http.services.bazarr.loadbalancer.server.port: "6767"
+      traefik.http.routers.bazarr.middlewares: authelia@docker
+      kuma.bazarr.http.name: Bazarr
+      kuma.bazarr.http.url: https://bazarr.ragnalab.xyz
+    restart: unless-stopped
+
+volumes:
+  bazarr_config:
+    external: true
+  media_data:
+    external: true
+
+networks:
+  traefik_public:
+    external: true

@@ -19,7 +19,7 @@ services:
       SECRETS: 0
       CONFIGS: 0
       DISTRIBUTIONS: 0
-      IMAGES: 0
+      IMAGES: 1
       INFO: 1
       MODULES: 0
       NODES: 0

@@ -51,5 +51,17 @@ make tandoor
 make dozzle
 ```
 
+## 6. Media Stack
+Deploy in order — each step auto-wires connections to previous services:
+```bash
+make qbittorrent       # Gluetun VPN + qBittorrent (fill in WireGuard creds in .env first)
+make sonarr            # TV shows — auto-adds qBittorrent download client
+make radarr            # Movies — auto-adds qBittorrent download client
+make prowlarr          # Indexer manager — auto-adds Sonarr + Radarr
+make bazarr            # Subtitles — connects to Sonarr + Radarr
+make jellyfin          # Media server — run setup wizard at jellyfin.ragnalab.xyz
+make jellyseerr        # Request portal — run setup wizard at requests.ragnalab.xyz
+```
+
 ## Managing secrets
 Edit `compose/.env` freely — the pre-commit hook auto-encrypts to `ansible/vars/secrets.yml` on every commit.

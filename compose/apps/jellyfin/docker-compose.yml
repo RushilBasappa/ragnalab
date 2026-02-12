@@ -1,0 +1,27 @@
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    volumes:
+      - jellyfin_config:/config
+      - media_data:/data
+    networks:
+      - traefik_public
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.jellyfin.rule: "Host(`jellyfin.ragnalab.xyz`)"
+      traefik.http.routers.jellyfin.entrypoints: websecure
+      traefik.http.services.jellyfin.loadbalancer.server.port: "8096"
+      kuma.jellyfin.http.name: Jellyfin
+      kuma.jellyfin.http.url: https://jellyfin.ragnalab.xyz
+    restart: unless-stopped
+
+volumes:
+  jellyfin_config:
+    external: true
+  media_data:
+    external: true
+
+networks:
+  traefik_public:
+    external: true

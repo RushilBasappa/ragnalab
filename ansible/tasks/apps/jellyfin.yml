@@ -1,0 +1,122 @@
+---
+# Jellyfin
+
+- name: Create volumes
+  community.docker.docker_volume:
+    name: "{{ item }}"
+  loop:
+    - jellyfin_config
+    - media_data
+
+- name: Start Jellyfin
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - jellyfin
+    state: present
+
+- name: Get jellyfin_config volume mountpoint
+  community.docker.docker_volume_info:
+    name: jellyfin_config
+  register: jellyfin_volume
+
+- name: Wait for Jellyfin system config to exist
+  ansible.builtin.wait_for:
+    path: "{{ jellyfin_volume.volume.Mountpoint }}/config/system.xml"
+    timeout: 60
+  become: true
+
+- name: Read system config
+  ansible.builtin.slurp:
+    src: "{{ jellyfin_volume.volume.Mountpoint }}/config/system.xml"
+  register: jellyfin_system_xml
+  become: true
+
+- name: Check if setup wizard is pending
+  ansible.builtin.set_fact:
+    jellyfin_wizard_pending: "{{ 'IsStartupWizardCompleted>false<' in (jellyfin_system_xml.content | b64decode) }}"
+
+- name: Read Jellyfin credentials from env
+  ansible.builtin.set_fact:
+    jellyfin_user: "{{ lookup('ansible.builtin.ini', 'JELLYFIN_ADMIN_USER', type='properties', file=playbook_dir + '/../compose/.env') }}"
+    jellyfin_pass: "{{ lookup('ansible.builtin.ini', 'JELLYFIN_ADMIN_PASSWORD', type='properties', file=playbook_dir + '/../compose/.env') }}"
+  when: jellyfin_wizard_pending
+
+- name: Wait for Jellyfin API to be ready
+  ansible.builtin.command: docker exec jellyfin curl -sf http://localhost:8096/Startup/Configuration
+  register: result
+  until: result.rc == 0
+  retries: 30
+  delay: 5
+  changed_when: false
+  when: jellyfin_wizard_pending
+
+- name: Set startup configuration
+  ansible.builtin.command: >
+    docker exec jellyfin curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -d '{"UICulture":"en-US","MetadataCountryCode":"US","PreferredMetadataLanguage":"en"}'
+    http://localhost:8096/Startup/Configuration
+  when: jellyfin_wizard_pending
+  changed_when: true
+
+- name: Create admin user
+  ansible.builtin.command: >
+    docker exec jellyfin curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -d '{"Name":"{{ jellyfin_user }}","Password":"{{ jellyfin_pass }}"}'
+    http://localhost:8096/Startup/User
+  when: jellyfin_wizard_pending
+  changed_when: true
+
+- name: Add Movies library
+  ansible.builtin.command: >
+    docker exec jellyfin curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -d '{"LibraryOptions":{}}'
+    "http://localhost:8096/Library/VirtualFolders?collectionType=movies&refreshLibrary=false&name=Movies"
+  when: jellyfin_wizard_pending
+  changed_when: true
+
+- name: Add Movies library path
+  ansible.builtin.command: >
+    docker exec jellyfin curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -d '{"Name":"Movies","Path":"/data/media/movies"}'
+    http://localhost:8096/Library/VirtualFolders/Paths
+  when: jellyfin_wizard_pending
+  changed_when: true
+
+- name: Add TV Shows library
+  ansible.builtin.command: >
+    docker exec jellyfin curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -d '{"LibraryOptions":{}}'
+    "http://localhost:8096/Library/VirtualFolders?collectionType=tvshows&refreshLibrary=false&name=TV%20Shows"
+  when: jellyfin_wizard_pending
+  changed_when: true
+
+- name: Add TV Shows library path
+  ansible.builtin.command: >
+    docker exec jellyfin curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -d '{"Name":"TV Shows","Path":"/data/media/tv"}'
+    http://localhost:8096/Library/VirtualFolders/Paths
+  when: jellyfin_wizard_pending
+  changed_when: true
+
+- name: Configure remote access
+  ansible.builtin.command: >
+    docker exec jellyfin curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -d '{"EnableRemoteAccess":true,"EnableAutomaticPortMapping":false}'
+    http://localhost:8096/Startup/RemoteAccess
+  when: jellyfin_wizard_pending
+  changed_when: true
+
+- name: Complete setup wizard
+  ansible.builtin.command: >
+    docker exec jellyfin curl -sf -X POST
+    http://localhost:8096/Startup/Complete
+  when: jellyfin_wizard_pending
+  changed_when: true

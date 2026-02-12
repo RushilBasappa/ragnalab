@@ -1,0 +1,29 @@
+services:
+  prowlarr:
+    image: linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Etc/UTC
+    volumes:
+      - prowlarr_config:/config
+    networks:
+      - traefik_public
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.prowlarr.rule: "Host(`prowlarr.ragnalab.xyz`)"
+      traefik.http.routers.prowlarr.entrypoints: websecure
+      traefik.http.services.prowlarr.loadbalancer.server.port: "9696"
+      traefik.http.routers.prowlarr.middlewares: authelia@docker
+      kuma.prowlarr.http.name: Prowlarr
+      kuma.prowlarr.http.url: https://prowlarr.ragnalab.xyz
+    restart: unless-stopped
+
+volumes:
+  prowlarr_config:
+    external: true
+
+networks:
+  traefik_public:
+    external: true

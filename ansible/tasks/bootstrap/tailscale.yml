@@ -1,14 +1,23 @@
 ---
 # Tailscale VPN setup
 
-- name: Check if Tailscale is installed
-  ansible.builtin.stat:
-    path: /usr/bin/tailscale
-  register: tailscale_bin
+- name: Add Tailscale GPG key
+  ansible.builtin.apt_key:
+    url: https://pkgs.tailscale.com/stable/debian/{{ ansible_distribution_release }}.noarmor.gpg
+    state: present
+  become: true
+
+- name: Add Tailscale APT repository
+  ansible.builtin.apt_repository:
+    repo: "deb https://pkgs.tailscale.com/stable/debian {{ ansible_distribution_release }} main"
+    state: present
+  become: true
 
 - name: Install Tailscale
-  ansible.builtin.shell: curl -fsSL https://tailscale.com/install.sh | sh
-  when: not tailscale_bin.stat.exists
+  ansible.builtin.apt:
+    name: tailscale
+    state: present
+    update_cache: true
   become: true
 
 - name: Check Tailscale status

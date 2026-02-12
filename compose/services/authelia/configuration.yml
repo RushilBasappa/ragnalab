@@ -18,6 +18,10 @@ access_control:
       policy: bypass
     - domain: ntfy.ragnalab.xyz
       policy: bypass
+    - domain: jellyfin.ragnalab.xyz
+      policy: bypass
+    - domain: requests.ragnalab.xyz
+      policy: bypass
 
 session:
   cookies:

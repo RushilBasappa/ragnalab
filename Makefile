@@ -78,3 +78,35 @@ tandoor:
 
 dozzle:
 	$(call app,dozzle,dozzle,)
+
+watchtower:
+	$(call app,watchtower,watchtower,)
+
+keys:
+	@for app in sonarr radarr prowlarr; do \
+		vol="/var/lib/docker/volumes/$${app}_config/_data/config.xml"; \
+		key=$$(sudo sed -n 's/.*<ApiKey>\(.*\)<\/ApiKey>.*/\1/p' "$$vol" 2>/dev/null); \
+		printf "%-10s %s\n" "$$app" "$${key:-not deployed}"; \
+	done
+
+# Media — deploy in order: qbittorrent → sonarr → radarr → prowlarr → bazarr → jellyfin → jellyseerr
+qbittorrent:
+	$(call app,qbittorrent,gluetun qbittorrent,gluetun_data qbittorrent_config media_data)
+
+prowlarr:
+	$(call app,prowlarr,prowlarr,prowlarr_config)
+
+sonarr:
+	$(call app,sonarr,sonarr,sonarr_config media_data)
+
+radarr:
+	$(call app,radarr,radarr,radarr_config media_data)
+
+bazarr:
+	$(call app,bazarr,bazarr,bazarr_config media_data)
+
+jellyfin:
+	$(call app,jellyfin,jellyfin,jellyfin_config media_data)
+
+jellyseerr:
+	$(call app,jellyseerr,jellyseerr,jellyseerr_config)

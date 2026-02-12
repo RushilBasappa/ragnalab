@@ -1,0 +1,18 @@
+services:
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    environment:
+      DOCKER_HOST: tcp://socket-proxy:2375
+      WATCHTOWER_MONITOR_ONLY: "true"
+      WATCHTOWER_NOTIFICATION_URL: "ntfy://ntfy.ragnalab.xyz/watchtower"
+      WATCHTOWER_SCHEDULE: "0 0 5 * * *"   # 5 AM daily
+      WATCHTOWER_CLEANUP: "false"
+      WATCHTOWER_NO_STARTUP_MESSAGE: "false"
+    networks:
+      - socket_proxy
+    restart: unless-stopped
+
+networks:
+  socket_proxy:
+    external: true

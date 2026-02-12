@@ -64,6 +64,27 @@
     - { section: Preferences, key: 'Downloads\TempPath', value: '/data/torrents/incomplete/' }
   become: true
 
+- name: Create media directory structure
+  community.docker.docker_volume_info:
+    name: media_data
+  register: media_volume
+
+- name: Ensure media directories exist
+  ansible.builtin.file:
+    path: "{{ media_volume.volume.Mountpoint }}/{{ item }}"
+    state: directory
+    owner: "1000"
+    group: "1000"
+    mode: "0755"
+  loop:
+    - torrents
+    - torrents/incomplete
+    - torrents/movies
+    - torrents/tv
+    - media/movies
+    - media/tv
+  become: true
+
 - name: Start qBittorrent with patched config
   community.docker.docker_compose_v2:
     project_src: "{{ playbook_dir }}/../compose"
