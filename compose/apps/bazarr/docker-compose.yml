@@ -13,12 +13,12 @@ services:
       - traefik_public
     labels:
       traefik.enable: "true"
-      traefik.http.routers.bazarr.rule: "Host(`bazarr.ragnalab.xyz`)"
+      traefik.http.routers.bazarr.rule: "Host(`bazarr.${DOMAIN}`)"
       traefik.http.routers.bazarr.entrypoints: websecure
       traefik.http.services.bazarr.loadbalancer.server.port: "6767"
       traefik.http.routers.bazarr.middlewares: authelia@docker
       kuma.bazarr.http.name: Bazarr
-      kuma.bazarr.http.url: https://bazarr.ragnalab.xyz
+      kuma.bazarr.http.url: https://bazarr.${DOMAIN}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:6767/ping"]
       interval: 30s

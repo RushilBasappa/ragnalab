@@ -12,12 +12,12 @@ services:
       - traefik_public
     labels:
       traefik.enable: "true"
-      traefik.http.routers.syncthing.rule: "Host(`sync.ragnalab.xyz`)"
+      traefik.http.routers.syncthing.rule: "Host(`sync.${DOMAIN}`)"
       traefik.http.routers.syncthing.entrypoints: websecure
       traefik.http.services.syncthing.loadbalancer.server.port: "8384"
       traefik.http.routers.syncthing.middlewares: authelia@docker
       kuma.syncthing.http.name: Syncthing
-      kuma.syncthing.http.url: https://sync.ragnalab.xyz
+      kuma.syncthing.http.url: https://sync.${DOMAIN}
     deploy:
       resources:
         limits:

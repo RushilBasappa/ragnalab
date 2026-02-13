@@ -3,7 +3,7 @@ services:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage
     environment:
-      HOMEPAGE_ALLOWED_HOSTS: home.ragnalab.xyz
+      HOMEPAGE_ALLOWED_HOSTS: home.${DOMAIN}
       # API keys for service widgets (HOMEPAGE_VAR_ prefix required)
       HOMEPAGE_VAR_RADARR_API_KEY: ${RADARR_API_KEY}
       HOMEPAGE_VAR_SONARR_API_KEY: ${SONARR_API_KEY}
@@ -27,12 +27,12 @@ services:
       - socket_proxy
     labels:
       traefik.enable: "true"
-      traefik.http.routers.homepage.rule: "Host(`home.ragnalab.xyz`)"
+      traefik.http.routers.homepage.rule: "Host(`home.${DOMAIN}`)"
       traefik.http.routers.homepage.entrypoints: websecure
       traefik.http.services.homepage.loadbalancer.server.port: "3000"
       traefik.http.routers.homepage.middlewares: authelia@docker
       kuma.homepage.http.name: Homepage
-      kuma.homepage.http.url: https://home.ragnalab.xyz
+      kuma.homepage.http.url: https://home.${DOMAIN}
     deploy:
       resources:
         limits:

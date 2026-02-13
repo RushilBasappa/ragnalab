@@ -9,12 +9,12 @@ services:
       - socket_proxy
     labels:
       traefik.enable: "true"
-      traefik.http.routers.dozzle.rule: "Host(`logs.ragnalab.xyz`)"
+      traefik.http.routers.dozzle.rule: "Host(`logs.${DOMAIN}`)"
       traefik.http.routers.dozzle.entrypoints: websecure
       traefik.http.services.dozzle.loadbalancer.server.port: "8080"
       traefik.http.routers.dozzle.middlewares: authelia@docker
       kuma.dozzle.http.name: Dozzle
-      kuma.dozzle.http.url: https://logs.ragnalab.xyz
+      kuma.dozzle.http.url: https://logs.${DOMAIN}
     deploy:
       resources:
         limits:

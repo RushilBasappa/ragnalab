@@ -3,7 +3,7 @@ ANSIBLE  := ANSIBLE_CONFIG=ansible/ansible.cfg ansible-playbook -i ansible/inven
 VAULT    := --vault-password-file .vault_pass
 SITE     := $(ANSIBLE) ansible/site.yml $(VAULT)
 
-.PHONY: help init sync hooks fix-locale install-ansible bootstrap deploy-infra deploy-media deploy-apps deploy-all status keys service teardown
+.PHONY: help init sync hooks fix-locale install-ansible bootstrap deploy-infra deploy-media deploy-apps deploy-all status keys service teardown teardown-all
 
 # --- Setup ---
 
@@ -51,6 +51,14 @@ service: ## Deploy one or more services: make service TAGS=sonarr,radarr
 
 teardown: ## Tear down an app: make teardown APP=ntfy
 	$(SITE) --tags $(APP) -e app_state=absent
+
+teardown-all: ## Stop all containers and delete all volumes
+	@echo "This will STOP all containers and DELETE all Docker volumes."
+	@echo ""
+	@read -p "Type 'yes' to confirm: " confirm && [ "$$confirm" = "yes" ] || (echo "Aborted."; exit 1)
+	cd compose && docker compose down --remove-orphans --volumes
+	@docker volume ls -q | xargs -r docker volume rm 2>/dev/null || true
+	@echo "Done. Run 'make deploy-all' to rebuild."
 
 # --- Utilities ---
 

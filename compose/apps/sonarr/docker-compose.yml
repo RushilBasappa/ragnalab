@@ -13,12 +13,12 @@ services:
       - traefik_public
     labels:
       traefik.enable: "true"
-      traefik.http.routers.sonarr.rule: "Host(`sonarr.ragnalab.xyz`)"
+      traefik.http.routers.sonarr.rule: "Host(`sonarr.${DOMAIN}`)"
       traefik.http.routers.sonarr.entrypoints: websecure
       traefik.http.services.sonarr.loadbalancer.server.port: "8989"
       traefik.http.routers.sonarr.middlewares: authelia@docker
       kuma.sonarr.http.name: Sonarr
-      kuma.sonarr.http.url: https://sonarr.ragnalab.xyz
+      kuma.sonarr.http.url: https://sonarr.${DOMAIN}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8989/ping"]
       interval: 30s

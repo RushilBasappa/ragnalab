@@ -7,7 +7,7 @@ services:
       PAPERLESS_SECRET_KEY: ${PAPERLESS_SECRET_KEY}
       PAPERLESS_ADMIN_USER: ${PAPERLESS_ADMIN_USER}
       PAPERLESS_ADMIN_PASSWORD: ${PAPERLESS_ADMIN_PASSWORD}
-      PAPERLESS_URL: https://paperless.ragnalab.xyz
+      PAPERLESS_URL: https://paperless.${DOMAIN}
       PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
       PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: HTTP_REMOTE_USER
     volumes:
@@ -32,12 +32,12 @@ services:
         condition: service_healthy
     labels:
       traefik.enable: "true"
-      traefik.http.routers.paperless-ngx.rule: "Host(`paperless.ragnalab.xyz`)"
+      traefik.http.routers.paperless-ngx.rule: "Host(`paperless.${DOMAIN}`)"
       traefik.http.routers.paperless-ngx.entrypoints: websecure
       traefik.http.services.paperless-ngx.loadbalancer.server.port: "8000"
       traefik.http.routers.paperless-ngx.middlewares: authelia@docker
       kuma.paperless-ngx.http.name: Paperless-ngx
-      kuma.paperless-ngx.http.url: https://paperless.ragnalab.xyz
+      kuma.paperless-ngx.http.url: https://paperless.${DOMAIN}
     restart: unless-stopped
 
   paperless-redis:

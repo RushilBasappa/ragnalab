@@ -8,7 +8,7 @@ services:
       PUBLIC_DASHBOARD: "true"
       SPEEDTEST_SCHEDULE: "0 */6 * * *"
       ADMIN_NAME: admin
-      ADMIN_EMAIL: admin@ragnalab.xyz
+      ADMIN_EMAIL: admin@${DOMAIN}
       ADMIN_PASSWORD: ${SPEEDTEST_ADMIN_PASSWORD}
     volumes:
       - speedtest_data:/config
@@ -16,12 +16,12 @@ services:
       - traefik_public
     labels:
       traefik.enable: "true"
-      traefik.http.routers.speedtest-tracker.rule: "Host(`speed.ragnalab.xyz`)"
+      traefik.http.routers.speedtest-tracker.rule: "Host(`speed.${DOMAIN}`)"
       traefik.http.routers.speedtest-tracker.entrypoints: websecure
       traefik.http.services.speedtest-tracker.loadbalancer.server.port: "80"
       traefik.http.routers.speedtest-tracker.middlewares: authelia@docker
       kuma.speedtest-tracker.http.name: Speedtest Tracker
-      kuma.speedtest-tracker.http.url: https://speed.ragnalab.xyz
+      kuma.speedtest-tracker.http.url: https://speed.${DOMAIN}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/api/healthcheck"]
       interval: 30s

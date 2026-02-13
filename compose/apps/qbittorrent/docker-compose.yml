@@ -20,11 +20,11 @@ services:
       - traefik_public
     labels:
       traefik.enable: "true"
-      traefik.http.routers.qbittorrent.rule: "Host(`qbit.ragnalab.xyz`)"
+      traefik.http.routers.qbittorrent.rule: "Host(`qbit.${DOMAIN}`)"
       traefik.http.routers.qbittorrent.entrypoints: websecure
       traefik.http.services.qbittorrent.loadbalancer.server.port: "8080"
       kuma.qbittorrent.http.name: qBittorrent
-      kuma.qbittorrent.http.url: https://qbit.ragnalab.xyz
+      kuma.qbittorrent.http.url: https://qbit.${DOMAIN}
     deploy:
       resources:
         limits:

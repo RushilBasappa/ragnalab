@@ -29,12 +29,12 @@ services:
         condition: service_healthy
     labels:
       traefik.enable: "true"
-      traefik.http.routers.dashboard.rule: "Host(`traefik.ragnalab.xyz`)"
+      traefik.http.routers.dashboard.rule: "Host(`traefik.${DOMAIN}`)"
       traefik.http.routers.dashboard.entrypoints: websecure
       traefik.http.routers.dashboard.service: api@internal
       traefik.http.routers.dashboard.middlewares: authelia@docker
       kuma.traefik.http.name: Traefik
-      kuma.traefik.http.url: https://traefik.ragnalab.xyz
+      kuma.traefik.http.url: https://traefik.${DOMAIN}
     restart: unless-stopped
 
 volumes:

@@ -13,11 +13,11 @@ services:
       - traefik_public
     labels:
       traefik.enable: "true"
-      traefik.http.routers.jellyfin.rule: "Host(`jellyfin.ragnalab.xyz`)"
+      traefik.http.routers.jellyfin.rule: "Host(`jellyfin.${DOMAIN}`)"
       traefik.http.routers.jellyfin.entrypoints: websecure
       traefik.http.services.jellyfin.loadbalancer.server.port: "8096"
       kuma.jellyfin.http.name: Jellyfin
-      kuma.jellyfin.http.url: https://jellyfin.ragnalab.xyz
+      kuma.jellyfin.http.url: https://jellyfin.${DOMAIN}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8096/health"]
       interval: 30s

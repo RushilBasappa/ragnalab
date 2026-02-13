@@ -8,11 +8,11 @@ services:
       - traefik_public
     labels:
       traefik.enable: "true"
-      traefik.http.routers.homeassistant.rule: "Host(`ha.ragnalab.xyz`)"
+      traefik.http.routers.homeassistant.rule: "Host(`ha.${DOMAIN}`)"
       traefik.http.routers.homeassistant.entrypoints: websecure
       traefik.http.services.homeassistant.loadbalancer.server.port: "8123"
       kuma.homeassistant.http.name: Home Assistant
-      kuma.homeassistant.http.url: https://ha.ragnalab.xyz
+      kuma.homeassistant.http.url: https://ha.${DOMAIN}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8123/manifest.json"]
       interval: 30s
