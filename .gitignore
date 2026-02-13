@@ -1,2 +1,25 @@
+# Secrets
 compose/.env
 .vault_pass
+
+# Claude Code
+.claude/
+**/.claude/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Ansible
+*.retry
