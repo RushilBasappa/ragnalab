@@ -17,6 +17,10 @@ services:
       traefik.http.routers.backrest.middlewares: authelia@docker
       kuma.backrest.http.name: Backrest
       kuma.backrest.http.url: https://backups.ragnalab.xyz
+    deploy:
+      resources:
+        limits:
+          memory: 256M
     restart: unless-stopped
 
 volumes:

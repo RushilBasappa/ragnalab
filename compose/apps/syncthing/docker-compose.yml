@@ -18,6 +18,10 @@ services:
       traefik.http.routers.syncthing.middlewares: authelia@docker
       kuma.syncthing.http.name: Syncthing
       kuma.syncthing.http.url: https://sync.ragnalab.xyz
+    deploy:
+      resources:
+        limits:
+          memory: 256M
     restart: unless-stopped
 
 volumes:

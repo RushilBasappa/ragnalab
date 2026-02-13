@@ -16,6 +16,16 @@ services:
       traefik.http.routers.freshrss.middlewares: authelia@docker
       kuma.freshrss.http.name: FreshRSS
       kuma.freshrss.http.url: https://rss.ragnalab.xyz
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/i/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 128M
     restart: unless-stopped
 
 volumes:

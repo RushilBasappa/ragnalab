@@ -23,6 +23,16 @@ services:
       traefik.http.routers.vaultwarden-admin.middlewares: authelia@docker
       kuma.vaultwarden.http.name: Vaultwarden
       kuma.vaultwarden.http.url: https://vault.ragnalab.xyz
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/alive"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 128M
     restart: unless-stopped
 
 volumes:

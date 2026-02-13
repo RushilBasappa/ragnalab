@@ -17,6 +17,10 @@ services:
       traefik.http.routers.filebrowser.middlewares: authelia@docker
       kuma.filebrowser.http.name: FileBrowser
       kuma.filebrowser.http.url: https://files.ragnalab.xyz
+    deploy:
+      resources:
+        limits:
+          memory: 128M
     restart: unless-stopped
 
 volumes:

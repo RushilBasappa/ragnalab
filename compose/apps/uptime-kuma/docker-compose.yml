@@ -14,6 +14,16 @@ services:
       traefik.http.routers.uptime-kuma.middlewares: authelia@docker
       kuma.uptime-kuma.http.name: Uptime Kuma
       kuma.uptime-kuma.http.url: https://uptime.ragnalab.xyz
+    healthcheck:
+      test: ["CMD-SHELL", "extra/healthcheck"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
     restart: unless-stopped
 
   autokuma:
@@ -28,7 +38,12 @@ services:
       - traefik_public
       - socket_proxy
     depends_on:
-      - uptime-kuma
+      uptime-kuma:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 128M
     restart: unless-stopped
 
 volumes:

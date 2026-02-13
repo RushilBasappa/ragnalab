@@ -21,6 +21,16 @@ services:
       traefik.http.routers.pihole.middlewares: authelia@docker
       kuma.pihole.http.name: Pi-hole
       kuma.pihole.http.url: https://pihole.ragnalab.xyz
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/admin/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
     restart: unless-stopped
 
 volumes:

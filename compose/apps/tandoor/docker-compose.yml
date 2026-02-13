@@ -16,8 +16,13 @@ services:
       - tandoor_media:/opt/recipes/mediafiles
     networks:
       - traefik_public
+    deploy:
+      resources:
+        limits:
+          memory: 256M
     depends_on:
-      - tandoor-db
+      tandoor-db:
+        condition: service_healthy
     labels:
       traefik.enable: "true"
       traefik.http.routers.tandoor.rule: "Host(`recipes.ragnalab.xyz`)"
@@ -39,6 +44,15 @@ services:
       - tandoor_postgres_data:/var/lib/postgresql/data
     networks:
       - traefik_public
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tandoor"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 256M
     restart: unless-stopped
 
 volumes:

@@ -17,6 +17,10 @@ services:
       traefik.http.routers.beszel.middlewares: authelia@docker
       kuma.beszel.http.name: Beszel
       kuma.beszel.http.url: https://beszel.ragnalab.xyz
+    deploy:
+      resources:
+        limits:
+          memory: 128M
     restart: unless-stopped
 
 volumes:

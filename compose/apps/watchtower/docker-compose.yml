@@ -11,6 +11,10 @@ services:
       WATCHTOWER_NO_STARTUP_MESSAGE: "false"
     networks:
       - socket_proxy
+    deploy:
+      resources:
+        limits:
+          memory: 128M
     restart: unless-stopped
 
 networks:

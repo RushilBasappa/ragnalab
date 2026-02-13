@@ -22,6 +22,16 @@ services:
       traefik.http.routers.speedtest-tracker.middlewares: authelia@docker
       kuma.speedtest-tracker.http.name: Speedtest Tracker
       kuma.speedtest-tracker.http.url: https://speed.ragnalab.xyz
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/api/healthcheck"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
     restart: unless-stopped
 
 volumes:

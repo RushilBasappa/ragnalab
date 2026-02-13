@@ -15,6 +15,10 @@ services:
       traefik.http.routers.dozzle.middlewares: authelia@docker
       kuma.dozzle.http.name: Dozzle
       kuma.dozzle.http.url: https://logs.ragnalab.xyz
+    deploy:
+      resources:
+        limits:
+          memory: 128M
     restart: unless-stopped
 
 networks:

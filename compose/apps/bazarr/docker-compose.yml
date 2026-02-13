@@ -19,6 +19,16 @@ services:
       traefik.http.routers.bazarr.middlewares: authelia@docker
       kuma.bazarr.http.name: Bazarr
       kuma.bazarr.http.url: https://bazarr.ragnalab.xyz
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6767/ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
     restart: unless-stopped
 
 volumes:

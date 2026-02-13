@@ -17,8 +17,19 @@ services:
       - paperless_consume:/usr/src/paperless/consume
     networks:
       - traefik_public
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     depends_on:
-      - paperless-redis
+      paperless-redis:
+        condition: service_healthy
     labels:
       traefik.enable: "true"
       traefik.http.routers.paperless-ngx.rule: "Host(`paperless.ragnalab.xyz`)"
@@ -36,6 +47,15 @@ services:
       - paperless_redis_data:/data
     networks:
       - traefik_public
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 128M
     restart: unless-stopped
 
 volumes:

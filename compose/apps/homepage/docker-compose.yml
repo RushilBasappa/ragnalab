@@ -33,6 +33,10 @@ services:
       traefik.http.routers.homepage.middlewares: authelia@docker
       kuma.homepage.http.name: Homepage
       kuma.homepage.http.url: https://home.ragnalab.xyz
+    deploy:
+      resources:
+        limits:
+          memory: 256M
     restart: unless-stopped
 
 networks:

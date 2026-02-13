@@ -25,6 +25,10 @@ services:
       traefik.http.services.qbittorrent.loadbalancer.server.port: "8080"
       kuma.qbittorrent.http.name: qBittorrent
       kuma.qbittorrent.http.url: https://qbit.ragnalab.xyz
+    deploy:
+      resources:
+        limits:
+          memory: 128M
     restart: unless-stopped
 
   qbittorrent:
@@ -39,6 +43,16 @@ services:
     volumes:
       - qbittorrent_config:/config
       - media_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     depends_on:
       - gluetun
     restart: unless-stopped

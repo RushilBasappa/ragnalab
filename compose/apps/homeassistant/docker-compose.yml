@@ -13,6 +13,16 @@ services:
       traefik.http.services.homeassistant.loadbalancer.server.port: "8123"
       kuma.homeassistant.http.name: Home Assistant
       kuma.homeassistant.http.url: https://ha.ragnalab.xyz
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8123/manifest.json"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
     restart: unless-stopped
 
 volumes:

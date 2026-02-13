@@ -18,6 +18,16 @@ services:
       traefik.http.services.obsidian-livesync.loadbalancer.server.port: "5984"
       kuma.obsidian-livesync.http.name: Obsidian LiveSync
       kuma.obsidian-livesync.http.url: https://obsidian.ragnalab.xyz
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5984/_up"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
     restart: unless-stopped
 
 volumes:

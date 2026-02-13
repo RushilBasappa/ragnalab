@@ -7,6 +7,8 @@ log:
 api:
   dashboard: true
 
+ping: {}
+
 entryPoints:
   web:
     address: ":80"

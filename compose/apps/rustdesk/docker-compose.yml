@@ -6,6 +6,10 @@ services:
     volumes:
       - rustdesk_data:/root
     network_mode: host
+    deploy:
+      resources:
+        limits:
+          memory: 64M
     depends_on:
       - hbbr
     restart: unless-stopped
@@ -17,6 +21,10 @@ services:
     volumes:
       - rustdesk_data:/root
     network_mode: host
+    deploy:
+      resources:
+        limits:
+          memory: 64M
     restart: unless-stopped
 
 volumes:
