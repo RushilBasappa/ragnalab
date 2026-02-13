@@ -2,123 +2,63 @@
 # Sonarr
 
 - name: Create volumes
-  community.docker.docker_volume:
-    name: "{{ item }}"
-  loop:
-    - sonarr_config
-    - media_data
-
-- name: Start Sonarr
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - sonarr
-    state: present
-
-- name: Wait for Sonarr to be ready
-  ansible.builtin.command: docker exec sonarr curl -sf http://localhost:8989/ping
-  register: result
-  until: result.rc == 0
-  retries: 30
-  delay: 5
-  changed_when: false
-
-- name: Get sonarr_config volume mountpoint
-  community.docker.docker_volume_info:
-    name: sonarr_config
-  register: sonarr_volume
-
-- name: Set config path
-  ansible.builtin.set_fact:
-    sonarr_conf: "{{ sonarr_volume.volume.Mountpoint }}/config.xml"
-
-- name: Read Sonarr config
-  ansible.builtin.slurp:
-    src: "{{ sonarr_conf }}"
-  register: sonarr_config_raw
-  become: true
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: create-volumes
+    volumes: [sonarr_config, media_data]
 
 - name: Extract Sonarr API key
-  ansible.builtin.set_fact:
-    sonarr_api_key: "{{ (sonarr_config_raw.content | b64decode) | regex_search('<ApiKey>(.*)</ApiKey>', '\\1') | first }}"
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: extract-apikey
+    arr_name: sonarr
+    arr_port: 8989
 
-- name: Show Sonarr API key
-  ansible.builtin.debug:
-    msg: "Sonarr API key: {{ sonarr_api_key }}"
-
-- name: Stop Sonarr before patching config
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - sonarr
-    state: stopped
-
-- name: Set Sonarr auth to External
-  ansible.builtin.replace:
-    path: "{{ sonarr_conf }}"
-    regexp: "{{ item.regexp }}"
-    replace: "{{ item.replace }}"
-  loop:
-    - { regexp: '<AuthenticationMethod>.*</AuthenticationMethod>', replace: '<AuthenticationMethod>External</AuthenticationMethod>' }
-    - { regexp: '<AuthenticationRequired>.*</AuthenticationRequired>', replace: '<AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>' }
-  become: true
-
-- name: Start Sonarr with patched config
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - sonarr
-    state: present
-
-- name: Wait for Sonarr to be ready after config patch
-  ansible.builtin.command: docker exec sonarr curl -sf http://localhost:8989/ping
-  register: result
-  until: result.rc == 0
-  retries: 30
-  delay: 5
-  changed_when: false
-
-- name: Check existing root folders
-  ansible.builtin.command: >
-    docker exec sonarr curl -sf
-    -H 'X-Api-Key: {{ sonarr_api_key }}'
-    http://localhost:8989/api/v3/rootfolder
-  register: sonarr_rootfolders
-  changed_when: false
+- name: Patch Sonarr authentication
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: patch-auth
+    arr_name: sonarr
+    arr_port: 8989
 
 - name: Add TV root folder
-  ansible.builtin.command: >
-    docker exec sonarr curl -sf -X POST
-    -H 'Content-Type: application/json'
-    -H 'X-Api-Key: {{ sonarr_api_key }}'
-    -d '{"path":"/data/media/tv"}'
-    http://localhost:8989/api/v3/rootfolder
-  when: "'/data/media/tv' not in sonarr_rootfolders.stdout"
-  changed_when: true
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: add-root-folder
+    arr_name: sonarr
+    arr_port: 8989
+    arr_api_path: /api/v3
+    arr_api_key: "{{ sonarr_api_key }}"
+    arr_root_path: /data/media/tv
 
-- name: Configure 4K Minimal quality profile
-  ansible.builtin.shell:
-    cmd: >
-      python3 {{ playbook_dir }}/../ansible/scripts/configure-arr-quality.py
-      sonarr 8989 {{ sonarr_api_key }}
-  register: sonarr_quality
-  changed_when: sonarr_quality.rc == 2
-  failed_when: sonarr_quality.rc not in [0, 2]
-
-- name: Check existing download clients
-  ansible.builtin.command: >
-    docker exec sonarr curl -sf
-    -H 'X-Api-Key: {{ sonarr_api_key }}'
-    http://localhost:8989/api/v3/downloadclient
-  register: sonarr_clients
-  changed_when: false
+- name: Configure quality profile
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: configure-quality
+    arr_name: sonarr
+    arr_port: 8989
+    arr_api_key: "{{ sonarr_api_key }}"
 
 - name: Add qBittorrent download client
-  ansible.builtin.command: >
-    docker exec sonarr curl -sf -X POST
-    -H 'Content-Type: application/json'
-    -H 'X-Api-Key: {{ sonarr_api_key }}'
-    -d '{"enable":true,"protocol":"torrent","priority":1,"name":"qBittorrent","implementation":"QBittorrent","configContract":"QBittorrentSettings","fields":[{"name":"host","value":"gluetun"},{"name":"port","value":8080},{"name":"category","value":"tv-sonarr"}]}'
-    http://localhost:8989/api/v3/downloadclient
-  when: "'qBittorrent' not in sonarr_clients.stdout"
-  changed_when: true
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: add-download-client
+    arr_name: sonarr
+    arr_port: 8989
+    arr_api_path: /api/v3
+    arr_api_key: "{{ sonarr_api_key }}"
+    arr_qbt_category: tv-sonarr
+
+- name: Add Jellyfin notification
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: add-jellyfin-notify
+    arr_name: sonarr
+    arr_port: 8989
+    arr_api_path: /api/v3
+    arr_api_key: "{{ sonarr_api_key }}"
+    arr_jellyfin_events:
+      onSeriesAdd: false
+      onSeriesDelete: true
+      onEpisodeFileDelete: true
+      onEpisodeFileDeleteForUpgrade: true

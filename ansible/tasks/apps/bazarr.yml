@@ -2,59 +2,53 @@
 # Bazarr
 
 - name: Create volumes
-  community.docker.docker_volume:
-    name: "{{ item }}"
-  loop:
-    - bazarr_config
-    - media_data
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: create-volumes
+    volumes: [bazarr_config, media_data]
 
 - name: Start Bazarr
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - bazarr
-    state: present
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: start
+    services: [bazarr]
 
 - name: Wait for Bazarr to be ready
-  ansible.builtin.command: docker exec bazarr curl -sf http://localhost:6767/ping
-  register: result
-  until: result.rc == 0
-  retries: 30
-  delay: 5
-  changed_when: false
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: wait-ready
+    container_name: bazarr
+    port: 6767
 
-- name: Get bazarr_config volume mountpoint
-  community.docker.docker_volume_info:
-    name: bazarr_config
-  register: bazarr_volume
+- name: Get bazarr_config volume path
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: get-volume-path
+    volume_name: bazarr_config
 
 - name: Set config path
   ansible.builtin.set_fact:
-    bazarr_conf: "{{ bazarr_volume.volume.Mountpoint }}/config/config.yaml"
+    bazarr_conf: "{{ _volume_path }}/config/config.yaml"
 
+# Read Sonarr and Radarr API keys
 - name: Read Sonarr API key
-  ansible.builtin.slurp:
-    src: /var/lib/docker/volumes/sonarr_config/_data/config.xml
-  register: sonarr_config_raw
-  become: true
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: read-apikey
+    arr_name: sonarr
 
 - name: Read Radarr API key
-  ansible.builtin.slurp:
-    src: /var/lib/docker/volumes/radarr_config/_data/config.xml
-  register: radarr_config_raw
-  become: true
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: read-apikey
+    arr_name: radarr
 
-- name: Set API keys
-  ansible.builtin.set_fact:
-    sonarr_api_key: "{{ (sonarr_config_raw.content | b64decode) | regex_search('<ApiKey>(.*)</ApiKey>', '\\1') | first }}"
-    radarr_api_key: "{{ (radarr_config_raw.content | b64decode) | regex_search('<ApiKey>(.*)</ApiKey>', '\\1') | first }}"
-
+# Patch Bazarr config
 - name: Stop Bazarr before patching config
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - bazarr
-    state: stopped
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: stop
+    services: [bazarr]
 
 - name: Read Bazarr config
   ansible.builtin.slurp:
@@ -87,19 +81,17 @@
   become: true
 
 - name: Start Bazarr with patched config
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - bazarr
-    state: present
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: start
+    services: [bazarr]
 
 - name: Wait for Bazarr to be ready after config patch
-  ansible.builtin.command: docker exec bazarr curl -sf http://localhost:6767/ping
-  register: result
-  until: result.rc == 0
-  retries: 30
-  delay: 5
-  changed_when: false
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: wait-ready
+    container_name: bazarr
+    port: 6767
 
 - name: Enable English language and create profile
   ansible.builtin.command:
@@ -125,9 +117,8 @@
   changed_when: "'changed' in bazarr_lang.stdout"
 
 - name: Restart Bazarr to pick up language profile
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - bazarr
-    state: restarted
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: restart
+    services: [bazarr]
   when: bazarr_lang.changed

@@ -43,7 +43,7 @@ headerStyle: boxed
 
 # Status indicators
 statusStyle: dot
-showStats: true
+showStats: false
 hideVersion: true
 disableCollapse: true
 

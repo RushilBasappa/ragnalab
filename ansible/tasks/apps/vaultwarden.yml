@@ -1,13 +1,14 @@
 ---
 # Vaultwarden
 
-- name: Create vaultwarden_data volume
-  community.docker.docker_volume:
-    name: vaultwarden_data
+- name: Create volumes
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: create-volumes
+    volumes: [vaultwarden_data]
 
 - name: Start Vaultwarden
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - vaultwarden
-    state: present
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: start
+    services: [vaultwarden]

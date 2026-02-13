@@ -1,5 +1,5 @@
 ---
-# Media Services
+# Media
 - Media:
     - Jellyfin:
         icon: jellyfin.png
@@ -29,8 +29,6 @@
         icon: radarr.png
         href: https://radarr.ragnalab.xyz
         description: Movie collection manager
-        server: socket-proxy
-        container: radarr
         widget:
           type: radarr
           url: http://radarr:7878
@@ -40,8 +38,6 @@
         icon: sonarr.png
         href: https://sonarr.ragnalab.xyz
         description: TV show collection manager
-        server: socket-proxy
-        container: sonarr
         widget:
           type: sonarr
           url: http://sonarr:8989
@@ -51,8 +47,6 @@
         icon: prowlarr.png
         href: https://prowlarr.ragnalab.xyz
         description: Indexer manager
-        server: socket-proxy
-        container: prowlarr
         widget:
           type: prowlarr
           url: http://prowlarr:9696
@@ -62,8 +56,6 @@
         icon: bazarr.png
         href: https://bazarr.ragnalab.xyz
         description: Subtitle manager
-        server: socket-proxy
-        container: bazarr
         widget:
           type: bazarr
           url: http://bazarr:6767
@@ -89,9 +81,6 @@
         description: Reverse proxy and SSL
         server: socket-proxy
         container: traefik
-        widget:
-          type: traefik
-          url: http://traefik:8080
 
     - Authelia:
         icon: authelia.png
@@ -106,14 +95,24 @@
         description: Network-wide ad blocking
         server: socket-proxy
         container: pihole
-        widget:
-          type: pihole
-          url: http://pihole:80
-          key: "{{HOMEPAGE_VAR_PIHOLE_API_KEY}}"
 
     - Tailscale:
         icon: tailscale.png
         description: Mesh VPN network
+
+    - Backrest:
+        icon: backrest.png
+        href: https://backups.ragnalab.xyz
+        description: Backup management
+        server: socket-proxy
+        container: backrest
+
+    - Home Assistant:
+        icon: home-assistant.png
+        href: https://ha.ragnalab.xyz
+        description: Home automation
+        server: socket-proxy
+        container: homeassistant
 
 # Productivity
 - Productivity:
@@ -149,11 +148,46 @@
         server: socket-proxy
         container: ntfy
 
+    - FreshRSS:
+        icon: freshrss.png
+        href: https://rss.ragnalab.xyz
+        description: RSS feed reader
+        server: socket-proxy
+        container: freshrss
+
+    - Actual Budget:
+        icon: actual.png
+        href: https://budget.ragnalab.xyz
+        description: Personal budgeting
+        server: socket-proxy
+        container: actual-budget
+
+    - Obsidian LiveSync:
+        icon: obsidian.png
+        href: https://obsidian.ragnalab.xyz
+        description: Obsidian notes sync
+        server: socket-proxy
+        container: obsidian-livesync
+
+    - Syncthing:
+        icon: syncthing.png
+        href: https://sync.ragnalab.xyz
+        description: File synchronization
+        server: socket-proxy
+        container: syncthing
+
+    - FileBrowser:
+        icon: filebrowser.png
+        href: https://files.ragnalab.xyz
+        description: Web file manager
+        server: socket-proxy
+        container: filebrowser
+
 # Monitoring
 - Monitoring:
     - Uptime Kuma:
         icon: uptime-kuma.png
-        href: https://status.ragnalab.xyz
+        href: https://uptime.ragnalab.xyz
         description: Uptime monitoring
         server: socket-proxy
         container: uptime-kuma
@@ -164,10 +198,27 @@
 
     - Dozzle:
         icon: dozzle.png
-        href: https://dozzle.ragnalab.xyz
+        href: https://logs.ragnalab.xyz
         description: Container log viewer
         server: socket-proxy
         container: dozzle
+
+    - Beszel:
+        icon: beszel.png
+        href: https://beszel.ragnalab.xyz
+        description: Server monitoring
+        server: socket-proxy
+        container: beszel
+
+    - Speedtest Tracker:
+        icon: speedtest-tracker.png
+        href: https://speed.ragnalab.xyz
+        description: Internet speed monitoring
+        server: socket-proxy
+        container: speedtest-tracker
+        widget:
+          type: speedtest
+          url: http://speedtest-tracker:80
 
     - Watchtower:
         icon: watchtower.png
@@ -179,7 +230,6 @@
 - Remote Access:
     - RustDesk:
         icon: rustdesk.png
-        href: https://rustdesk.ragnalab.xyz
-        description: Remote desktop
+        description: Remote desktop relay server
         server: socket-proxy
         container: rustdesk-hbbs

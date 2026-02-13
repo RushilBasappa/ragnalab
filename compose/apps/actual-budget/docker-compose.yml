@@ -1,0 +1,25 @@
+services:
+  actual-budget:
+    image: actualbudget/actual-server:latest
+    container_name: actual-budget
+    volumes:
+      - actual_data:/data
+    networks:
+      - traefik_public
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.actual-budget.rule: "Host(`budget.ragnalab.xyz`)"
+      traefik.http.routers.actual-budget.entrypoints: websecure
+      traefik.http.services.actual-budget.loadbalancer.server.port: "5006"
+      traefik.http.routers.actual-budget.middlewares: authelia@docker
+      kuma.actual-budget.http.name: Actual Budget
+      kuma.actual-budget.http.url: https://budget.ragnalab.xyz
+    restart: unless-stopped
+
+volumes:
+  actual_data:
+    external: true
+
+networks:
+  traefik_public:
+    external: true

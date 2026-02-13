@@ -19,3 +19,12 @@ include:
   - apps/bazarr/docker-compose.yml
   - apps/jellyfin/docker-compose.yml
   - apps/jellyseerr/docker-compose.yml
+  - apps/freshrss/docker-compose.yml
+  - apps/actual-budget/docker-compose.yml
+  - apps/obsidian-livesync/docker-compose.yml
+  - apps/syncthing/docker-compose.yml
+  - apps/filebrowser/docker-compose.yml
+  - apps/backrest/docker-compose.yml
+  - apps/beszel/docker-compose.yml
+  - apps/homeassistant/docker-compose.yml
+  - apps/speedtest-tracker/docker-compose.yml

@@ -2,123 +2,63 @@
 # Radarr
 
 - name: Create volumes
-  community.docker.docker_volume:
-    name: "{{ item }}"
-  loop:
-    - radarr_config
-    - media_data
-
-- name: Start Radarr
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - radarr
-    state: present
-
-- name: Wait for Radarr to be ready
-  ansible.builtin.command: docker exec radarr curl -sf http://localhost:7878/ping
-  register: result
-  until: result.rc == 0
-  retries: 30
-  delay: 5
-  changed_when: false
-
-- name: Get radarr_config volume mountpoint
-  community.docker.docker_volume_info:
-    name: radarr_config
-  register: radarr_volume
-
-- name: Set config path
-  ansible.builtin.set_fact:
-    radarr_conf: "{{ radarr_volume.volume.Mountpoint }}/config.xml"
-
-- name: Read Radarr config
-  ansible.builtin.slurp:
-    src: "{{ radarr_conf }}"
-  register: radarr_config_raw
-  become: true
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: create-volumes
+    volumes: [radarr_config, media_data]
 
 - name: Extract Radarr API key
-  ansible.builtin.set_fact:
-    radarr_api_key: "{{ (radarr_config_raw.content | b64decode) | regex_search('<ApiKey>(.*)</ApiKey>', '\\1') | first }}"
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: extract-apikey
+    arr_name: radarr
+    arr_port: 7878
 
-- name: Show Radarr API key
-  ansible.builtin.debug:
-    msg: "Radarr API key: {{ radarr_api_key }}"
-
-- name: Stop Radarr before patching config
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - radarr
-    state: stopped
-
-- name: Set Radarr auth to External
-  ansible.builtin.replace:
-    path: "{{ radarr_conf }}"
-    regexp: "{{ item.regexp }}"
-    replace: "{{ item.replace }}"
-  loop:
-    - { regexp: '<AuthenticationMethod>.*</AuthenticationMethod>', replace: '<AuthenticationMethod>External</AuthenticationMethod>' }
-    - { regexp: '<AuthenticationRequired>.*</AuthenticationRequired>', replace: '<AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>' }
-  become: true
-
-- name: Start Radarr with patched config
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - radarr
-    state: present
-
-- name: Wait for Radarr to be ready after config patch
-  ansible.builtin.command: docker exec radarr curl -sf http://localhost:7878/ping
-  register: result
-  until: result.rc == 0
-  retries: 30
-  delay: 5
-  changed_when: false
-
-- name: Check existing root folders
-  ansible.builtin.command: >
-    docker exec radarr curl -sf
-    -H 'X-Api-Key: {{ radarr_api_key }}'
-    http://localhost:7878/api/v3/rootfolder
-  register: radarr_rootfolders
-  changed_when: false
+- name: Patch Radarr authentication
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: patch-auth
+    arr_name: radarr
+    arr_port: 7878
 
 - name: Add movies root folder
-  ansible.builtin.command: >
-    docker exec radarr curl -sf -X POST
-    -H 'Content-Type: application/json'
-    -H 'X-Api-Key: {{ radarr_api_key }}'
-    -d '{"path":"/data/media/movies"}'
-    http://localhost:7878/api/v3/rootfolder
-  when: "'/data/media/movies' not in radarr_rootfolders.stdout"
-  changed_when: true
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: add-root-folder
+    arr_name: radarr
+    arr_port: 7878
+    arr_api_path: /api/v3
+    arr_api_key: "{{ radarr_api_key }}"
+    arr_root_path: /data/media/movies
 
-- name: Configure 4K Minimal quality profile
-  ansible.builtin.shell:
-    cmd: >
-      python3 {{ playbook_dir }}/../ansible/scripts/configure-arr-quality.py
-      radarr 7878 {{ radarr_api_key }}
-  register: radarr_quality
-  changed_when: radarr_quality.rc == 2
-  failed_when: radarr_quality.rc not in [0, 2]
-
-- name: Check existing download clients
-  ansible.builtin.command: >
-    docker exec radarr curl -sf
-    -H 'X-Api-Key: {{ radarr_api_key }}'
-    http://localhost:7878/api/v3/downloadclient
-  register: radarr_clients
-  changed_when: false
+- name: Configure quality profile
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: configure-quality
+    arr_name: radarr
+    arr_port: 7878
+    arr_api_key: "{{ radarr_api_key }}"
 
 - name: Add qBittorrent download client
-  ansible.builtin.command: >
-    docker exec radarr curl -sf -X POST
-    -H 'Content-Type: application/json'
-    -H 'X-Api-Key: {{ radarr_api_key }}'
-    -d '{"enable":true,"protocol":"torrent","priority":1,"name":"qBittorrent","implementation":"QBittorrent","configContract":"QBittorrentSettings","fields":[{"name":"host","value":"gluetun"},{"name":"port","value":8080},{"name":"category","value":"radarr"}]}'
-    http://localhost:7878/api/v3/downloadclient
-  when: "'qBittorrent' not in radarr_clients.stdout"
-  changed_when: true
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: add-download-client
+    arr_name: radarr
+    arr_port: 7878
+    arr_api_path: /api/v3
+    arr_api_key: "{{ radarr_api_key }}"
+    arr_qbt_category: radarr
+
+- name: Add Jellyfin notification
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: add-jellyfin-notify
+    arr_name: radarr
+    arr_port: 7878
+    arr_api_path: /api/v3
+    arr_api_key: "{{ radarr_api_key }}"
+    arr_jellyfin_events:
+      onMovieAdded: false
+      onMovieDelete: true
+      onMovieFileDelete: true
+      onMovieFileDeleteForUpgrade: true

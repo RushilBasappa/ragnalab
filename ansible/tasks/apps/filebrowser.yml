@@ -1,14 +1,14 @@
 ---
-# Uptime Kuma + AutoKuma
+# FileBrowser
 
 - name: Create volumes
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     action: create-volumes
-    volumes: [uptime_kuma_data]
+    volumes: [filebrowser_db, filebrowser_data]
 
-- name: Start Uptime Kuma + AutoKuma
+- name: Start FileBrowser
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     action: start
-    services: [uptime-kuma, autokuma]
+    services: [filebrowser]

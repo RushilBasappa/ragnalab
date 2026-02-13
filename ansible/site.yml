@@ -109,3 +109,40 @@
     - name: Jellyseerr
       ansible.builtin.import_tasks: tasks/apps/jellyseerr.yml
       tags: [jellyseerr]
+
+    # New Apps
+    - name: FreshRSS
+      ansible.builtin.import_tasks: tasks/apps/freshrss.yml
+      tags: [freshrss]
+
+    - name: Actual Budget
+      ansible.builtin.import_tasks: tasks/apps/actual-budget.yml
+      tags: [actual-budget]
+
+    - name: Obsidian LiveSync
+      ansible.builtin.import_tasks: tasks/apps/obsidian-livesync.yml
+      tags: [obsidian-livesync]
+
+    - name: Syncthing
+      ansible.builtin.import_tasks: tasks/apps/syncthing.yml
+      tags: [syncthing]
+
+    - name: FileBrowser
+      ansible.builtin.import_tasks: tasks/apps/filebrowser.yml
+      tags: [filebrowser]
+
+    - name: Backrest
+      ansible.builtin.import_tasks: tasks/apps/backrest.yml
+      tags: [backrest]
+
+    - name: Beszel
+      ansible.builtin.import_tasks: tasks/apps/beszel.yml
+      tags: [beszel]
+
+    - name: Home Assistant
+      ansible.builtin.import_tasks: tasks/apps/homeassistant.yml
+      tags: [homeassistant]
+
+    - name: Speedtest Tracker
+      ansible.builtin.import_tasks: tasks/apps/speedtest-tracker.yml
+      tags: [speedtest-tracker]

@@ -2,8 +2,7 @@
 # Watchtower
 
 - name: Start Watchtower
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - watchtower
-    state: present
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: start
+    services: [watchtower]

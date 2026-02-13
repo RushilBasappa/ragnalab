@@ -1,0 +1,32 @@
+services:
+  backrest:
+    image: garethgeorge/backrest:latest
+    container_name: backrest
+    volumes:
+      - backrest_data:/data
+      - backrest_config:/config
+      - backrest_cache:/cache
+      - /var/lib/docker/volumes:/docker-volumes:ro
+    networks:
+      - traefik_public
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.backrest.rule: "Host(`backups.ragnalab.xyz`)"
+      traefik.http.routers.backrest.entrypoints: websecure
+      traefik.http.services.backrest.loadbalancer.server.port: "9898"
+      traefik.http.routers.backrest.middlewares: authelia@docker
+      kuma.backrest.http.name: Backrest
+      kuma.backrest.http.url: https://backups.ragnalab.xyz
+    restart: unless-stopped
+
+volumes:
+  backrest_data:
+    external: true
+  backrest_config:
+    external: true
+  backrest_cache:
+    external: true
+
+networks:
+  traefik_public:
+    external: true

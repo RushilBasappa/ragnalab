@@ -1,17 +1,17 @@
 ---
 # RustDesk Server (hbbs + hbbr)
 
-- name: Create rustdesk volume
-  community.docker.docker_volume:
-    name: rustdesk_data
+- name: Create volumes
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: create-volumes
+    volumes: [rustdesk_data]
 
-- name: Start rustdesk
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - hbbs
-      - hbbr
-    state: present
+- name: Start RustDesk
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: start
+    services: [hbbs, hbbr]
 
 - name: Copy public key from container
   ansible.builtin.command: docker cp rustdesk-hbbs:/root/id_ed25519.pub /tmp/rustdesk_pubkey

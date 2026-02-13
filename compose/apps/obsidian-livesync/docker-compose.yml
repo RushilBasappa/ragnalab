@@ -1,0 +1,29 @@
+services:
+  obsidian-livesync:
+    image: couchdb:3
+    container_name: obsidian-livesync
+    environment:
+      COUCHDB_USER: ${COUCHDB_USER}
+      COUCHDB_PASSWORD: ${COUCHDB_PASSWORD}
+    ports:
+      - "127.0.0.1:5984:5984"
+    volumes:
+      - couchdb_data:/opt/couchdb/data
+    networks:
+      - traefik_public
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.obsidian-livesync.rule: "Host(`obsidian.ragnalab.xyz`)"
+      traefik.http.routers.obsidian-livesync.entrypoints: websecure
+      traefik.http.services.obsidian-livesync.loadbalancer.server.port: "5984"
+      kuma.obsidian-livesync.http.name: Obsidian LiveSync
+      kuma.obsidian-livesync.http.url: https://obsidian.ragnalab.xyz
+    restart: unless-stopped
+
+volumes:
+  couchdb_data:
+    external: true
+
+networks:
+  traefik_public:
+    external: true

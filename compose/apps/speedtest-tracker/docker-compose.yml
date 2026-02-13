@@ -1,0 +1,33 @@
+services:
+  speedtest-tracker:
+    image: lscr.io/linuxserver/speedtest-tracker:latest
+    container_name: speedtest-tracker
+    environment:
+      APP_KEY: ${SPEEDTEST_APP_KEY}
+      DB_CONNECTION: sqlite
+      PUBLIC_DASHBOARD: "true"
+      SPEEDTEST_SCHEDULE: "0 */6 * * *"
+      ADMIN_NAME: admin
+      ADMIN_EMAIL: admin@ragnalab.xyz
+      ADMIN_PASSWORD: ${SPEEDTEST_ADMIN_PASSWORD}
+    volumes:
+      - speedtest_data:/config
+    networks:
+      - traefik_public
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.speedtest-tracker.rule: "Host(`speed.ragnalab.xyz`)"
+      traefik.http.routers.speedtest-tracker.entrypoints: websecure
+      traefik.http.services.speedtest-tracker.loadbalancer.server.port: "80"
+      traefik.http.routers.speedtest-tracker.middlewares: authelia@docker
+      kuma.speedtest-tracker.http.name: Speedtest Tracker
+      kuma.speedtest-tracker.http.url: https://speed.ragnalab.xyz
+    restart: unless-stopped
+
+volumes:
+  speedtest_data:
+    external: true
+
+networks:
+  traefik_public:
+    external: true

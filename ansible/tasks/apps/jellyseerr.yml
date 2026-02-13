@@ -1,16 +1,17 @@
 ---
 # Jellyseerr
 
-- name: Create jellyseerr_config volume
-  community.docker.docker_volume:
-    name: jellyseerr_config
+- name: Create volumes
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: create-volumes
+    volumes: [jellyseerr_config]
 
 - name: Start Jellyseerr
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - jellyseerr
-    state: present
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: start
+    services: [jellyseerr]
 
 - name: Jellyseerr post-deploy
   ansible.builtin.debug:

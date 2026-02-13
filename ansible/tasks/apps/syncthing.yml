@@ -1,0 +1,67 @@
+---
+# Syncthing
+
+- name: Create volumes
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: create-volumes
+    volumes: [syncthing_config]
+
+- name: Start Syncthing
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: start
+    services: [syncthing]
+
+- name: Get syncthing_config volume path
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: get-volume-path
+    volume_name: syncthing_config
+
+- name: Set config path
+  ansible.builtin.set_fact:
+    syncthing_conf: "{{ _volume_path }}/config/config.xml"
+
+- name: Wait for Syncthing config to exist
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: wait-for-file
+    file_path: "{{ syncthing_conf }}"
+
+- name: Check if insecureAdminAccess already set
+  ansible.builtin.command:
+    cmd: grep -q insecureAdminAccess {{ syncthing_conf }}
+  register: admin_check
+  changed_when: false
+  failed_when: false
+  become: true
+
+- name: Disable Syncthing GUI auth (behind Authelia)
+  when: admin_check.rc != 0
+  block:
+    - name: Stop Syncthing for config patching
+      ansible.builtin.include_tasks: ../shared/helpers.yml
+      vars:
+        action: stop
+        services: [syncthing]
+
+    - name: Add insecureAdminAccess
+      ansible.builtin.lineinfile:
+        path: "{{ syncthing_conf }}"
+        insertafter: '<address>.*</address>'
+        line: '        <insecureAdminAccess>true</insecureAdminAccess>'
+      become: true
+
+    - name: Add insecureSkipHostcheck
+      ansible.builtin.lineinfile:
+        path: "{{ syncthing_conf }}"
+        insertafter: '<insecureAdminAccess>'
+        line: '        <insecureSkipHostcheck>true</insecureSkipHostcheck>'
+      become: true
+
+    - name: Start Syncthing with patched config
+      ansible.builtin.include_tasks: ../shared/helpers.yml
+      vars:
+        action: start
+        services: [syncthing]

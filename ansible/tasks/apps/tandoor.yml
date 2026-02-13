@@ -1,22 +1,17 @@
 ---
 # Tandoor Recipes
 
-- name: Create tandoor_postgres_data volume
-  community.docker.docker_volume:
-    name: tandoor_postgres_data
-
-- name: Create tandoor_static volume
-  community.docker.docker_volume:
-    name: tandoor_static
-
-- name: Create tandoor_media volume
-  community.docker.docker_volume:
-    name: tandoor_media
+- name: Create volumes
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: create-volumes
+    volumes:
+      - tandoor_postgres_data
+      - tandoor_static
+      - tandoor_media
 
 - name: Start Tandoor Recipes
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - tandoor
-      - tandoor-db
-    state: present
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: start
+    services: [tandoor, tandoor-db]

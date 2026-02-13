@@ -7,26 +7,23 @@
 
 # --- Extract API keys from running containers ---
 
-- name: Extract Radarr API key
-  ansible.builtin.shell:
-    cmd: docker exec radarr cat /config/config.xml | grep -oP '<ApiKey>\K[^<]+'
-  register: radarr_key
-  changed_when: false
-  failed_when: false
+- name: Read Radarr API key
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: read-apikey
+    arr_name: radarr
 
-- name: Extract Sonarr API key
-  ansible.builtin.shell:
-    cmd: docker exec sonarr cat /config/config.xml | grep -oP '<ApiKey>\K[^<]+'
-  register: sonarr_key
-  changed_when: false
-  failed_when: false
+- name: Read Sonarr API key
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: read-apikey
+    arr_name: sonarr
 
-- name: Extract Prowlarr API key
-  ansible.builtin.shell:
-    cmd: docker exec prowlarr cat /config/config.xml | grep -oP '<ApiKey>\K[^<]+'
-  register: prowlarr_key
-  changed_when: false
-  failed_when: false
+- name: Read Prowlarr API key
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: read-apikey
+    arr_name: prowlarr
 
 - name: Extract Bazarr API key
   ansible.builtin.shell:
@@ -87,9 +84,9 @@
     regexp: "^{{ item.var }}="
     line: "{{ item.var }}={{ item.value }}"
   loop:
-    - { var: RADARR_API_KEY, value: "{{ radarr_key.stdout }}" }
-    - { var: SONARR_API_KEY, value: "{{ sonarr_key.stdout }}" }
-    - { var: PROWLARR_API_KEY, value: "{{ prowlarr_key.stdout }}" }
+    - { var: RADARR_API_KEY, value: "{{ radarr_api_key }}" }
+    - { var: SONARR_API_KEY, value: "{{ sonarr_api_key }}" }
+    - { var: PROWLARR_API_KEY, value: "{{ prowlarr_api_key }}" }
     - { var: BAZARR_API_KEY, value: "{{ bazarr_key.stdout }}" }
     - { var: JELLYSEERR_API_KEY, value: "{{ jellyseerr_key.stdout }}" }
     - { var: JELLYFIN_API_KEY, value: "{{ jellyfin_key.stdout }}" }
@@ -100,8 +97,7 @@
 # --- Deploy Homepage ---
 
 - name: Start Homepage
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - homepage
-    state: present
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: start
+    services: [homepage]

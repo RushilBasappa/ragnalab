@@ -1,14 +1,14 @@
 ---
-# Uptime Kuma + AutoKuma
+# FreshRSS
 
 - name: Create volumes
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     action: create-volumes
-    volumes: [uptime_kuma_data]
+    volumes: [freshrss_data]
 
-- name: Start Uptime Kuma + AutoKuma
+- name: Start FreshRSS
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     action: start
-    services: [uptime-kuma, autokuma]
+    services: [freshrss]

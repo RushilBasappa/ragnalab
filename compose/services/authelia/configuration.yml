@@ -22,8 +22,15 @@ access_control:
       policy: bypass
     - domain: requests.ragnalab.xyz
       policy: bypass
+    - domain: obsidian.ragnalab.xyz
+      policy: bypass
+    - domain: ha.ragnalab.xyz
+      policy: bypass
 
 session:
+  expiration: 7d
+  inactivity: 1d
+  remember_me: 1M
   cookies:
     - domain: ragnalab.xyz
       authelia_url: https://auth.ragnalab.xyz

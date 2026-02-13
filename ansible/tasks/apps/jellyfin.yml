@@ -2,33 +2,32 @@
 # Jellyfin
 
 - name: Create volumes
-  community.docker.docker_volume:
-    name: "{{ item }}"
-  loop:
-    - jellyfin_config
-    - media_data
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: create-volumes
+    volumes: [jellyfin_config, media_data]
 
 - name: Start Jellyfin
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - jellyfin
-    state: present
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: start
+    services: [jellyfin]
 
-- name: Get jellyfin_config volume mountpoint
-  community.docker.docker_volume_info:
-    name: jellyfin_config
-  register: jellyfin_volume
+- name: Get jellyfin_config volume path
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: get-volume-path
+    volume_name: jellyfin_config
 
 - name: Wait for Jellyfin system config to exist
-  ansible.builtin.wait_for:
-    path: "{{ jellyfin_volume.volume.Mountpoint }}/config/system.xml"
-    timeout: 60
-  become: true
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: wait-for-file
+    file_path: "{{ _volume_path }}/config/system.xml"
 
 - name: Read system config
   ansible.builtin.slurp:
-    src: "{{ jellyfin_volume.volume.Mountpoint }}/config/system.xml"
+    src: "{{ _volume_path }}/config/system.xml"
   register: jellyfin_system_xml
   become: true
 
@@ -43,12 +42,12 @@
   when: jellyfin_wizard_pending
 
 - name: Wait for Jellyfin API to be ready
-  ansible.builtin.command: docker exec jellyfin curl -sf http://localhost:8096/Startup/Configuration
-  register: result
-  until: result.rc == 0
-  retries: 30
-  delay: 5
-  changed_when: false
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: wait-ready
+    container_name: jellyfin
+    port: 8096
+    health_path: Startup/Configuration
   when: jellyfin_wizard_pending
 
 - name: Set startup configuration

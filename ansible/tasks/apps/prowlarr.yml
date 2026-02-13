@@ -1,97 +1,40 @@
 ---
 # Prowlarr
 
-- name: Create prowlarr_config volume
-  community.docker.docker_volume:
-    name: prowlarr_config
-
-- name: Start Prowlarr
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - prowlarr
-    state: present
-
-- name: Wait for Prowlarr to be ready
-  ansible.builtin.command: docker exec prowlarr curl -sf http://localhost:9696/ping
-  register: result
-  until: result.rc == 0
-  retries: 30
-  delay: 5
-  changed_when: false
-
-- name: Get prowlarr_config volume mountpoint
-  community.docker.docker_volume_info:
-    name: prowlarr_config
-  register: prowlarr_volume
-
-- name: Set config path
-  ansible.builtin.set_fact:
-    prowlarr_conf: "{{ prowlarr_volume.volume.Mountpoint }}/config.xml"
-
-- name: Read Prowlarr config
-  ansible.builtin.slurp:
-    src: "{{ prowlarr_conf }}"
-  register: prowlarr_config_raw
-  become: true
+- name: Create volumes
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: create-volumes
+    volumes: [prowlarr_config]
 
 - name: Extract Prowlarr API key
-  ansible.builtin.set_fact:
-    prowlarr_api_key: "{{ (prowlarr_config_raw.content | b64decode) | regex_search('<ApiKey>(.*)</ApiKey>', '\\1') | first }}"
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: extract-apikey
+    arr_name: prowlarr
+    arr_port: 9696
 
-- name: Show Prowlarr API key
-  ansible.builtin.debug:
-    msg: "Prowlarr API key: {{ prowlarr_api_key }}"
+- name: Patch Prowlarr authentication
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: patch-auth
+    arr_name: prowlarr
+    arr_port: 9696
 
-- name: Stop Prowlarr before patching config
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - prowlarr
-    state: stopped
-
-- name: Set Prowlarr auth to External
-  ansible.builtin.replace:
-    path: "{{ prowlarr_conf }}"
-    regexp: "{{ item.regexp }}"
-    replace: "{{ item.replace }}"
-  loop:
-    - { regexp: '<AuthenticationMethod>.*</AuthenticationMethod>', replace: '<AuthenticationMethod>External</AuthenticationMethod>' }
-    - { regexp: '<AuthenticationRequired>.*</AuthenticationRequired>', replace: '<AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>' }
-  become: true
-
-- name: Start Prowlarr with patched config
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - prowlarr
-    state: present
-
-- name: Wait for Prowlarr to be ready after config patch
-  ansible.builtin.command: docker exec prowlarr curl -sf http://localhost:9696/ping
-  register: result
-  until: result.rc == 0
-  retries: 30
-  delay: 5
-  changed_when: false
-
+# Read Sonarr and Radarr API keys for app integrations
 - name: Read Sonarr API key
-  ansible.builtin.slurp:
-    src: /var/lib/docker/volumes/sonarr_config/_data/config.xml
-  register: sonarr_config_raw
-  become: true
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: read-apikey
+    arr_name: sonarr
 
 - name: Read Radarr API key
-  ansible.builtin.slurp:
-    src: /var/lib/docker/volumes/radarr_config/_data/config.xml
-  register: radarr_config_raw
-  become: true
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: read-apikey
+    arr_name: radarr
 
-- name: Set Sonarr and Radarr API keys
-  ansible.builtin.set_fact:
-    sonarr_api_key: "{{ (sonarr_config_raw.content | b64decode) | regex_search('<ApiKey>(.*)</ApiKey>', '\\1') | first }}"
-    radarr_api_key: "{{ (radarr_config_raw.content | b64decode) | regex_search('<ApiKey>(.*)</ApiKey>', '\\1') | first }}"
-
+# Prowlarr-specific: add Sonarr and Radarr as applications
 - name: Check existing Prowlarr applications
   ansible.builtin.command: >
     docker exec prowlarr curl -sf

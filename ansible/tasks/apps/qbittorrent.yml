@@ -2,20 +2,16 @@
 # Gluetun VPN + qBittorrent
 
 - name: Create volumes
-  community.docker.docker_volume:
-    name: "{{ item }}"
-  loop:
-    - gluetun_data
-    - qbittorrent_config
-    - media_data
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: create-volumes
+    volumes: [gluetun_data, qbittorrent_config, media_data]
 
 - name: Start Gluetun + qBittorrent
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - gluetun
-      - qbittorrent
-    state: present
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: start
+    services: [gluetun, qbittorrent]
 
 - name: Wait for Gluetun to be healthy
   ansible.builtin.command: docker inspect --format '{{ '{{' }}.State.Health.Status{{ '}}' }}' gluetun
@@ -25,27 +21,27 @@
   delay: 5
   changed_when: false
 
-- name: Get qbittorrent_config volume mountpoint
-  community.docker.docker_volume_info:
-    name: qbittorrent_config
-  register: qbit_volume
+- name: Get qBittorrent config path
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: get-volume-path
+    volume_name: qbittorrent_config
 
 - name: Set config path
   ansible.builtin.set_fact:
-    qbit_conf: "{{ qbit_volume.volume.Mountpoint }}/qBittorrent/qBittorrent.conf"
+    qbit_conf: "{{ _volume_path }}/qBittorrent/qBittorrent.conf"
 
 - name: Wait for qBittorrent config to exist
-  ansible.builtin.wait_for:
-    path: "{{ qbit_conf }}"
-    timeout: 60
-  become: true
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: wait-for-file
+    file_path: "{{ qbit_conf }}"
 
 - name: Stop qBittorrent before patching config
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - qbittorrent
-    state: stopped
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: stop
+    services: [qbittorrent]
 
 - name: Patch qBittorrent config
   community.general.ini_file:
@@ -68,13 +64,14 @@
   become: true
 
 - name: Create media directory structure
-  community.docker.docker_volume_info:
-    name: media_data
-  register: media_volume
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: get-volume-path
+    volume_name: media_data
 
 - name: Ensure media directories exist
   ansible.builtin.file:
-    path: "{{ media_volume.volume.Mountpoint }}/{{ item }}"
+    path: "{{ _volume_path }}/{{ item }}"
     state: directory
     owner: "1000"
     group: "1000"
@@ -89,11 +86,10 @@
   become: true
 
 - name: Start qBittorrent with patched config
-  community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
-    services:
-      - qbittorrent
-    state: present
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: start
+    services: [qbittorrent]
 
 - name: Wait for Gluetun port forwarding
   ansible.builtin.command: >

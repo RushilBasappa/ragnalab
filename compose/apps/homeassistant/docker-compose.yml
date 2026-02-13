@@ -1,0 +1,24 @@
+services:
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: homeassistant
+    volumes:
+      - homeassistant_config:/config
+    networks:
+      - traefik_public
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.homeassistant.rule: "Host(`ha.ragnalab.xyz`)"
+      traefik.http.routers.homeassistant.entrypoints: websecure
+      traefik.http.services.homeassistant.loadbalancer.server.port: "8123"
+      kuma.homeassistant.http.name: Home Assistant
+      kuma.homeassistant.http.url: https://ha.ragnalab.xyz
+    restart: unless-stopped
+
+volumes:
+  homeassistant_config:
+    external: true
+
+networks:
+  traefik_public:
+    external: true

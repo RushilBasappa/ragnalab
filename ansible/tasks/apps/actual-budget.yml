@@ -1,14 +1,14 @@
 ---
-# Uptime Kuma + AutoKuma
+# Actual Budget
 
 - name: Create volumes
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     action: create-volumes
-    volumes: [uptime_kuma_data]
+    volumes: [actual_data]
 
-- name: Start Uptime Kuma + AutoKuma
+- name: Start Actual Budget
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     action: start
-    services: [uptime-kuma, autokuma]
+    services: [actual-budget]

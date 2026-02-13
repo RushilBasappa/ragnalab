@@ -110,3 +110,31 @@ jellyfin:
 
 jellyseerr:
 	$(call app,jellyseerr,jellyseerr,jellyseerr_config)
+
+# New Apps
+freshrss:
+	$(call app,freshrss,freshrss,freshrss_data)
+
+actual-budget:
+	$(call app,actual-budget,actual-budget,actual_data)
+
+obsidian-livesync:
+	$(call app,obsidian-livesync,obsidian-livesync,couchdb_data)
+
+syncthing:
+	$(call app,syncthing,syncthing,syncthing_config)
+
+filebrowser:
+	$(call app,filebrowser,filebrowser,filebrowser_db filebrowser_data)
+
+backrest:
+	$(call app,backrest,backrest,backrest_data backrest_config backrest_cache)
+
+beszel:
+	$(call app,beszel,beszel,beszel_data)
+
+homeassistant:
+	$(call app,homeassistant,homeassistant,homeassistant_config)
+
+speedtest-tracker:
+	$(call app,speedtest-tracker,speedtest-tracker,speedtest_data)

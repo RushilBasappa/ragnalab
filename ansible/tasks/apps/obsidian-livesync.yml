@@ -1,0 +1,81 @@
+---
+# Obsidian LiveSync (CouchDB)
+
+- name: Create volumes
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: create-volumes
+    volumes: [couchdb_data]
+
+- name: Read CouchDB credentials from .env
+  ansible.builtin.set_fact:
+    couchdb_user: "{{ lookup('pipe', 'grep ^COUCHDB_USER= ' + playbook_dir + '/../compose/.env | cut -d= -f2') | default('admin', true) }}"
+    couchdb_password: "{{ lookup('pipe', 'grep ^COUCHDB_PASSWORD= ' + playbook_dir + '/../compose/.env | cut -d= -f2') }}"
+
+- name: Start Obsidian LiveSync
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    action: start
+    services: [obsidian-livesync]
+
+- name: Wait for CouchDB to be ready
+  ansible.builtin.uri:
+    url: http://localhost:5984/
+    user: "{{ couchdb_user }}"
+    password: "{{ couchdb_password }}"
+    force_basic_auth: true
+    status_code: 200
+  register: couchdb_health
+  retries: 10
+  delay: 5
+  until: couchdb_health.status == 200
+
+- name: Configure CouchDB single-node setup
+  ansible.builtin.uri:
+    url: http://localhost:5984/_cluster_setup
+    method: POST
+    user: "{{ couchdb_user }}"
+    password: "{{ couchdb_password }}"
+    force_basic_auth: true
+    body_format: json
+    body:
+      action: enable_single_node
+      username: "{{ couchdb_user }}"
+      password: "{{ couchdb_password }}"
+      bind_address: "0.0.0.0"
+      port: 5984
+    status_code: [200, 201]
+  changed_when: false
+
+- name: Enable CORS on CouchDB
+  ansible.builtin.uri:
+    url: "http://localhost:5984/_node/_local/_config/{{ item.section }}/{{ item.key }}"
+    method: PUT
+    user: "{{ couchdb_user }}"
+    password: "{{ couchdb_password }}"
+    force_basic_auth: true
+    headers:
+      Content-Type: application/json
+    body: '"{{ item.value }}"'
+    status_code: [200, 201]
+  loop:
+    - { section: httpd, key: enable_cors, value: "true" }
+    - { section: cors, key: origins, value: "app://obsidian.md,capacitor://localhost,http://localhost" }
+    - { section: cors, key: credentials, value: "true" }
+    - { section: cors, key: headers, value: "accept, authorization, content-type, origin, referer" }
+    - { section: cors, key: methods, value: "GET, PUT, POST, HEAD, DELETE" }
+    - { section: cors, key: max_age, value: "3600" }
+  changed_when: false
+
+- name: Set CouchDB max document size (100 MB)
+  ansible.builtin.uri:
+    url: http://localhost:5984/_node/_local/_config/couchdb/max_document_size
+    method: PUT
+    user: "{{ couchdb_user }}"
+    password: "{{ couchdb_password }}"
+    force_basic_auth: true
+    headers:
+      Content-Type: application/json
+    body: '"104857600"'
+    status_code: [200, 201]
+  changed_when: false
