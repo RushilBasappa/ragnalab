@@ -4,5 +4,5 @@
 - name: Start Dozzle
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: start
+    helper: start
     services: [dozzle]

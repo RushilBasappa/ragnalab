@@ -4,7 +4,7 @@
 - name: Create volumes
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: create-volumes
+    helper: create-volumes
     volumes: [couchdb_data]
 
 - name: Read CouchDB credentials from .env
@@ -15,7 +15,7 @@
 - name: Start Obsidian LiveSync
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: start
+    helper: start
     services: [obsidian-livesync]
 
 - name: Wait for CouchDB to be ready
@@ -39,7 +39,7 @@
     force_basic_auth: true
     body_format: json
     body:
-      action: enable_single_node
+      helper: enable_single_node
       username: "{{ couchdb_user }}"
       password: "{{ couchdb_password }}"
       bind_address: "0.0.0.0"

@@ -4,20 +4,20 @@
 - name: Create volumes
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: create-volumes
+    helper: create-volumes
     volumes: [prowlarr_config]
 
 - name: Extract Prowlarr API key
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: extract-apikey
+    helper: extract-apikey
     arr_name: prowlarr
     arr_port: 9696
 
 - name: Patch Prowlarr authentication
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: patch-auth
+    helper: patch-auth
     arr_name: prowlarr
     arr_port: 9696
 
@@ -25,13 +25,13 @@
 - name: Read Sonarr API key
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: read-apikey
+    helper: read-apikey
     arr_name: sonarr
 
 - name: Read Radarr API key
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: read-apikey
+    helper: read-apikey
     arr_name: radarr
 
 # Prowlarr-specific: add Sonarr and Radarr as applications

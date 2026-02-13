@@ -1,7 +1,7 @@
 ---
 # Shared Helper Functions
 #
-# Usage: include_tasks with 'action' parameter
+# Usage: include_tasks with 'helper' parameter
 #
 # General Actions:
 #   create-volumes      - Create one or more Docker volumes
@@ -29,7 +29,7 @@
   community.docker.docker_volume:
     name: "{{ item }}"
   loop: "{{ volumes }}"
-  when: action == 'create-volumes'
+  when: helper == 'create-volumes'
 
 # =============================================================================
 # START CONTAINER(S)
@@ -40,7 +40,7 @@
     project_src: "{{ playbook_dir }}/../compose"
     services: "{{ services }}"
     state: present
-  when: action == 'start'
+  when: helper == 'start'
 
 # =============================================================================
 # STOP CONTAINER(S)
@@ -51,7 +51,7 @@
     project_src: "{{ playbook_dir }}/../compose"
     services: "{{ services }}"
     state: stopped
-  when: action == 'stop'
+  when: helper == 'stop'
 
 # =============================================================================
 # RESTART CONTAINER(S)
@@ -62,21 +62,21 @@
     project_src: "{{ playbook_dir }}/../compose"
     services: "{{ services }}"
     state: restarted
-  when: action == 'restart'
+  when: helper == 'restart'
 
 # =============================================================================
 # WAIT FOR CONTAINER READY (curl healthcheck)
-# Required: container_name, port
+# Required: container_name, check_port
 # Optional: health_path (default: ping)
 # =============================================================================
 - name: "Wait for {{ container_name }} to be ready"
-  ansible.builtin.command: "docker exec {{ container_name }} curl -sf http://localhost:{{ port }}/{{ health_path | default('ping') }}"
+  ansible.builtin.command: "docker exec {{ container_name }} curl -sf http://localhost:{{ check_port }}/{{ health_path | default('ping') }}"
   register: _wait_result
   until: _wait_result.rc == 0
   retries: 30
   delay: 5
   changed_when: false
-  when: action == 'wait-ready'
+  when: helper == 'wait-ready'
 
 # =============================================================================
 # GET VOLUME MOUNTPOINT
@@ -87,12 +87,12 @@
   community.docker.docker_volume_info:
     name: "{{ volume_name }}"
   register: _vol_info
-  when: action == 'get-volume-path'
+  when: helper == 'get-volume-path'
 
 - name: Set volume path fact
   ansible.builtin.set_fact:
     _volume_path: "{{ _vol_info.volume.Mountpoint }}"
-  when: action == 'get-volume-path'
+  when: helper == 'get-volume-path'
 
 # =============================================================================
 # WAIT FOR FILE TO EXIST
@@ -104,7 +104,7 @@
     path: "{{ file_path }}"
     timeout: "{{ timeout | default(60) }}"
   become: true
-  when: action == 'wait-for-file'
+  when: helper == 'wait-for-file'
 
 # =============================================================================
 # EXTRACT API KEY (start *arr container + read config.xml)
@@ -117,7 +117,7 @@
     services:
       - "{{ arr_name }}"
     state: present
-  when: action == 'extract-apikey'
+  when: helper == 'extract-apikey'
 
 - name: "[{{ arr_name }}] Wait for ready"
   ansible.builtin.command: "docker exec {{ arr_name }} curl -sf http://localhost:{{ arr_port }}/ping"
@@ -126,31 +126,31 @@
   retries: 30
   delay: 5
   changed_when: false
-  when: action == 'extract-apikey'
+  when: helper == 'extract-apikey'
 
 - name: "[{{ arr_name }}] Get config volume mountpoint"
   community.docker.docker_volume_info:
     name: "{{ arr_name }}_config"
   register: _arr_volume
-  when: action in ['extract-apikey', 'read-apikey']
+  when: helper in ['extract-apikey', 'read-apikey']
 
 - name: "[{{ arr_name }}] Read config.xml"
   ansible.builtin.slurp:
     src: "{{ _arr_volume.volume.Mountpoint }}/config.xml"
   register: _arr_config_raw
   become: true
-  when: action in ['extract-apikey', 'read-apikey']
+  when: helper in ['extract-apikey', 'read-apikey']
 
 - name: "[{{ arr_name }}] Set API key facts"
   ansible.builtin.set_fact:
     "{{ arr_name }}_api_key": "{{ (_arr_config_raw.content | b64decode) | regex_search('<ApiKey>(.*)</ApiKey>', '\\1') | first }}"
     arr_api_key: "{{ (_arr_config_raw.content | b64decode) | regex_search('<ApiKey>(.*)</ApiKey>', '\\1') | first }}"
-  when: action in ['extract-apikey', 'read-apikey']
+  when: helper in ['extract-apikey', 'read-apikey']
 
 - name: "[{{ arr_name }}] API key"
   ansible.builtin.debug:
     msg: "{{ arr_name }} API key: {{ arr_api_key }}"
-  when: action in ['extract-apikey', 'read-apikey']
+  when: helper in ['extract-apikey', 'read-apikey']
 
 # =============================================================================
 # PATCH AUTH (stop → patch XML → start → wait)
@@ -162,13 +162,13 @@
     services:
       - "{{ arr_name }}"
     state: stopped
-  when: action == 'patch-auth'
+  when: helper == 'patch-auth'
 
 - name: "[{{ arr_name }}] Get config volume for auth patch"
   community.docker.docker_volume_info:
     name: "{{ arr_name }}_config"
   register: _arr_volume_auth
-  when: action == 'patch-auth'
+  when: helper == 'patch-auth'
 
 - name: "[{{ arr_name }}] Set auth to External"
   ansible.builtin.replace:
@@ -179,7 +179,7 @@
     - { regexp: '<AuthenticationMethod>.*</AuthenticationMethod>', replace: '<AuthenticationMethod>External</AuthenticationMethod>' }
     - { regexp: '<AuthenticationRequired>.*</AuthenticationRequired>', replace: '<AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>' }
   become: true
-  when: action == 'patch-auth'
+  when: helper == 'patch-auth'
 
 - name: "[{{ arr_name }}] Start container after auth patch"
   community.docker.docker_compose_v2:
@@ -187,7 +187,7 @@
     services:
       - "{{ arr_name }}"
     state: present
-  when: action == 'patch-auth'
+  when: helper == 'patch-auth'
 
 - name: "[{{ arr_name }}] Wait for ready after auth patch"
   ansible.builtin.command: "docker exec {{ arr_name }} curl -sf http://localhost:{{ arr_port }}/ping"
@@ -196,7 +196,7 @@
   retries: 30
   delay: 5
   changed_when: false
-  when: action == 'patch-auth'
+  when: helper == 'patch-auth'
 
 # =============================================================================
 # ADD ROOT FOLDER
@@ -209,7 +209,7 @@
     http://localhost:{{ arr_port }}{{ arr_api_path }}/rootfolder
   register: _arr_rootfolders
   changed_when: false
-  when: action == 'add-root-folder'
+  when: helper == 'add-root-folder'
 
 - name: "[{{ arr_name }}] Add root folder {{ arr_root_path }}"
   ansible.builtin.command: >
@@ -218,7 +218,7 @@
     -H 'X-Api-Key: {{ arr_api_key }}'
     -d '{"path":"{{ arr_root_path }}"}'
     http://localhost:{{ arr_port }}{{ arr_api_path }}/rootfolder
-  when: action == 'add-root-folder' and arr_root_path not in _arr_rootfolders.stdout
+  when: helper == 'add-root-folder' and arr_root_path not in _arr_rootfolders.stdout
   changed_when: true
 
 # =============================================================================
@@ -232,7 +232,7 @@
     http://localhost:{{ arr_port }}{{ arr_api_path }}/downloadclient
   register: _arr_clients
   changed_when: false
-  when: action == 'add-download-client'
+  when: helper == 'add-download-client'
 
 - name: "[{{ arr_name }}] Add qBittorrent download client"
   ansible.builtin.command: >
@@ -241,7 +241,7 @@
     -H 'X-Api-Key: {{ arr_api_key }}'
     -d '{"enable":true,"protocol":"torrent","priority":1,"name":"qBittorrent","implementation":"QBittorrent","configContract":"QBittorrentSettings","fields":[{"name":"host","value":"gluetun"},{"name":"port","value":8080},{"name":"category","value":"{{ arr_qbt_category }}"}]}'
     http://localhost:{{ arr_port }}{{ arr_api_path }}/downloadclient
-  when: action == 'add-download-client' and "'qBittorrent' not in _arr_clients.stdout"
+  when: helper == 'add-download-client' and "'qBittorrent' not in _arr_clients.stdout"
   changed_when: true
 
 # =============================================================================
@@ -252,7 +252,7 @@
 - name: "[{{ arr_name }}] Read Jellyfin API key from .env"
   ansible.builtin.set_fact:
     _jellyfin_api_key: "{{ lookup('ansible.builtin.ini', 'JELLYFIN_API_KEY', type='properties', file=playbook_dir + '/../compose/.env') }}"
-  when: action == 'add-jellyfin-notify'
+  when: helper == 'add-jellyfin-notify'
 
 - name: "[{{ arr_name }}] Check existing notifications"
   ansible.builtin.command: >
@@ -261,7 +261,7 @@
     http://localhost:{{ arr_port }}{{ arr_api_path }}/notification
   register: _arr_notifications
   changed_when: false
-  when: action == 'add-jellyfin-notify'
+  when: helper == 'add-jellyfin-notify'
 
 - name: "[{{ arr_name }}] Build Jellyfin notification payload"
   ansible.builtin.set_fact:
@@ -283,7 +283,7 @@
       onUpgrade: true
       onRename: true
       tags: []
-  when: action == 'add-jellyfin-notify'
+  when: helper == 'add-jellyfin-notify'
 
 - name: "[{{ arr_name }}] Add Jellyfin notification"
   ansible.builtin.command: >
@@ -292,7 +292,7 @@
     -H 'X-Api-Key: {{ arr_api_key }}'
     -d '{{ _notify_payload | to_json }}'
     http://localhost:{{ arr_port }}{{ arr_api_path }}/notification
-  when: action == 'add-jellyfin-notify' and "'Jellyfin' not in _arr_notifications.stdout"
+  when: helper == 'add-jellyfin-notify' and "'Jellyfin' not in _arr_notifications.stdout"
   changed_when: true
 
 # =============================================================================
@@ -307,4 +307,4 @@
   register: _arr_quality
   changed_when: _arr_quality.rc == 2
   failed_when: _arr_quality.rc not in [0, 2]
-  when: action == 'configure-quality'
+  when: helper == 'configure-quality'

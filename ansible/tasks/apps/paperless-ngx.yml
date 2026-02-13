@@ -4,7 +4,7 @@
 - name: Create volumes
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: create-volumes
+    helper: create-volumes
     volumes:
       - paperless_data
       - paperless_media
@@ -15,5 +15,5 @@
 - name: Start Paperless-ngx
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: start
+    helper: start
     services: [paperless-ngx, paperless-redis]

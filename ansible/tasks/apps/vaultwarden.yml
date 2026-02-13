@@ -4,11 +4,11 @@
 - name: Create volumes
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: create-volumes
+    helper: create-volumes
     volumes: [vaultwarden_data]
 
 - name: Start Vaultwarden
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: start
+    helper: start
     services: [vaultwarden]

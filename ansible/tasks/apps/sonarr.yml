@@ -4,27 +4,27 @@
 - name: Create volumes
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: create-volumes
+    helper: create-volumes
     volumes: [sonarr_config, media_data]
 
 - name: Extract Sonarr API key
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: extract-apikey
+    helper: extract-apikey
     arr_name: sonarr
     arr_port: 8989
 
 - name: Patch Sonarr authentication
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: patch-auth
+    helper: patch-auth
     arr_name: sonarr
     arr_port: 8989
 
 - name: Add TV root folder
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: add-root-folder
+    helper: add-root-folder
     arr_name: sonarr
     arr_port: 8989
     arr_api_path: /api/v3
@@ -34,7 +34,7 @@
 - name: Configure quality profile
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: configure-quality
+    helper: configure-quality
     arr_name: sonarr
     arr_port: 8989
     arr_api_key: "{{ sonarr_api_key }}"
@@ -42,7 +42,7 @@
 - name: Add qBittorrent download client
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: add-download-client
+    helper: add-download-client
     arr_name: sonarr
     arr_port: 8989
     arr_api_path: /api/v3
@@ -52,7 +52,7 @@
 - name: Add Jellyfin notification
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: add-jellyfin-notify
+    helper: add-jellyfin-notify
     arr_name: sonarr
     arr_port: 8989
     arr_api_path: /api/v3

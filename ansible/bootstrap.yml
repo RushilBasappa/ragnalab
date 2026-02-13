@@ -1,0 +1,72 @@
+---
+# Full system bootstrap: bare Raspberry Pi → production-ready homelab
+# Usage: make bootstrap
+
+- name: RagnaLab Bootstrap
+  hosts: ragnalab
+  become: false
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    # ── Phase 1: System preparation ──────────────────────────────
+    - name: System update
+      ansible.builtin.import_tasks: tasks/bootstrap/system-update.yml
+      tags: [bootstrap, system-update]
+
+    - name: GitHub SSH setup
+      ansible.builtin.import_tasks: tasks/bootstrap/github-ssh.yml
+      tags: [bootstrap, github-ssh]
+
+    - name: Pause — add SSH key to GitHub
+      ansible.builtin.pause:
+        prompt: |
+
+          ═══════════════════════════════════════════════════════
+           Copy the SSH public key above, add it at:
+           https://github.com/settings/ssh/new
+           Press Enter when done...
+          ═══════════════════════════════════════════════════════
+      when: github_key_created is defined and github_key_created is changed
+      tags: [bootstrap, github-ssh]
+
+    - name: Tailscale VPN
+      ansible.builtin.import_tasks: tasks/bootstrap/tailscale.yml
+      tags: [bootstrap, tailscale]
+
+    # ── Phase 2: Docker (may require reboot) ─────────────────────
+    - name: Docker
+      ansible.builtin.import_tasks: tasks/bootstrap/docker.yml
+      tags: [bootstrap, docker]
+
+    - name: Reboot for cgroup changes
+      ansible.builtin.reboot:
+        reboot_timeout: 300
+        msg: "Rebooting for Docker cgroup configuration"
+      become: true
+      when: cmdline_changed is defined and cmdline_changed is changed
+      tags: [bootstrap, docker]
+
+    - name: Wait for system
+      ansible.builtin.wait_for_connection:
+        timeout: 300
+      when: cmdline_changed is defined and cmdline_changed is changed
+      tags: [bootstrap, docker]
+
+    # ── Phase 3: Shell ───────────────────────────────────────────
+    - name: Zsh + Starship
+      ansible.builtin.import_tasks: tasks/bootstrap/zsh.yml
+      tags: [bootstrap, zsh]
+
+    - name: Bootstrap complete
+      ansible.builtin.debug:
+        msg: |
+
+          ═══════════════════════════════════════════════════════
+           RagnaLab Bootstrap Complete!
+
+           Next:
+             make init          # Decrypt secrets
+             make deploy-all    # Deploy everything
+          ═══════════════════════════════════════════════════════
+      tags: [bootstrap]

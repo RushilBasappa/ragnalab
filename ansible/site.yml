@@ -1,148 +1,154 @@
 ---
-- name: RagnaLab Bootstrap
+# RagnaLab — single-service deployment via tags
+# Usage: ansible-playbook site.yml --tags sonarr
+#        make service TAGS=sonarr,radarr
+
+- name: RagnaLab
   hosts: ragnalab
   become: false
   vars_files:
     - vars/main.yml
 
   tasks:
-    # Bootstrap
+    # ── Bootstrap ────────────────────────────────────────────────
     - name: System update
       ansible.builtin.import_tasks: tasks/bootstrap/system-update.yml
-      tags: [system-update]
+      tags: [system-update, bootstrap]
 
     - name: GitHub SSH setup
       ansible.builtin.import_tasks: tasks/bootstrap/github-ssh.yml
-      tags: [github-ssh]
+      tags: [github-ssh, bootstrap]
 
     - name: Tailscale VPN
       ansible.builtin.import_tasks: tasks/bootstrap/tailscale.yml
-      tags: [tailscale]
+      tags: [tailscale, bootstrap]
 
     - name: Docker
       ansible.builtin.import_tasks: tasks/bootstrap/docker.yml
-      tags: [docker]
+      tags: [docker, bootstrap]
 
     - name: Zsh + Starship
       ansible.builtin.import_tasks: tasks/bootstrap/zsh.yml
-      tags: [zsh]
+      tags: [zsh, bootstrap]
 
-    # Services
+    # ── Infrastructure ───────────────────────────────────────────
     - name: Socket Proxy
       ansible.builtin.import_tasks: tasks/services/socket-proxy.yml
-      tags: [socket-proxy]
+      tags: [socket-proxy, infrastructure]
 
     - name: Authelia
       ansible.builtin.import_tasks: tasks/services/authelia.yml
-      tags: [authelia]
+      tags: [authelia, infrastructure]
 
     - name: Traefik
       ansible.builtin.import_tasks: tasks/services/traefik.yml
-      tags: [traefik]
+      tags: [traefik, infrastructure]
 
     - name: Pi-hole
       ansible.builtin.import_tasks: tasks/services/pihole.yml
-      tags: [pihole]
+      tags: [pihole, infrastructure]
 
-    # Apps
-    - name: RustDesk
-      ansible.builtin.import_tasks: tasks/apps/rustdesk.yml
-      tags: [rustdesk]
-
-    - name: Homepage
-      ansible.builtin.import_tasks: tasks/apps/homepage.yml
-      tags: [homepage]
-
-    - name: Uptime Kuma
-      ansible.builtin.import_tasks: tasks/apps/uptime-kuma.yml
-      tags: [uptime-kuma]
-
-    - name: Vaultwarden
-      ansible.builtin.import_tasks: tasks/apps/vaultwarden.yml
-      tags: [vaultwarden]
-
-    - name: Paperless-ngx
-      ansible.builtin.import_tasks: tasks/apps/paperless-ngx.yml
-      tags: [paperless-ngx]
-
-    - name: Ntfy
-      ansible.builtin.import_tasks: tasks/apps/ntfy.yml
-      tags: [ntfy]
-
-    - name: Tandoor Recipes
-      ansible.builtin.import_tasks: tasks/apps/tandoor.yml
-      tags: [tandoor]
-
-    - name: Dozzle
-      ansible.builtin.import_tasks: tasks/apps/dozzle.yml
-      tags: [dozzle]
-
-    - name: Watchtower
-      ansible.builtin.import_tasks: tasks/apps/watchtower.yml
-      tags: [watchtower]
-
-    # Media
+    # ── Media Stack ──────────────────────────────────────────────
     - name: qBittorrent + Gluetun
       ansible.builtin.import_tasks: tasks/apps/qbittorrent.yml
-      tags: [qbittorrent]
+      tags: [qbittorrent, media]
 
     - name: Sonarr
       ansible.builtin.import_tasks: tasks/apps/sonarr.yml
-      tags: [sonarr]
+      tags: [sonarr, media]
 
     - name: Radarr
       ansible.builtin.import_tasks: tasks/apps/radarr.yml
-      tags: [radarr]
+      tags: [radarr, media]
 
     - name: Prowlarr
       ansible.builtin.import_tasks: tasks/apps/prowlarr.yml
-      tags: [prowlarr]
+      tags: [prowlarr, media]
 
     - name: Bazarr
       ansible.builtin.import_tasks: tasks/apps/bazarr.yml
-      tags: [bazarr]
+      tags: [bazarr, media]
 
     - name: Jellyfin
       ansible.builtin.import_tasks: tasks/apps/jellyfin.yml
-      tags: [jellyfin]
+      tags: [jellyfin, media]
 
     - name: Jellyseerr
       ansible.builtin.import_tasks: tasks/apps/jellyseerr.yml
-      tags: [jellyseerr]
+      tags: [jellyseerr, media]
 
-    # New Apps
-    - name: FreshRSS
-      ansible.builtin.import_tasks: tasks/apps/freshrss.yml
-      tags: [freshrss]
+    # ── Monitoring ───────────────────────────────────────────────
+    - name: Uptime Kuma
+      ansible.builtin.import_tasks: tasks/apps/uptime-kuma.yml
+      tags: [uptime-kuma, apps]
 
-    - name: Actual Budget
-      ansible.builtin.import_tasks: tasks/apps/actual-budget.yml
-      tags: [actual-budget]
+    - name: Dozzle
+      ansible.builtin.import_tasks: tasks/apps/dozzle.yml
+      tags: [dozzle, apps]
 
-    - name: Obsidian LiveSync
-      ansible.builtin.import_tasks: tasks/apps/obsidian-livesync.yml
-      tags: [obsidian-livesync]
-
-    - name: Syncthing
-      ansible.builtin.import_tasks: tasks/apps/syncthing.yml
-      tags: [syncthing]
-
-    - name: FileBrowser
-      ansible.builtin.import_tasks: tasks/apps/filebrowser.yml
-      tags: [filebrowser]
-
-    - name: Backrest
-      ansible.builtin.import_tasks: tasks/apps/backrest.yml
-      tags: [backrest]
+    - name: Watchtower
+      ansible.builtin.import_tasks: tasks/apps/watchtower.yml
+      tags: [watchtower, apps]
 
     - name: Beszel
       ansible.builtin.import_tasks: tasks/apps/beszel.yml
-      tags: [beszel]
-
-    - name: Home Assistant
-      ansible.builtin.import_tasks: tasks/apps/homeassistant.yml
-      tags: [homeassistant]
+      tags: [beszel, apps]
 
     - name: Speedtest Tracker
       ansible.builtin.import_tasks: tasks/apps/speedtest-tracker.yml
-      tags: [speedtest-tracker]
+      tags: [speedtest-tracker, apps]
+
+    # ── Productivity ─────────────────────────────────────────────
+    - name: Vaultwarden
+      ansible.builtin.import_tasks: tasks/apps/vaultwarden.yml
+      tags: [vaultwarden, apps]
+
+    - name: Paperless-ngx
+      ansible.builtin.import_tasks: tasks/apps/paperless-ngx.yml
+      tags: [paperless-ngx, apps]
+
+    - name: Tandoor Recipes
+      ansible.builtin.import_tasks: tasks/apps/tandoor.yml
+      tags: [tandoor, apps]
+
+    - name: FreshRSS
+      ansible.builtin.import_tasks: tasks/apps/freshrss.yml
+      tags: [freshrss, apps]
+
+    - name: Actual Budget
+      ansible.builtin.import_tasks: tasks/apps/actual-budget.yml
+      tags: [actual-budget, apps]
+
+    # ── Sync & Storage ───────────────────────────────────────────
+    - name: Obsidian LiveSync
+      ansible.builtin.import_tasks: tasks/apps/obsidian-livesync.yml
+      tags: [obsidian-livesync, apps]
+
+    - name: Syncthing
+      ansible.builtin.import_tasks: tasks/apps/syncthing.yml
+      tags: [syncthing, apps]
+
+    - name: FileBrowser
+      ansible.builtin.import_tasks: tasks/apps/filebrowser.yml
+      tags: [filebrowser, apps]
+
+    - name: Backrest
+      ansible.builtin.import_tasks: tasks/apps/backrest.yml
+      tags: [backrest, apps]
+
+    # ── Other ────────────────────────────────────────────────────
+    - name: RustDesk
+      ansible.builtin.import_tasks: tasks/apps/rustdesk.yml
+      tags: [rustdesk, apps]
+
+    - name: Home Assistant
+      ansible.builtin.import_tasks: tasks/apps/homeassistant.yml
+      tags: [homeassistant, apps]
+
+    - name: Ntfy
+      ansible.builtin.import_tasks: tasks/apps/ntfy.yml
+      tags: [ntfy, apps]
+
+    - name: Homepage
+      ansible.builtin.import_tasks: tasks/apps/homepage.yml
+      tags: [homepage, apps]

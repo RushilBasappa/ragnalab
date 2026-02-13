@@ -4,7 +4,7 @@
 - name: Create volumes
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: create-volumes
+    helper: create-volumes
     volumes:
       - backrest_data
       - backrest_config
@@ -13,5 +13,5 @@
 - name: Start Backrest
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: start
+    helper: start
     services: [backrest]

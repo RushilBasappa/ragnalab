@@ -1,0 +1,92 @@
+---
+# Deploy complete RagnaLab stack: infrastructure + media + all apps
+# Usage: make deploy-all
+
+- name: Deploy Infrastructure
+  ansible.builtin.import_playbook: deploy-infrastructure.yml
+
+- name: Deploy Media Stack
+  ansible.builtin.import_playbook: deploy-media.yml
+
+- name: Deploy Apps
+  hosts: ragnalab
+  become: false
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    # Monitoring
+    - name: Uptime Kuma
+      ansible.builtin.import_tasks: tasks/apps/uptime-kuma.yml
+      tags: [apps, uptime-kuma]
+
+    - name: Dozzle
+      ansible.builtin.import_tasks: tasks/apps/dozzle.yml
+      tags: [apps, dozzle]
+
+    - name: Watchtower
+      ansible.builtin.import_tasks: tasks/apps/watchtower.yml
+      tags: [apps, watchtower]
+
+    - name: Beszel
+      ansible.builtin.import_tasks: tasks/apps/beszel.yml
+      tags: [apps, beszel]
+
+    - name: Speedtest Tracker
+      ansible.builtin.import_tasks: tasks/apps/speedtest-tracker.yml
+      tags: [apps, speedtest-tracker]
+
+    # Productivity
+    - name: Vaultwarden
+      ansible.builtin.import_tasks: tasks/apps/vaultwarden.yml
+      tags: [apps, vaultwarden]
+
+    - name: Paperless-ngx
+      ansible.builtin.import_tasks: tasks/apps/paperless-ngx.yml
+      tags: [apps, paperless-ngx]
+
+    - name: Tandoor Recipes
+      ansible.builtin.import_tasks: tasks/apps/tandoor.yml
+      tags: [apps, tandoor]
+
+    - name: FreshRSS
+      ansible.builtin.import_tasks: tasks/apps/freshrss.yml
+      tags: [apps, freshrss]
+
+    - name: Actual Budget
+      ansible.builtin.import_tasks: tasks/apps/actual-budget.yml
+      tags: [apps, actual-budget]
+
+    # Sync & Storage
+    - name: Obsidian LiveSync
+      ansible.builtin.import_tasks: tasks/apps/obsidian-livesync.yml
+      tags: [apps, obsidian-livesync]
+
+    - name: Syncthing
+      ansible.builtin.import_tasks: tasks/apps/syncthing.yml
+      tags: [apps, syncthing]
+
+    - name: FileBrowser
+      ansible.builtin.import_tasks: tasks/apps/filebrowser.yml
+      tags: [apps, filebrowser]
+
+    - name: Backrest
+      ansible.builtin.import_tasks: tasks/apps/backrest.yml
+      tags: [apps, backrest]
+
+    # Other
+    - name: RustDesk
+      ansible.builtin.import_tasks: tasks/apps/rustdesk.yml
+      tags: [apps, rustdesk]
+
+    - name: Home Assistant
+      ansible.builtin.import_tasks: tasks/apps/homeassistant.yml
+      tags: [apps, homeassistant]
+
+    - name: Ntfy
+      ansible.builtin.import_tasks: tasks/apps/ntfy.yml
+      tags: [apps, ntfy]
+
+    - name: Homepage
+      ansible.builtin.import_tasks: tasks/apps/homepage.yml
+      tags: [apps, homepage]

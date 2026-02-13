@@ -1,140 +1,65 @@
-PLAYBOOK = ANSIBLE_CONFIG=ansible/ansible.cfg ansible-playbook ansible/site.yml -i ansible/inventory/hosts.yml
-ENV_FILE = compose/.env
-SECRETS_FILE = ansible/vars/secrets.yml
-VAULT = --vault-password-file .vault_pass
+.DEFAULT_GOAL := help
+ANSIBLE  := ANSIBLE_CONFIG=ansible/ansible.cfg ansible-playbook -i ansible/inventory/hosts.yml
+VAULT    := --vault-password-file .vault_pass
+SITE     := $(ANSIBLE) ansible/site.yml $(VAULT)
 
-# app(tag, containers, volumes) - deploy or tear down with v=1
-define app
-$(if $(v),docker rm -f $(2)$(if $(3), && docker volume rm $(3),),$(PLAYBOOK) --tags $(1))
-endef
+.PHONY: help init sync hooks fix-locale install-ansible bootstrap deploy-infra deploy-media deploy-apps deploy-all status keys service teardown
 
-# Secrets
-sync:
-	ansible-vault encrypt $(ENV_FILE) --output $(SECRETS_FILE) $(VAULT)
+# --- Setup ---
 
-init:
-	ansible-vault decrypt $(SECRETS_FILE) --output $(ENV_FILE) $(VAULT)
+help: ## Show this help
+	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z_-]+:.*##/ {printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-hooks:
+init: ## Decrypt secrets from Ansible Vault to compose/.env
+	ansible-vault decrypt ansible/vars/secrets.yml --output compose/.env $(VAULT)
+
+sync: ## Encrypt compose/.env to Ansible Vault
+	ansible-vault encrypt compose/.env --output ansible/vars/secrets.yml $(VAULT)
+
+hooks: ## Install git pre-commit hooks
 	ln -sf ../../hooks/pre-commit .git/hooks/pre-commit
 
-# First-time setup
-fix-locale:
+# --- First-time (run before Ansible is available) ---
+
+fix-locale: ## Fix locale to en_US.UTF-8
 	sudo locale-gen en_US.UTF-8
 
-install-ansible: fix-locale
+install-ansible: fix-locale ## Install Ansible
 	sudo apt update && sudo apt install -y ansible
 
-# Bootstrap
-system-update:
-	$(PLAYBOOK) --tags system-update
+# --- Orchestrated Deployments ---
 
-github-ssh:
-	$(PLAYBOOK) --tags github-ssh
+bootstrap: ## Full bootstrap: bare Pi to configured system
+	$(ANSIBLE) ansible/bootstrap.yml $(VAULT)
 
-tailscale:
-	$(PLAYBOOK) --tags tailscale
+deploy-infra: ## Deploy infrastructure (socket-proxy, authelia, traefik, pihole)
+	$(ANSIBLE) ansible/deploy-infrastructure.yml $(VAULT)
 
-docker:
-	$(PLAYBOOK) --tags docker
+deploy-media: ## Deploy media stack in dependency order
+	$(ANSIBLE) ansible/deploy-media.yml $(VAULT)
 
-zsh:
-	$(PLAYBOOK) --tags zsh
+deploy-apps: ## Deploy all utility apps (non-infra, non-media)
+	$(SITE) --tags apps
 
-# Services
-socket-proxy:
-	$(PLAYBOOK) --tags socket-proxy
+deploy-all: ## Deploy everything (infrastructure + media + apps)
+	$(ANSIBLE) ansible/deploy-all.yml $(VAULT)
 
-authelia:
-	$(PLAYBOOK) --tags authelia
+# --- Granular Control ---
 
-traefik:
-	$(PLAYBOOK) --tags traefik
+service: ## Deploy one or more services: make service TAGS=sonarr,radarr
+	$(SITE) --tags $(TAGS)
 
-pihole:
-	$(PLAYBOOK) --tags pihole
+teardown: ## Tear down an app: make teardown APP=ntfy
+	$(SITE) --tags $(APP) -e app_state=absent
 
-# Apps — pass v=1 to tear down and delete volumes (e.g. make ntfy v=1)
-rustdesk:
-	$(call app,rustdesk,rustdesk-hbbs rustdesk-hbbr,rustdesk_data)
+# --- Utilities ---
 
-homepage:
-	$(call app,homepage,homepage,)
+status: ## Show running containers, memory, disk
+	$(ANSIBLE) ansible/status.yml $(VAULT)
 
-uptime-kuma:
-	$(call app,uptime-kuma,uptime-kuma autokuma,uptime_kuma_data)
-
-vaultwarden:
-	$(call app,vaultwarden,vaultwarden,vaultwarden_data)
-
-paperless-ngx:
-	$(call app,paperless-ngx,paperless-ngx paperless-redis,paperless_data paperless_media paperless_export paperless_consume paperless_redis_data)
-
-ntfy:
-	$(call app,ntfy,ntfy,ntfy_cache)
-
-tandoor:
-	$(call app,tandoor,tandoor tandoor-db,tandoor_postgres_data tandoor_static tandoor_media)
-
-dozzle:
-	$(call app,dozzle,dozzle,)
-
-watchtower:
-	$(call app,watchtower,watchtower,)
-
-keys:
+keys: ## Extract API keys from *arr apps
 	@for app in sonarr radarr prowlarr; do \
 		vol="/var/lib/docker/volumes/$${app}_config/_data/config.xml"; \
 		key=$$(sudo sed -n 's/.*<ApiKey>\(.*\)<\/ApiKey>.*/\1/p' "$$vol" 2>/dev/null); \
 		printf "%-10s %s\n" "$$app" "$${key:-not deployed}"; \
 	done
-
-# Media — deploy in order: qbittorrent → sonarr → radarr → prowlarr → bazarr → jellyfin → jellyseerr
-qbittorrent:
-	$(call app,qbittorrent,gluetun qbittorrent,gluetun_data qbittorrent_config media_data)
-
-prowlarr:
-	$(call app,prowlarr,prowlarr,prowlarr_config)
-
-sonarr:
-	$(call app,sonarr,sonarr,sonarr_config media_data)
-
-radarr:
-	$(call app,radarr,radarr,radarr_config media_data)
-
-bazarr:
-	$(call app,bazarr,bazarr,bazarr_config media_data)
-
-jellyfin:
-	$(call app,jellyfin,jellyfin,jellyfin_config media_data)
-
-jellyseerr:
-	$(call app,jellyseerr,jellyseerr,jellyseerr_config)
-
-# New Apps
-freshrss:
-	$(call app,freshrss,freshrss,freshrss_data)
-
-actual-budget:
-	$(call app,actual-budget,actual-budget,actual_data)
-
-obsidian-livesync:
-	$(call app,obsidian-livesync,obsidian-livesync,couchdb_data)
-
-syncthing:
-	$(call app,syncthing,syncthing,syncthing_config)
-
-filebrowser:
-	$(call app,filebrowser,filebrowser,filebrowser_db filebrowser_data)
-
-backrest:
-	$(call app,backrest,backrest,backrest_data backrest_config backrest_cache)
-
-beszel:
-	$(call app,beszel,beszel,beszel_data)
-
-homeassistant:
-	$(call app,homeassistant,homeassistant,homeassistant_config)
-
-speedtest-tracker:
-	$(call app,speedtest-tracker,speedtest-tracker,speedtest_data)

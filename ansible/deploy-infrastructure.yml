@@ -1,0 +1,26 @@
+---
+# Deploy core infrastructure services in dependency order
+# Usage: make deploy-infra
+
+- name: Deploy Core Infrastructure
+  hosts: ragnalab
+  become: false
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    - name: Socket Proxy (Docker API gateway)
+      ansible.builtin.import_tasks: tasks/services/socket-proxy.yml
+      tags: [infrastructure, socket-proxy]
+
+    - name: Authelia (SSO)
+      ansible.builtin.import_tasks: tasks/services/authelia.yml
+      tags: [infrastructure, authelia]
+
+    - name: Traefik (reverse proxy)
+      ansible.builtin.import_tasks: tasks/services/traefik.yml
+      tags: [infrastructure, traefik]
+
+    - name: Pi-hole (DNS)
+      ansible.builtin.import_tasks: tasks/services/pihole.yml
+      tags: [infrastructure, pihole]

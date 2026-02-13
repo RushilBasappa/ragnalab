@@ -4,13 +4,13 @@
 - name: Create volumes
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: create-volumes
+    helper: create-volumes
     volumes: [rustdesk_data]
 
 - name: Start RustDesk
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: start
+    helper: start
     services: [hbbs, hbbr]
 
 - name: Copy public key from container

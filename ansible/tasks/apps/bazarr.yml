@@ -4,26 +4,26 @@
 - name: Create volumes
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: create-volumes
+    helper: create-volumes
     volumes: [bazarr_config, media_data]
 
 - name: Start Bazarr
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: start
+    helper: start
     services: [bazarr]
 
 - name: Wait for Bazarr to be ready
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: wait-ready
+    helper: wait-ready
     container_name: bazarr
-    port: 6767
+    check_port: 6767
 
 - name: Get bazarr_config volume path
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: get-volume-path
+    helper: get-volume-path
     volume_name: bazarr_config
 
 - name: Set config path
@@ -34,20 +34,20 @@
 - name: Read Sonarr API key
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: read-apikey
+    helper: read-apikey
     arr_name: sonarr
 
 - name: Read Radarr API key
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: read-apikey
+    helper: read-apikey
     arr_name: radarr
 
 # Patch Bazarr config
 - name: Stop Bazarr before patching config
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: stop
+    helper: stop
     services: [bazarr]
 
 - name: Read Bazarr config
@@ -83,15 +83,15 @@
 - name: Start Bazarr with patched config
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: start
+    helper: start
     services: [bazarr]
 
 - name: Wait for Bazarr to be ready after config patch
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: wait-ready
+    helper: wait-ready
     container_name: bazarr
-    port: 6767
+    check_port: 6767
 
 - name: Enable English language and create profile
   ansible.builtin.command:
@@ -119,6 +119,6 @@
 - name: Restart Bazarr to pick up language profile
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: restart
+    helper: restart
     services: [bazarr]
   when: bazarr_lang.changed

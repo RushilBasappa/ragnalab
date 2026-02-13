@@ -4,7 +4,7 @@
 - name: Create volumes
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: create-volumes
+    helper: create-volumes
     volumes:
       - tandoor_postgres_data
       - tandoor_static
@@ -13,5 +13,5 @@
 - name: Start Tandoor Recipes
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: start
+    helper: start
     services: [tandoor, tandoor-db]

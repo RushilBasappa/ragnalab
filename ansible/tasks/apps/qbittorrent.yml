@@ -4,13 +4,13 @@
 - name: Create volumes
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: create-volumes
+    helper: create-volumes
     volumes: [gluetun_data, qbittorrent_config, media_data]
 
 - name: Start Gluetun + qBittorrent
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: start
+    helper: start
     services: [gluetun, qbittorrent]
 
 - name: Wait for Gluetun to be healthy
@@ -24,7 +24,7 @@
 - name: Get qBittorrent config path
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: get-volume-path
+    helper: get-volume-path
     volume_name: qbittorrent_config
 
 - name: Set config path
@@ -34,13 +34,13 @@
 - name: Wait for qBittorrent config to exist
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: wait-for-file
+    helper: wait-for-file
     file_path: "{{ qbit_conf }}"
 
 - name: Stop qBittorrent before patching config
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: stop
+    helper: stop
     services: [qbittorrent]
 
 - name: Patch qBittorrent config
@@ -66,7 +66,7 @@
 - name: Create media directory structure
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: get-volume-path
+    helper: get-volume-path
     volume_name: media_data
 
 - name: Ensure media directories exist
@@ -88,7 +88,7 @@
 - name: Start qBittorrent with patched config
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: start
+    helper: start
     services: [qbittorrent]
 
 - name: Wait for Gluetun port forwarding

@@ -10,19 +10,19 @@
 - name: Read Radarr API key
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: read-apikey
+    helper: read-apikey
     arr_name: radarr
 
 - name: Read Sonarr API key
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: read-apikey
+    helper: read-apikey
     arr_name: sonarr
 
 - name: Read Prowlarr API key
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: read-apikey
+    helper: read-apikey
     arr_name: prowlarr
 
 - name: Extract Bazarr API key
@@ -99,5 +99,5 @@
 - name: Start Homepage
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
-    action: start
+    helper: start
     services: [homepage]

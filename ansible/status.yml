@@ -1,0 +1,44 @@
+---
+# Show RagnaLab deployment status
+# Usage: make status
+
+- name: RagnaLab Status
+  hosts: ragnalab
+  become: false
+  gather_facts: true
+
+  tasks:
+    - name: Get running containers
+      ansible.builtin.command: docker ps --format "table {{'{{'}}.Names{{'}}'}}\t{{'{{'}}.Status{{'}}'}}\t{{'{{'}}.Image{{'}}'}}"
+      register: containers
+      changed_when: false
+
+    - name: Get Docker disk usage
+      ansible.builtin.command: docker system df
+      register: disk_usage
+      changed_when: false
+
+    - name: Get memory usage per container
+      ansible.builtin.shell: docker stats --no-stream --format "table {{'{{'}}.Name{{'}}'}}\t{{'{{'}}.MemUsage{{'}}'}}\t{{'{{'}}.MemPerc{{'}}'}}" | sort -k1
+      register: mem_stats
+      changed_when: false
+
+    - name: Display status
+      ansible.builtin.debug:
+        msg: |
+
+          ═══════════════════════════════════════════════════════
+           RagnaLab Status — {{ ansible_hostname }}
+          ═══════════════════════════════════════════════════════
+
+          System: {{ ansible_distribution }} {{ ansible_distribution_version }} ({{ ansible_architecture }})
+          Memory: {{ ansible_memtotal_mb }}MB total, {{ ansible_memfree_mb }}MB free
+
+          ─── Containers ───────────────────────────────────────
+          {{ containers.stdout }}
+
+          ─── Memory per Container ─────────────────────────────
+          {{ mem_stats.stdout }}
+
+          ─── Disk Usage ───────────────────────────────────────
+          {{ disk_usage.stdout }}

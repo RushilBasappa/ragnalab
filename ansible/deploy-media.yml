@@ -1,0 +1,42 @@
+---
+# Deploy media stack in dependency order
+# Usage: make deploy-media
+
+- name: Deploy Media Stack
+  hosts: ragnalab
+  become: false
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    # Step 1: Download client (everything else depends on this)
+    - name: qBittorrent + Gluetun VPN
+      ansible.builtin.import_tasks: tasks/apps/qbittorrent.yml
+      tags: [media, qbittorrent]
+
+    # Step 2: Automation suite
+    - name: Sonarr (TV)
+      ansible.builtin.import_tasks: tasks/apps/sonarr.yml
+      tags: [media, sonarr]
+
+    - name: Radarr (Movies)
+      ansible.builtin.import_tasks: tasks/apps/radarr.yml
+      tags: [media, radarr]
+
+    - name: Prowlarr (Indexers)
+      ansible.builtin.import_tasks: tasks/apps/prowlarr.yml
+      tags: [media, prowlarr]
+
+    - name: Bazarr (Subtitles)
+      ansible.builtin.import_tasks: tasks/apps/bazarr.yml
+      tags: [media, bazarr]
+
+    # Step 3: Media server
+    - name: Jellyfin
+      ansible.builtin.import_tasks: tasks/apps/jellyfin.yml
+      tags: [media, jellyfin]
+
+    # Step 4: Request portal (needs Jellyfin running)
+    - name: Jellyseerr
+      ansible.builtin.import_tasks: tasks/apps/jellyseerr.yml
+      tags: [media, jellyseerr]
