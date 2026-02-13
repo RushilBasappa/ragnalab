@@ -264,7 +264,7 @@ make deploy-apps
 ```
 
 Deploys all remaining services:
-- **Monitoring:** uptime-kuma, dozzle, watchtower, beszel, speedtest-tracker
+- **Monitoring:** uptime-kuma, dozzle, beszel, speedtest-tracker
 - **Productivity:** vaultwarden, paperless-ngx, tandoor, freshrss, actual-budget
 - **Sync/Storage:** obsidian-livesync, syncthing, filebrowser, backrest
 - **Other:** rustdesk, homeassistant, ntfy, homepage
@@ -532,10 +532,6 @@ make status
 # - Should show logs for all containers
 # - Test filtering and search
 
-# Check Watchtower:
-# - Wait for 5:00 AM (scheduled check)
-# - OR restart container: docker restart watchtower
-# - Check ntfy for update notifications
 ```
 
 ---

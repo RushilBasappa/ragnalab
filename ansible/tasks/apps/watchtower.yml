@@ -1,8 +1,0 @@
----
-# Watchtower
-
-- name: Start Watchtower
-  ansible.builtin.include_tasks: ../shared/helpers.yml
-  vars:
-    helper: start
-    services: [watchtower]

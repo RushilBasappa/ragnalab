@@ -86,10 +86,6 @@
       ansible.builtin.import_tasks: tasks/apps/dozzle.yml
       tags: [dozzle, apps]
 
-    - name: Watchtower
-      ansible.builtin.import_tasks: tasks/apps/watchtower.yml
-      tags: [watchtower, apps]
-
     - name: Beszel
       ansible.builtin.import_tasks: tasks/apps/beszel.yml
       tags: [beszel, apps]

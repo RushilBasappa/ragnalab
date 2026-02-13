@@ -11,7 +11,6 @@ include:
   - apps/ntfy/docker-compose.yml
   - apps/tandoor/docker-compose.yml
   - apps/dozzle/docker-compose.yml
-  - apps/watchtower/docker-compose.yml
   - apps/qbittorrent/docker-compose.yml
   - apps/prowlarr/docker-compose.yml
   - apps/sonarr/docker-compose.yml

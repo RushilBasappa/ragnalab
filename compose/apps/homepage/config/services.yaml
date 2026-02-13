@@ -220,12 +220,6 @@
           type: speedtest
           url: http://speedtest-tracker:80
 
-    - Watchtower:
-        icon: watchtower.png
-        description: Automatic container updates
-        server: socket-proxy
-        container: watchtower
-
 # Remote Access
 - Remote Access:
     - RustDesk:

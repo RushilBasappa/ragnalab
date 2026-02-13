@@ -7,7 +7,7 @@ Fully automated Raspberry Pi homelab with 34 self-hosted services.
 - **One-command deployment** from bare Pi to production (`make deploy-all`)
 - **34 services:** Jellyfin, *arr suite, Vaultwarden, Paperless, Pi-hole, and more
 - **Security-first:** Traefik + Authelia SSO, Docker socket proxy, VPN-protected torrents
-- **Monitoring:** Uptime Kuma, Dozzle, Watchtower, Homepage dashboard
+- **Monitoring:** Uptime Kuma, Dozzle, Beszel, Homepage dashboard
 
 ## Quick Start
 

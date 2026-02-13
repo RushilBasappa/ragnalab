@@ -187,7 +187,7 @@
 - **Image:** `binwiederhier/ntfy:latest`
 - **Purpose:** Push notification service
 - **URL:** https://ntfy.ragnalab.xyz
-- **Features:** Used by Watchtower for update notifications
+- **Features:** Push notification service
 - **Memory Limit:** 64M
 
 ### Backrest
@@ -223,17 +223,6 @@
   - Search and filter
   - No log persistence
 - **Memory Limit:** 64M
-
-### Watchtower
-- **Image:** `containrrr/watchtower:latest`
-- **Purpose:** Container update monitoring
-- **Mode:** Monitor-only (notifications via ntfy)
-- **Schedule:** Daily at 5:00 AM
-- **Features:**
-  - Checks for image updates
-  - Sends ntfy notifications
-  - Does NOT auto-update containers
-- **Memory Limit:** 128M
 
 ### Beszel
 - **Image:** `henrygd/beszel:latest`
@@ -351,7 +340,7 @@ Services with fully automated setup via Ansible:
 ### Memory Limits Summary
 - **Heavy (512M):** Sonarr, Radarr, Prowlarr, Bazarr, Jellyfin, Paperless-ngx, qBittorrent
 - **Medium (256M):** Traefik, Authelia, Pi-hole, Homepage, Uptime Kuma, Home Assistant, Tandoor, Syncthing, Obsidian LiveSync, Backrest, Beszel, Speedtest Tracker, Jellyseerr
-- **Light (128M):** Gluetun, Vaultwarden, FreshRSS, FileBrowser, Autokuma, Watchtower, Actual Budget, Paperless Redis, Tandoor DB
+- **Light (128M):** Gluetun, Vaultwarden, FreshRSS, FileBrowser, Autokuma, Actual Budget, Paperless Redis, Tandoor DB
 - **Minimal (64M):** Socket Proxy, Ntfy, Dozzle, RustDesk (x2)
 
 **Total Allocation:** ~8.8GB
