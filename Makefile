@@ -3,7 +3,7 @@ ANSIBLE  := ANSIBLE_CONFIG=ansible/ansible.cfg ansible-playbook -i ansible/inven
 VAULT    := --vault-password-file .vault_pass
 SITE     := $(ANSIBLE) ansible/site.yml $(VAULT)
 
-.PHONY: help init sync hooks fix-locale install-ansible bootstrap deploy-infra deploy-media deploy-apps deploy-all status keys service teardown teardown-all
+.PHONY: help init sync hooks fix-locale install-ansible bootstrap deploy-infra deploy-media deploy-apps deploy-all status keys service teardown teardown-all rename-domain
 
 # --- Setup ---
 
@@ -64,6 +64,21 @@ teardown-all: ## Stop all containers and delete all volumes
 
 status: ## Show running containers, memory, disk
 	$(ANSIBLE) ansible/status.yml $(VAULT)
+
+rename-domain: ## Change domain everywhere: make rename-domain NEW=example.com
+	@[ -n "$(NEW)" ] || (echo "Usage: make rename-domain NEW=example.com"; exit 1)
+	@old=$$(grep '^DOMAIN=' compose/.env | cut -d= -f2); \
+	[ -n "$$old" ] || (echo "Error: DOMAIN not found in compose/.env"; exit 1); \
+	echo "Renaming $$old → $(NEW)"; \
+	sed -i "s/$$old/$(NEW)/g" \
+		compose/services/authelia/configuration.yml \
+		compose/services/traefik/traefik.yml \
+		compose/apps/ntfy/server.yml \
+		compose/apps/homepage/config/services.yaml \
+		ansible/vars/main.yml \
+		ansible/tasks/apps/jellyseerr.yml \
+		compose/.env; \
+	echo "Done. Run 'make sync' then redeploy affected services."
 
 keys: ## Extract API keys from *arr apps
 	@for app in sonarr radarr prowlarr; do \

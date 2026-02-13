@@ -15,4 +15,4 @@
 
 - name: Jellyseerr post-deploy
   ansible.builtin.debug:
-    msg: "Jellyseerr deployed. Complete the setup wizard at https://requests.ragnalab.xyz"
+    msg: "Jellyseerr deployed. Complete the setup wizard at https://requests.{{ domain }}"
