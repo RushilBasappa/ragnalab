@@ -5,7 +5,7 @@
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     helper: create-volumes
-    volumes: [radarr_data, media_data]
+    volumes: [radarr_data]
 
 - name: Extract Radarr API key
   ansible.builtin.include_tasks: ../shared/helpers.yml

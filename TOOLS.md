@@ -299,16 +299,17 @@
 - Multi-service apps use subdirectories (e.g., `tandoor_data/postgres`, `paperless_data/redis`)
 
 ### Media Storage
-- **Shared volume:** `media_data`
+- **Bind mount:** `/srv` on host → `/data` in containers
 - **Structure:**
   ```
-  /data/
+  /srv/
   ├── media/
   │   ├── movies/
-  │   ├── tv/
-  ├── torrents/
+  │   └── tv/
+  └── torrents/
+      ├── incomplete/
       ├── movies/
-      ├── tv/
+      └── tv/
   ```
 
 ---

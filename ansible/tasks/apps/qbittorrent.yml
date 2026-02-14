@@ -5,7 +5,7 @@
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     helper: create-volumes
-    volumes: [qbittorrent_data, media_data]
+    volumes: [qbittorrent_data]
 
 - name: Create subpaths
   ansible.builtin.include_tasks: ../shared/helpers.yml
@@ -68,28 +68,6 @@
     - { section: BitTorrent, key: 'Session\Interface', value: 'tun0' }
     - { section: BitTorrent, key: 'Session\InterfaceAddress', value: '' }
     - { section: BitTorrent, key: 'Session\InterfaceName', value: 'tun0' }
-  become: true
-
-- name: Create media directory structure
-  ansible.builtin.include_tasks: ../shared/helpers.yml
-  vars:
-    helper: get-volume-path
-    volume_name: media_data
-
-- name: Ensure media directories exist
-  ansible.builtin.file:
-    path: "{{ _volume_path }}/{{ item }}"
-    state: directory
-    owner: "1000"
-    group: "1000"
-    mode: "0755"
-  loop:
-    - torrents
-    - torrents/incomplete
-    - torrents/movies
-    - torrents/tv
-    - media/movies
-    - media/tv
   become: true
 
 - name: Start qBittorrent with patched config

@@ -5,7 +5,7 @@
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     helper: create-volumes
-    volumes: [jellyfin_data, media_data]
+    volumes: [jellyfin_data]
 
 - name: Start Jellyfin
   ansible.builtin.include_tasks: ../shared/helpers.yml

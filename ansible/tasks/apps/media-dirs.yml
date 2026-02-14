@@ -1,0 +1,27 @@
+---
+# Media directory structure on /srv
+
+- name: Ensure /srv exists
+  ansible.builtin.file:
+    path: /srv
+    state: directory
+    owner: "1000"
+    group: "1000"
+    mode: "0755"
+  become: true
+
+- name: Create media subdirectories
+  ansible.builtin.file:
+    path: "/srv/{{ item }}"
+    state: directory
+    owner: "1000"
+    group: "1000"
+    mode: "0755"
+  loop:
+    - torrents
+    - torrents/incomplete
+    - torrents/movies
+    - torrents/tv
+    - media/movies
+    - media/tv
+  become: true

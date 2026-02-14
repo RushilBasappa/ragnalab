@@ -71,7 +71,6 @@
             "repo": "local-backups",
             "paths": ["/docker-volumes"],
             "excludes": [
-              "media_data",
               "backrest_data",
               "ragnalab_backups"
             ],

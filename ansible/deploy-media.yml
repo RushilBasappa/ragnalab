@@ -9,6 +9,11 @@
     - vars/main.yml
 
   tasks:
+    # Step 0: Media directory structure
+    - name: Media directories
+      ansible.builtin.import_tasks: tasks/apps/media-dirs.yml
+      tags: [media]
+
     # Step 1: Download client (everything else depends on this)
     - name: qBittorrent + Gluetun VPN
       ansible.builtin.import_tasks: tasks/apps/qbittorrent.yml

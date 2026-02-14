@@ -6,7 +6,7 @@ services:
       - /dev/video19:/dev/video19
     volumes:
       - jellyfin_data:/config
-      - media_data:/data
+      - /srv:/data
     ports:
       - "8096:8096"
     networks:
@@ -32,8 +32,6 @@ services:
 
 volumes:
   jellyfin_data:
-    external: true
-  media_data:
     external: true
 
 networks:
