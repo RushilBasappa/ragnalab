@@ -5,9 +5,6 @@ services:
     environment:
       TZ: ${PIHOLE_TZ}
       WEBPASSWORD: ${PIHOLE_WEBPASSWORD}
-    ports:
-      - "53:53/tcp"
-      - "53:53/udp"
     volumes:
       - type: volume
         source: pihole_data
@@ -19,16 +16,11 @@ services:
         target: /etc/dnsmasq.d
         volume:
           subpath: dnsmasq
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
     networks:
       - traefik_public
-    labels:
-      traefik.enable: "true"
-      traefik.http.routers.pihole.rule: "Host(`pihole.${DOMAIN}`)"
-      traefik.http.routers.pihole.entrypoints: websecure
-      traefik.http.services.pihole.loadbalancer.server.port: "80"
-      traefik.http.routers.pihole.middlewares: authelia@docker
-      kuma.pihole.http.name: Pi-hole
-      kuma.pihole.http.url: https://pihole.${DOMAIN}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/admin/"]
       interval: 30s
@@ -39,6 +31,14 @@ services:
       resources:
         limits:
           memory: 256M
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.pihole.rule: "Host(`pihole.${DOMAIN}`)"
+      traefik.http.routers.pihole.entrypoints: websecure
+      traefik.http.services.pihole.loadbalancer.server.port: "80"
+      traefik.http.routers.pihole.middlewares: authelia@docker
+      kuma.pihole.http.name: Pi-hole
+      kuma.pihole.http.url: https://pihole.${DOMAIN}
     restart: unless-stopped
 
 volumes:

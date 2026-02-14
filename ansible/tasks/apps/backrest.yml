@@ -1,10 +1,6 @@
 ---
 # Backrest — automated backup with pre-seeded config
 
-- name: Set .env path
-  ansible.builtin.set_fact:
-    env_file: "{{ playbook_dir }}/../compose/.env"
-
 - name: Create volumes
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:

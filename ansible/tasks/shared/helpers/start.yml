@@ -3,6 +3,6 @@
 # Required: services (list of service names)
 - name: "Start {{ (services | default([])) | join(', ') }}"
   community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
+    project_src: "{{ compose_root }}"
     services: "{{ services }}"
     state: present

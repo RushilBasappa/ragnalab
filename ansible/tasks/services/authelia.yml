@@ -7,7 +7,7 @@
 
 - name: Start Authelia
   community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
+    project_src: "{{ compose_root }}"
     services:
       - authelia
     state: present

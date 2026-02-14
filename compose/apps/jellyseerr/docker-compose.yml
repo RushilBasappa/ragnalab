@@ -8,13 +8,6 @@ services:
       - jellyseerr_data:/app/config
     networks:
       - traefik_public
-    labels:
-      traefik.enable: "true"
-      traefik.http.routers.jellyseerr.rule: "Host(`requests.${DOMAIN}`)"
-      traefik.http.routers.jellyseerr.entrypoints: websecure
-      traefik.http.services.jellyseerr.loadbalancer.server.port: "5055"
-      kuma.jellyseerr.http.name: Jellyseerr
-      kuma.jellyseerr.http.url: https://requests.${DOMAIN}
     healthcheck:
       test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1"]
       interval: 30s
@@ -25,6 +18,13 @@ services:
       resources:
         limits:
           memory: 256M
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.jellyseerr.rule: "Host(`requests.${DOMAIN}`)"
+      traefik.http.routers.jellyseerr.entrypoints: websecure
+      traefik.http.services.jellyseerr.loadbalancer.server.port: "5055"
+      kuma.jellyseerr.http.name: Jellyseerr
+      kuma.jellyseerr.http.url: https://requests.${DOMAIN}
     restart: unless-stopped
 
 volumes:

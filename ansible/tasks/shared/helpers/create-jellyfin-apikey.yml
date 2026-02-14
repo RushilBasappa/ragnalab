@@ -6,8 +6,8 @@
 
 - name: "[Jellyfin] Read admin credentials from .env"
   ansible.builtin.set_fact:
-    _jf_admin_user: "{{ lookup('ansible.builtin.ini', 'JELLYFIN_ADMIN_USER', type='properties', file=playbook_dir + '/../compose/.env') }}"
-    _jf_admin_pass: "{{ lookup('ansible.builtin.ini', 'JELLYFIN_ADMIN_PASSWORD', type='properties', file=playbook_dir + '/../compose/.env') }}"
+    _jf_admin_user: "{{ lookup('ansible.builtin.ini', 'JELLYFIN_ADMIN_USER', type='properties', file=env_file) }}"
+    _jf_admin_pass: "{{ lookup('ansible.builtin.ini', 'JELLYFIN_ADMIN_PASSWORD', type='properties', file=env_file) }}"
 
 - name: "[Jellyfin] Authenticate to get access token"
   ansible.builtin.command: >

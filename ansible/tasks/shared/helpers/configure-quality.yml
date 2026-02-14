@@ -4,7 +4,7 @@
 - name: "[{{ arr_name | default('?') }}] Configure 4K Minimal quality profile"
   ansible.builtin.shell:
     cmd: >
-      python3 {{ playbook_dir }}/../ansible/scripts/configure-arr-quality.py
+      python3 {{ playbook_dir }}/scripts/configure-arr-quality.py
       {{ arr_name }} {{ arr_port }} {{ arr_api_key }}
   register: _arr_quality
   changed_when: _arr_quality.rc == 2

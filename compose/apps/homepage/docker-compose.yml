@@ -4,7 +4,6 @@ services:
     container_name: homepage
     environment:
       HOMEPAGE_ALLOWED_HOSTS: home.${DOMAIN}
-      # API keys for service widgets (HOMEPAGE_VAR_ prefix required)
       HOMEPAGE_VAR_RADARR_API_KEY: ${RADARR_API_KEY}
       HOMEPAGE_VAR_SONARR_API_KEY: ${SONARR_API_KEY}
       HOMEPAGE_VAR_PROWLARR_API_KEY: ${PROWLARR_API_KEY}
@@ -27,6 +26,10 @@ services:
     networks:
       - traefik_public
       - socket_proxy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
     labels:
       traefik.enable: "true"
       traefik.http.routers.homepage.rule: "Host(`home.${DOMAIN}`)"
@@ -35,10 +38,6 @@ services:
       traefik.http.routers.homepage.middlewares: authelia@docker
       kuma.homepage.http.name: Homepage
       kuma.homepage.http.url: https://home.${DOMAIN}
-    deploy:
-      resources:
-        limits:
-          memory: 256M
     restart: unless-stopped
 
 networks:

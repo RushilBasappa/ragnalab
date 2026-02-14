@@ -12,16 +12,6 @@ services:
       - authelia_data:/data
     networks:
       - traefik_public
-    labels:
-      traefik.enable: "true"
-      traefik.http.routers.authelia.rule: "Host(`auth.${DOMAIN}`)"
-      traefik.http.routers.authelia.entrypoints: websecure
-      traefik.http.services.authelia.loadbalancer.server.port: "9091"
-      traefik.http.middlewares.authelia.forwardAuth.address: "http://authelia:9091/api/authz/forward-auth"
-      traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader: "true"
-      traefik.http.middlewares.authelia.forwardAuth.authResponseHeaders: "Remote-User,Remote-Groups,Remote-Email,Remote-Name"
-      kuma.authelia.http.name: Authelia
-      kuma.authelia.http.url: https://auth.${DOMAIN}
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9091/api/health"]
       interval: 30s
@@ -32,6 +22,16 @@ services:
       resources:
         limits:
           memory: 256M
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.authelia.rule: "Host(`auth.${DOMAIN}`)"
+      traefik.http.routers.authelia.entrypoints: websecure
+      traefik.http.services.authelia.loadbalancer.server.port: "9091"
+      traefik.http.middlewares.authelia.forwardAuth.address: "http://authelia:9091/api/authz/forward-auth"
+      traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader: "true"
+      traefik.http.middlewares.authelia.forwardAuth.authResponseHeaders: "Remote-User,Remote-Groups,Remote-Email,Remote-Name"
+      kuma.authelia.http.name: Authelia
+      kuma.authelia.http.url: https://auth.${DOMAIN}
     restart: unless-stopped
 
 volumes:

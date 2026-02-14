@@ -11,14 +11,6 @@ services:
       - /srv:/data
     networks:
       - traefik_public
-    labels:
-      traefik.enable: "true"
-      traefik.http.routers.radarr.rule: "Host(`radarr.${DOMAIN}`)"
-      traefik.http.routers.radarr.entrypoints: websecure
-      traefik.http.services.radarr.loadbalancer.server.port: "7878"
-      traefik.http.routers.radarr.middlewares: authelia@docker
-      kuma.radarr.http.name: Radarr
-      kuma.radarr.http.url: https://radarr.${DOMAIN}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:7878/ping"]
       interval: 30s
@@ -29,6 +21,14 @@ services:
       resources:
         limits:
           memory: 512M
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.radarr.rule: "Host(`radarr.${DOMAIN}`)"
+      traefik.http.routers.radarr.entrypoints: websecure
+      traefik.http.services.radarr.loadbalancer.server.port: "7878"
+      traefik.http.routers.radarr.middlewares: authelia@docker
+      kuma.radarr.http.name: Radarr
+      kuma.radarr.http.url: https://radarr.${DOMAIN}
     restart: unless-stopped
 
 volumes:

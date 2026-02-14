@@ -10,19 +10,6 @@ services:
       - vaultwarden_data:/data
     networks:
       - traefik_public
-    labels:
-      traefik.enable: "true"
-      # Main router — no Authelia (API/browser extensions need direct access)
-      traefik.http.routers.vaultwarden.rule: "Host(`vault.${DOMAIN}`)"
-      traefik.http.routers.vaultwarden.entrypoints: websecure
-      traefik.http.services.vaultwarden.loadbalancer.server.port: "80"
-      # Admin panel — behind Authelia
-      traefik.http.routers.vaultwarden-admin.rule: "Host(`vault.${DOMAIN}`) && PathPrefix(`/admin`)"
-      traefik.http.routers.vaultwarden-admin.entrypoints: websecure
-      traefik.http.routers.vaultwarden-admin.service: vaultwarden
-      traefik.http.routers.vaultwarden-admin.middlewares: authelia@docker
-      kuma.vaultwarden.http.name: Vaultwarden
-      kuma.vaultwarden.http.url: https://vault.${DOMAIN}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/alive"]
       interval: 30s
@@ -33,6 +20,17 @@ services:
       resources:
         limits:
           memory: 128M
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.vaultwarden.rule: "Host(`vault.${DOMAIN}`)"
+      traefik.http.routers.vaultwarden.entrypoints: websecure
+      traefik.http.services.vaultwarden.loadbalancer.server.port: "80"
+      traefik.http.routers.vaultwarden-admin.rule: "Host(`vault.${DOMAIN}`) && PathPrefix(`/admin`)"
+      traefik.http.routers.vaultwarden-admin.entrypoints: websecure
+      traefik.http.routers.vaultwarden-admin.service: vaultwarden
+      traefik.http.routers.vaultwarden-admin.middlewares: authelia@docker
+      kuma.vaultwarden.http.name: Vaultwarden
+      kuma.vaultwarden.http.url: https://vault.${DOMAIN}
     restart: unless-stopped
 
 volumes:

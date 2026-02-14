@@ -1,10 +1,6 @@
 ---
 # Homepage Dashboard
 
-- name: Set .env path
-  ansible.builtin.set_fact:
-    env_file: "{{ playbook_dir }}/../compose/.env"
-
 # --- Extract API keys from running containers ---
 
 - name: Read Radarr API key

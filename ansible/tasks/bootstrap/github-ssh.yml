@@ -6,7 +6,7 @@
     name: "{{ ansible_user_id }}"
     generate_ssh_key: true
     ssh_key_type: ed25519
-    ssh_key_file: "{{ github_ssh_key }}"
+    ssh_key_file: "{{ github_ssh_key_path }}"
     ssh_key_comment: "{{ github_email }}"
   register: ssh_key
 
@@ -20,7 +20,7 @@
       Host github.com
         HostName github.com
         User git
-        IdentityFile {{ ansible_env.HOME }}/{{ github_ssh_key }}
+        IdentityFile {{ ansible_env.HOME }}/{{ github_ssh_key_path }}
         IdentitiesOnly yes
 
 - name: Print public key to add to GitHub
@@ -28,5 +28,5 @@
     msg: |
       Add this key to https://github.com/settings/ssh/new
 
-      {{ lookup('file', ansible_env.HOME + '/' + github_ssh_key + '.pub') }}
+      {{ lookup('file', ansible_env.HOME + '/' + github_ssh_key_path + '.pub') }}
   when: ssh_key.changed

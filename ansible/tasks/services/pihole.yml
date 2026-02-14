@@ -16,7 +16,7 @@
 
 - name: Start Pi-hole
   community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
+    project_src: "{{ compose_root }}"
     services:
       - pihole
     state: present

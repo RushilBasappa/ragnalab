@@ -5,7 +5,7 @@
 #           arr_jellyfin_api_key (if not provided, reads from JELLYFIN_API_KEY in .env)
 - name: "[{{ arr_name | default('?') }}] Set Jellyfin API key"
   ansible.builtin.set_fact:
-    _jellyfin_api_key: "{{ arr_jellyfin_api_key | default(lookup('ansible.builtin.ini', 'JELLYFIN_API_KEY', type='properties', file=playbook_dir + '/../compose/.env')) }}"
+    _jellyfin_api_key: "{{ arr_jellyfin_api_key | default(lookup('ansible.builtin.ini', 'JELLYFIN_API_KEY', type='properties', file=env_file)) }}"
 
 - name: "[{{ arr_name | default('?') }}] Check existing notifications"
   ansible.builtin.command: >

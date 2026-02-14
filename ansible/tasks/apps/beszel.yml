@@ -13,10 +13,6 @@
     helper: start
     services: [beszel]
 
-- name: Set .env path
-  ansible.builtin.set_fact:
-    env_file: "{{ playbook_dir }}/../compose/.env"
-
 - name: Get Beszel data volume path
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:

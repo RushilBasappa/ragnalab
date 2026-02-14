@@ -8,7 +8,7 @@
 
 - name: Start socket-proxy
   community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
+    project_src: "{{ compose_root }}"
     services:
       - socket-proxy
     state: present

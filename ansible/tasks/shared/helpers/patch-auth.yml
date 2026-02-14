@@ -3,7 +3,7 @@
 # Required: arr_name, arr_port
 - name: "[{{ arr_name | default('?') }}] Stop container for auth patch"
   community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
+    project_src: "{{ compose_root }}"
     services:
       - "{{ arr_name }}"
     state: stopped
@@ -25,7 +25,7 @@
 
 - name: "[{{ arr_name | default('?') }}] Start container after auth patch"
   community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
+    project_src: "{{ compose_root }}"
     services:
       - "{{ arr_name }}"
     state: present

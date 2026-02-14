@@ -1,10 +1,16 @@
 # RagnaLab Configuration
 domain: ragnalab.xyz
 timezone: America/Los_Angeles
-puid: 1000
-pgid: 1000
+user_puid: 1000
+user_pgid: 1000
 
-# GitHub SSH
+# GitHub SSH Configuration
 github_email: rushil.basappa@gmail.com
-github_ssh_key: .ssh/github_ragnapi
+github_ssh_key_path: .ssh/github_ragnapi
+
+# Tailscale VPN
 tailscale_ip: 100.110.120.130
+
+# Paths
+compose_root: "{{ playbook_dir }}/../compose"
+env_file: "{{ playbook_dir }}/../compose/.env"

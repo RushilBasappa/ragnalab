@@ -9,8 +9,8 @@
 
 - name: Read CouchDB credentials from .env
   ansible.builtin.set_fact:
-    couchdb_user: "{{ lookup('pipe', 'grep ^COUCHDB_USER= ' + playbook_dir + '/../compose/.env | cut -d= -f2') | default('admin', true) }}"
-    couchdb_password: "{{ lookup('pipe', 'grep ^COUCHDB_PASSWORD= ' + playbook_dir + '/../compose/.env | cut -d= -f2') }}"
+    couchdb_user: "{{ lookup('ansible.builtin.ini', 'COUCHDB_USER', type='properties', file=env_file, default='admin') }}"
+    couchdb_password: "{{ lookup('ansible.builtin.ini', 'COUCHDB_PASSWORD', type='properties', file=env_file) }}"
 
 - name: Start Obsidian LiveSync
   ansible.builtin.include_tasks: ../shared/helpers.yml

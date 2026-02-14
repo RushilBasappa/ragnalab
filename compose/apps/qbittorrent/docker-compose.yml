@@ -2,10 +2,6 @@ services:
   gluetun:
     image: qmcgaw/gluetun:latest
     container_name: gluetun
-    cap_add:
-      - NET_ADMIN
-    devices:
-      - /dev/net/tun:/dev/net/tun
     environment:
       VPN_SERVICE_PROVIDER: ${VPN_SERVICE_PROVIDER}
       VPN_TYPE: ${VPN_TYPE}
@@ -22,6 +18,14 @@ services:
           subpath: gluetun
     networks:
       - traefik_public
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    deploy:
+      resources:
+        limits:
+          memory: 128M
     labels:
       traefik.enable: "true"
       traefik.http.routers.qbittorrent.rule: "Host(`qbit.${DOMAIN}`)"
@@ -29,10 +33,6 @@ services:
       traefik.http.services.qbittorrent.loadbalancer.server.port: "8080"
       kuma.qbittorrent.http.name: qBittorrent
       kuma.qbittorrent.http.url: https://qbit.${DOMAIN}
-    deploy:
-      resources:
-        limits:
-          memory: 128M
     restart: unless-stopped
 
   qbittorrent:

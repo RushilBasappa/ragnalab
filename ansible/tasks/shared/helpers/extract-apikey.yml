@@ -4,7 +4,7 @@
 # Sets: {{ arr_name }}_api_key, arr_api_key
 - name: "[{{ arr_name | default('?') }}] Start container"
   community.docker.docker_compose_v2:
-    project_src: "{{ playbook_dir }}/../compose"
+    project_src: "{{ compose_root }}"
     services:
       - "{{ arr_name }}"
     state: present

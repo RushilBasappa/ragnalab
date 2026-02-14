@@ -37,8 +37,8 @@
 
 - name: Read Jellyfin credentials from env
   ansible.builtin.set_fact:
-    jellyfin_user: "{{ lookup('ansible.builtin.ini', 'JELLYFIN_ADMIN_USER', type='properties', file=playbook_dir + '/../compose/.env') }}"
-    jellyfin_pass: "{{ lookup('ansible.builtin.ini', 'JELLYFIN_ADMIN_PASSWORD', type='properties', file=playbook_dir + '/../compose/.env') }}"
+    jellyfin_user: "{{ lookup('ansible.builtin.ini', 'JELLYFIN_ADMIN_USER', type='properties', file=env_file) }}"
+    jellyfin_pass: "{{ lookup('ansible.builtin.ini', 'JELLYFIN_ADMIN_PASSWORD', type='properties', file=env_file) }}"
   when: jellyfin_wizard_pending
 
 - name: Wait for Jellyfin API to be ready
