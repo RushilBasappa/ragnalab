@@ -1,9 +1,18 @@
 ---
 # Pi-hole DNS
 
-- name: Create pihole_data volume
-  community.docker.docker_volume:
-    name: pihole_data
+- name: Create volumes
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: create-volumes
+    volumes: [pihole_data]
+
+- name: Create subpaths
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: create-subpaths
+    volume_name: pihole_data
+    subpaths: [pihole, dnsmasq]
 
 - name: Start Pi-hole
   community.docker.docker_compose_v2:

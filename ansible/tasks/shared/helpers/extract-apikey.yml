@@ -1,0 +1,38 @@
+---
+# EXTRACT API KEY (start *arr container + read config.xml)
+# Required: arr_name, arr_port
+# Sets: {{ arr_name }}_api_key, arr_api_key
+- name: "[{{ arr_name | default('?') }}] Start container"
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - "{{ arr_name }}"
+    state: present
+
+- name: "[{{ arr_name | default('?') }}] Wait for ready"
+  ansible.builtin.command: "docker exec {{ arr_name }} curl -sf http://localhost:{{ arr_port }}/ping"
+  register: _arr_ping
+  until: _arr_ping.rc == 0
+  retries: 30
+  delay: 5
+  changed_when: false
+
+- name: "[{{ arr_name | default('?') }}] Get config volume mountpoint"
+  community.docker.docker_volume_info:
+    name: "{{ arr_name }}_data"
+  register: _arr_volume
+
+- name: "[{{ arr_name | default('?') }}] Read config.xml"
+  ansible.builtin.slurp:
+    src: "{{ _arr_volume.volume.Mountpoint }}/config.xml"
+  register: _arr_config_raw
+  become: true
+
+- name: "[{{ arr_name | default('?') }}] Set API key facts"
+  ansible.builtin.set_fact:
+    "{{ arr_name }}_api_key": "{{ (_arr_config_raw.content | b64decode) | regex_search('<ApiKey>(.*)</ApiKey>', '\\1') | first }}"
+    arr_api_key: "{{ (_arr_config_raw.content | b64decode) | regex_search('<ApiKey>(.*)</ApiKey>', '\\1') | first }}"
+
+- name: "[{{ arr_name | default('?') }}] API key"
+  ansible.builtin.debug:
+    msg: "{{ arr_name }} API key: {{ arr_api_key }}"

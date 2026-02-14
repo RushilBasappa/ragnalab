@@ -7,6 +7,13 @@
     helper: create-volumes
     volumes: [qbittorrent_data, media_data]
 
+- name: Create subpaths
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: create-subpaths
+    volume_name: qbittorrent_data
+    subpaths: [gluetun, config]
+
 - name: Start Gluetun + qBittorrent
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:

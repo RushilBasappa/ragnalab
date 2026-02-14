@@ -34,6 +34,13 @@
     helper: get-volume-path
     volume_name: backrest_data
 
+- name: Create config directory
+  ansible.builtin.file:
+    path: "{{ _volume_path }}/config"
+    state: directory
+    mode: "0755"
+  become: true
+
 - name: Pre-seed Backrest config
   ansible.builtin.copy:
     content: |

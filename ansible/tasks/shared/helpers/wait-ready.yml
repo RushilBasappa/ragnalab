@@ -1,0 +1,11 @@
+---
+# WAIT FOR CONTAINER READY (curl healthcheck)
+# Required: container_name, check_port
+# Optional: health_path (default: ping)
+- name: "Wait for {{ container_name | default('?') }} to be ready"
+  ansible.builtin.command: "docker exec {{ container_name }} curl -sf http://localhost:{{ check_port }}/{{ health_path | default('ping') }}"
+  register: _wait_result
+  until: _wait_result.rc == 0
+  retries: 30
+  delay: 5
+  changed_when: false

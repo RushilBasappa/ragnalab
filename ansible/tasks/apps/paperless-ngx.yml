@@ -5,8 +5,14 @@
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     helper: create-volumes
-    volumes:
-      - paperless_data
+    volumes: [paperless_data]
+
+- name: Create subpaths
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: create-subpaths
+    volume_name: paperless_data
+    subpaths: [app, media, export, consume, redis]
 
 - name: Start Paperless-ngx
   ansible.builtin.include_tasks: ../shared/helpers.yml

@@ -40,3 +40,8 @@
     - name: Jellyseerr
       ansible.builtin.import_tasks: tasks/apps/jellyseerr.yml
       tags: [media, jellyseerr]
+
+    # Step 5: Cross-app integrations (needs all apps running)
+    - name: Integrations
+      ansible.builtin.import_tasks: tasks/apps/media-integrations.yml
+      tags: [media, integrations]

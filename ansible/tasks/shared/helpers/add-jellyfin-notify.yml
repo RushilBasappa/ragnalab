@@ -1,0 +1,46 @@
+---
+# ADD JELLYFIN NOTIFICATION
+# Required: arr_name, arr_port, arr_api_path, arr_api_key
+# Optional: arr_jellyfin_events (dict of app-specific on* flags)
+- name: "[{{ arr_name | default('?') }}] Read Jellyfin API key from .env"
+  ansible.builtin.set_fact:
+    _jellyfin_api_key: "{{ lookup('ansible.builtin.ini', 'JELLYFIN_API_KEY', type='properties', file=playbook_dir + '/../compose/.env') }}"
+
+- name: "[{{ arr_name | default('?') }}] Check existing notifications"
+  ansible.builtin.command: >
+    docker exec {{ arr_name }} curl -sf
+    -H 'X-Api-Key: {{ arr_api_key }}'
+    http://localhost:{{ arr_port }}{{ arr_api_path }}/notification
+  register: _arr_notifications
+  changed_when: false
+
+- name: "[{{ arr_name | default('?') }}] Build Jellyfin notification payload"
+  ansible.builtin.set_fact:
+    _notify_payload: >-
+      {{ _notify_base | combine(arr_jellyfin_events | default({})) }}
+  vars:
+    _notify_base:
+      name: Jellyfin
+      implementation: MediaBrowser
+      configContract: MediaBrowserSettings
+      fields:
+        - { name: host, value: jellyfin }
+        - { name: port, value: 8096 }
+        - { name: apiKey, value: "{{ _jellyfin_api_key }}" }
+        - { name: notify, value: false }
+        - { name: updateLibrary, value: true }
+      onGrab: false
+      onDownload: true
+      onUpgrade: true
+      onRename: true
+      tags: []
+
+- name: "[{{ arr_name | default('?') }}] Add Jellyfin notification"
+  ansible.builtin.command: >
+    docker exec {{ arr_name }} curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -H 'X-Api-Key: {{ arr_api_key }}'
+    -d '{{ _notify_payload | to_json }}'
+    http://localhost:{{ arr_port }}{{ arr_api_path }}/notification
+  when: "'Jellyfin' not in _arr_notifications.stdout"
+  changed_when: true

@@ -92,18 +92,55 @@
   retries: 30
   delay: 5
 
-- name: Get Beszel user ID
+- name: Authenticate with Beszel API
+  ansible.builtin.uri:
+    url: "{{ beszel_api }}/api/collections/_superusers/auth-with-password"
+    method: POST
+    body_format: json
+    body:
+      identity: "{{ beszel_email }}"
+      password: "{{ beszel_pass }}"
+    status_code: 200
+  register: beszel_auth
+
+- name: Check if Beszel user exists
+  ansible.builtin.uri:
+    url: "{{ beszel_api }}/api/collections/users/records?filter=(email='{{ beszel_email }}')"
+    headers:
+      Authorization: "Bearer {{ beszel_auth.json.token }}"
+  register: beszel_users
+
+- name: Create Beszel user
   ansible.builtin.uri:
     url: "{{ beszel_api }}/api/collections/users/records"
+    method: POST
+    body_format: json
     headers:
-      Remote-Email: "{{ beszel_email }}"
-  register: beszel_users
+      Authorization: "Bearer {{ beszel_auth.json.token }}"
+    body:
+      email: "{{ beszel_email }}"
+      password: "{{ beszel_pass }}"
+      passwordConfirm: "{{ beszel_pass }}"
+      role: admin
+    status_code: 200
+  register: beszel_user_created
+  when: beszel_users.json.totalItems == 0
+
+- name: Set Beszel user ID (new user)
+  ansible.builtin.set_fact:
+    beszel_user_id: "{{ beszel_user_created.json.id }}"
+  when: beszel_users.json.totalItems == 0
+
+- name: Set Beszel user ID (existing user)
+  ansible.builtin.set_fact:
+    beszel_user_id: "{{ beszel_users.json['items'][0].id }}"
+  when: beszel_users.json.totalItems != 0
 
 - name: Check if ragnalab system exists
   ansible.builtin.uri:
     url: "{{ beszel_api }}/api/collections/systems/records?filter=(name='ragnalab')"
     headers:
-      Remote-Email: "{{ beszel_email }}"
+      Authorization: "Bearer {{ beszel_auth.json.token }}"
   register: beszel_systems
 
 - name: Register ragnalab system
@@ -112,12 +149,12 @@
     method: POST
     body_format: json
     headers:
-      Remote-Email: "{{ beszel_email }}"
+      Authorization: "Bearer {{ beszel_auth.json.token }}"
     body:
       name: ragnalab
       host: host.docker.internal
       port: 45876
-      users: "{{ beszel_users.json.items[0].id }}"
+      users: "{{ beszel_user_id }}"
     status_code: 200
   when: beszel_systems.json.totalItems == 0
 

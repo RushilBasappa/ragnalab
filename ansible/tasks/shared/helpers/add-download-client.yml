@@ -1,0 +1,20 @@
+---
+# ADD DOWNLOAD CLIENT (qBittorrent via Gluetun)
+# Required: arr_name, arr_port, arr_api_path, arr_api_key, arr_qbt_category
+- name: "[{{ arr_name | default('?') }}] Check existing download clients"
+  ansible.builtin.command: >
+    docker exec {{ arr_name }} curl -sf
+    -H 'X-Api-Key: {{ arr_api_key }}'
+    http://localhost:{{ arr_port }}{{ arr_api_path }}/downloadclient
+  register: _arr_clients
+  changed_when: false
+
+- name: "[{{ arr_name | default('?') }}] Add qBittorrent download client"
+  ansible.builtin.command: >
+    docker exec {{ arr_name }} curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -H 'X-Api-Key: {{ arr_api_key }}'
+    -d '{"enable":true,"protocol":"torrent","priority":1,"name":"qBittorrent","implementation":"QBittorrent","configContract":"QBittorrentSettings","fields":[{"name":"host","value":"gluetun"},{"name":"port","value":8080},{"name":"category","value":"{{ arr_qbt_category }}"}]}'
+    http://localhost:{{ arr_port }}{{ arr_api_path }}/downloadclient
+  when: "'qBittorrent' not in _arr_clients.stdout"
+  changed_when: true

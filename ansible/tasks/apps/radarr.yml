@@ -48,17 +48,3 @@
     arr_api_path: /api/v3
     arr_api_key: "{{ radarr_api_key }}"
     arr_qbt_category: radarr
-
-- name: Add Jellyfin notification
-  ansible.builtin.include_tasks: ../shared/helpers.yml
-  vars:
-    helper: add-jellyfin-notify
-    arr_name: radarr
-    arr_port: 7878
-    arr_api_path: /api/v3
-    arr_api_key: "{{ radarr_api_key }}"
-    arr_jellyfin_events:
-      onMovieAdded: false
-      onMovieDelete: true
-      onMovieFileDelete: true
-      onMovieFileDeleteForUpgrade: true

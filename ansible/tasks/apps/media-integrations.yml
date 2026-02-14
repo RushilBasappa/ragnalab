@@ -1,0 +1,46 @@
+---
+# Cross-app integrations (runs after all media apps are deployed)
+
+# Sonarr → Jellyfin
+- name: Read Sonarr API key
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: read-apikey
+    arr_name: sonarr
+    arr_port: 8989
+
+- name: Add Jellyfin notification to Sonarr
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: add-jellyfin-notify
+    arr_name: sonarr
+    arr_port: 8989
+    arr_api_path: /api/v3
+    arr_api_key: "{{ sonarr_api_key }}"
+    arr_jellyfin_events:
+      onSeriesAdd: false
+      onSeriesDelete: true
+      onEpisodeFileDelete: true
+      onEpisodeFileDeleteForUpgrade: true
+
+# Radarr → Jellyfin
+- name: Read Radarr API key
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: read-apikey
+    arr_name: radarr
+    arr_port: 7878
+
+- name: Add Jellyfin notification to Radarr
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: add-jellyfin-notify
+    arr_name: radarr
+    arr_port: 7878
+    arr_api_path: /api/v3
+    arr_api_key: "{{ radarr_api_key }}"
+    arr_jellyfin_events:
+      onMovieAdded: false
+      onMovieDelete: true
+      onMovieFileDelete: true
+      onMovieFileDeleteForUpgrade: true

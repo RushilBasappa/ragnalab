@@ -1,0 +1,9 @@
+---
+# WAIT FOR FILE TO EXIST
+# Required: file_path
+# Optional: timeout (default: 60)
+- name: "Wait for {{ (file_path | default('?')) | basename }} to exist"
+  ansible.builtin.wait_for:
+    path: "{{ file_path }}"
+    timeout: "{{ timeout | default(60) }}"
+  become: true

@@ -1,0 +1,8 @@
+---
+# STOP CONTAINER(S)
+# Required: services (list of service names)
+- name: "Stop {{ (services | default([])) | join(', ') }}"
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services: "{{ services }}"
+    state: stopped

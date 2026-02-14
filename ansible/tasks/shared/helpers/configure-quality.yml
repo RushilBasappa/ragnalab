@@ -1,0 +1,11 @@
+---
+# CONFIGURE QUALITY PROFILE (Python script)
+# Required: arr_name, arr_port, arr_api_key
+- name: "[{{ arr_name | default('?') }}] Configure 4K Minimal quality profile"
+  ansible.builtin.shell:
+    cmd: >
+      python3 {{ playbook_dir }}/../ansible/scripts/configure-arr-quality.py
+      {{ arr_name }} {{ arr_port }} {{ arr_api_key }}
+  register: _arr_quality
+  changed_when: _arr_quality.rc == 2
+  failed_when: _arr_quality.rc not in [0, 2]

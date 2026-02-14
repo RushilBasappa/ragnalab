@@ -59,6 +59,16 @@
   when: jellyfin_wizard_pending
   changed_when: true
 
+- name: Wait for default user to be created
+  ansible.builtin.command: >
+    docker exec jellyfin curl -sf http://localhost:8096/Startup/User
+  register: _jf_startup_user
+  until: _jf_startup_user.rc == 0 and (_jf_startup_user.stdout | from_json).Name | default('') | length > 0
+  retries: 15
+  delay: 2
+  changed_when: false
+  when: jellyfin_wizard_pending
+
 - name: Create admin user
   ansible.builtin.command: >
     docker exec jellyfin curl -sf -X POST

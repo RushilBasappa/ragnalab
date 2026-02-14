@@ -95,24 +95,28 @@
 
 - name: Enable English language and create profile
   ansible.builtin.command:
-    cmd: >
-      docker exec bazarr python3 -c "
-      import sqlite3, json;
-      conn = sqlite3.connect('/config/db/bazarr.db');
-      c = conn.cursor();
-      changed = False;
-      c.execute(\"SELECT enabled FROM table_settings_languages WHERE code3='eng'\");
-      if c.fetchone()[0] != 1:
-          c.execute(\"UPDATE table_settings_languages SET enabled=1 WHERE code3='eng'\");
-          changed = True;
-      c.execute('SELECT profileId FROM table_languages_profiles WHERE name=\"English\"');
-      if not c.fetchone():
-          items = json.dumps([{'id':1,'language':'en','audio_exclude':'False','hi':'False','forced':'False'}]);
-          c.execute('INSERT INTO table_languages_profiles (name, items, cutoff) VALUES (?,?,?)', ('English', items, None));
-          changed = True;
-      conn.commit();
-      print('changed' if changed else 'ok')
-      "
+    argv:
+      - docker
+      - exec
+      - bazarr
+      - python3
+      - -c
+      - |
+        import sqlite3, json
+        conn = sqlite3.connect('/config/db/bazarr.db')
+        c = conn.cursor()
+        changed = False
+        c.execute("SELECT enabled FROM table_settings_languages WHERE code3='eng'")
+        if c.fetchone()[0] != 1:
+            c.execute("UPDATE table_settings_languages SET enabled=1 WHERE code3='eng'")
+            changed = True
+        c.execute('SELECT profileId FROM table_languages_profiles WHERE name="English"')
+        if not c.fetchone():
+            items = json.dumps([{"id": 1, "language": "en", "audio_exclude": "False", "hi": "False", "forced": "False"}])
+            c.execute("INSERT INTO table_languages_profiles (name, items, cutoff) VALUES (?,?,?)", ("English", items, None))
+            changed = True
+        conn.commit()
+        print("changed" if changed else "ok")
   register: bazarr_lang
   changed_when: "'changed' in bazarr_lang.stdout"
 

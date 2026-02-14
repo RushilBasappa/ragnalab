@@ -1,0 +1,39 @@
+---
+# PATCH AUTH (stop → patch XML → start → wait)
+# Required: arr_name, arr_port
+- name: "[{{ arr_name | default('?') }}] Stop container for auth patch"
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - "{{ arr_name }}"
+    state: stopped
+
+- name: "[{{ arr_name | default('?') }}] Get config volume for auth patch"
+  community.docker.docker_volume_info:
+    name: "{{ arr_name }}_data"
+  register: _arr_volume_auth
+
+- name: "[{{ arr_name | default('?') }}] Set auth to External"
+  ansible.builtin.replace:
+    path: "{{ _arr_volume_auth.volume.Mountpoint }}/config.xml"
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
+  loop:
+    - { regexp: '<AuthenticationMethod>.*</AuthenticationMethod>', replace: '<AuthenticationMethod>External</AuthenticationMethod>' }
+    - { regexp: '<AuthenticationRequired>.*</AuthenticationRequired>', replace: '<AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>' }
+  become: true
+
+- name: "[{{ arr_name | default('?') }}] Start container after auth patch"
+  community.docker.docker_compose_v2:
+    project_src: "{{ playbook_dir }}/../compose"
+    services:
+      - "{{ arr_name }}"
+    state: present
+
+- name: "[{{ arr_name | default('?') }}] Wait for ready after auth patch"
+  ansible.builtin.command: "docker exec {{ arr_name }} curl -sf http://localhost:{{ arr_port }}/ping"
+  register: _arr_ping_auth
+  until: _arr_ping_auth.rc == 0
+  retries: 30
+  delay: 5
+  changed_when: false

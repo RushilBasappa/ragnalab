@@ -48,17 +48,3 @@
     arr_api_path: /api/v3
     arr_api_key: "{{ sonarr_api_key }}"
     arr_qbt_category: tv-sonarr
-
-- name: Add Jellyfin notification
-  ansible.builtin.include_tasks: ../shared/helpers.yml
-  vars:
-    helper: add-jellyfin-notify
-    arr_name: sonarr
-    arr_port: 8989
-    arr_api_path: /api/v3
-    arr_api_key: "{{ sonarr_api_key }}"
-    arr_jellyfin_events:
-      onSeriesAdd: false
-      onSeriesDelete: true
-      onEpisodeFileDelete: true
-      onEpisodeFileDeleteForUpgrade: true

@@ -1,0 +1,12 @@
+---
+# GET VOLUME MOUNTPOINT
+# Required: volume_name
+# Sets: _volume_path fact
+- name: "Get {{ volume_name | default('?') }} volume mountpoint"
+  community.docker.docker_volume_info:
+    name: "{{ volume_name }}"
+  register: _vol_info
+
+- name: Set volume path fact
+  ansible.builtin.set_fact:
+    _volume_path: "{{ _vol_info.volume.Mountpoint }}"

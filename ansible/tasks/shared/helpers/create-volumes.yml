@@ -1,0 +1,7 @@
+---
+# CREATE VOLUMES
+# Required: volumes (list of volume names)
+- name: Create Docker volumes
+  community.docker.docker_volume:
+    name: "{{ item }}"
+  loop: "{{ volumes }}"

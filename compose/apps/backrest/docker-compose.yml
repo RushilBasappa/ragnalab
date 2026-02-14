@@ -4,11 +4,11 @@ services:
     container_name: backrest
     hostname: ragnalab
     environment:
-      BACKREST_DATA: /backrest/data
-      BACKREST_CONFIG: /backrest/config/config.json
-      XDG_CACHE_HOME: /backrest/cache
+      BACKREST_DATA: /data
+      BACKREST_CONFIG: /data/config/config.json
+      XDG_CACHE_HOME: /data/cache
     volumes:
-      - backrest_data:/backrest
+      - backrest_data:/data
       - /var/lib/docker/volumes:/docker-volumes
       - ragnalab_backups:/backups
     networks:

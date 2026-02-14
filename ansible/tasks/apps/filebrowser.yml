@@ -7,6 +7,13 @@
     helper: create-volumes
     volumes: [filebrowser_data]
 
+- name: Create subpaths
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: create-subpaths
+    volume_name: filebrowser_data
+    subpaths: [db, srv]
+
 - name: Start FileBrowser
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:

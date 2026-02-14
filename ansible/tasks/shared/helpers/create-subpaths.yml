@@ -1,0 +1,15 @@
+---
+# CREATE VOLUME SUBPATHS
+# Required: volume_name, subpaths (list of subdirectory names)
+- name: "Get {{ volume_name | default('?') }} mountpoint for subpaths"
+  community.docker.docker_volume_info:
+    name: "{{ volume_name }}"
+  register: _subpath_vol
+
+- name: "Create subpaths in {{ volume_name | default('?') }}"
+  ansible.builtin.file:
+    path: "{{ _subpath_vol.volume.Mountpoint }}/{{ item }}"
+    state: directory
+    mode: "0755"
+  loop: "{{ subpaths }}"
+  become: true

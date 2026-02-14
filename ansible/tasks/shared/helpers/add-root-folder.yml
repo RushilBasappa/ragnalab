@@ -1,0 +1,20 @@
+---
+# ADD ROOT FOLDER
+# Required: arr_name, arr_port, arr_api_path, arr_api_key, arr_root_path
+- name: "[{{ arr_name | default('?') }}] Check existing root folders"
+  ansible.builtin.command: >
+    docker exec {{ arr_name }} curl -sf
+    -H 'X-Api-Key: {{ arr_api_key }}'
+    http://localhost:{{ arr_port }}{{ arr_api_path }}/rootfolder
+  register: _arr_rootfolders
+  changed_when: false
+
+- name: "[{{ arr_name | default('?') }}] Add root folder {{ arr_root_path | default('?') }}"
+  ansible.builtin.command: >
+    docker exec {{ arr_name }} curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -H 'X-Api-Key: {{ arr_api_key }}'
+    -d '{"path":"{{ arr_root_path }}"}'
+    http://localhost:{{ arr_port }}{{ arr_api_path }}/rootfolder
+  when: arr_root_path not in _arr_rootfolders.stdout
+  changed_when: true
