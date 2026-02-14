@@ -3,9 +3,11 @@ services:
     image: henrygd/beszel:latest
     container_name: beszel
     environment:
-      TRUSTED_AUTH_HEADER: Remote-User
+      TRUSTED_AUTH_HEADER: Remote-Email
     volumes:
       - beszel_data:/beszel_data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - traefik_public
       - socket_proxy
@@ -21,6 +23,22 @@ services:
       resources:
         limits:
           memory: 128M
+    restart: unless-stopped
+
+  beszel-agent:
+    image: henrygd/beszel-agent:latest
+    container_name: beszel-agent
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      PORT: "45876"
+      KEY: "${BESZEL_AGENT_KEY}"
+      FILESYSTEM: /dev/mmcblk0p2
+    deploy:
+      resources:
+        limits:
+          memory: 64M
     restart: unless-stopped
 
 volumes:

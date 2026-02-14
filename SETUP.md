@@ -448,27 +448,20 @@ https://pihole.ragnalab.xyz
 # - Restart: make service TAGS=homepage
 ```
 
-### 9. Backrest Backup Configuration
+### 9. Verify Backups
 ```bash
-# Open Backrest
+# Backrest is auto-configured by Ansible with:
+# - Local restic repo at /backups (encrypted)
+# - Daily backup at 3 AM for all Docker volumes
+# - Retention: 15 daily, 4 weekly, 3 monthly
+
+# Open Backrest UI to verify:
 https://backups.ragnalab.xyz
 
-# Configure repository:
-# 1. Add Repository → Choose backend (local/B2/S3/etc.)
-# 2. Configure remote storage (Backblaze B2 recommended)
-# 3. Initialize repository
+# Trigger a manual backup:
+make backup
 
-# Create backup plan:
-# 1. New Plan → Name: "Docker Volumes"
-# 2. Repository: Select created repository
-# 3. Paths: /docker-volumes
-# 4. Schedule: Daily at 3:00 AM
-# 5. Retention: 7 daily, 4 weekly, 6 monthly
-# 6. Save plan
-
-# Run first backup:
-# - Click "Run Now" on the backup plan
-# - Verify successful completion
+# Restore: use Backrest UI → select snapshot → restore files
 ```
 
 ---
@@ -754,7 +747,7 @@ sudo tar -xzf ragnalab-backup-DATE.tar.gz \
 ```
 
 ### Automated Backup (via Backrest)
-See Phase 4, Step 9 for Backrest configuration
+Auto-configured by Ansible. Daily at 3 AM, restic-encrypted. UI at `backups.ragnalab.xyz`.
 
 ### Disaster Recovery
 ```bash

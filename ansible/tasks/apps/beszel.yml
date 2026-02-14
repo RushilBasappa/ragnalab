@@ -1,5 +1,5 @@
 ---
-# Beszel
+# Beszel Hub + Agent
 
 - name: Create volumes
   ansible.builtin.include_tasks: ../shared/helpers.yml
@@ -7,8 +7,120 @@
     helper: create-volumes
     volumes: [beszel_data]
 
-- name: Start Beszel
+- name: Start Beszel hub
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     helper: start
     services: [beszel]
+
+- name: Set .env path
+  ansible.builtin.set_fact:
+    env_file: "{{ playbook_dir }}/../compose/.env"
+
+- name: Get Beszel data volume path
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: get-volume-path
+    volume_name: beszel_data
+
+- name: Wait for Beszel key to be generated
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: wait-for-file
+    file_path: "{{ _volume_path }}/id_ed25519"
+
+- name: Derive agent public key from hub private key
+  ansible.builtin.command: ssh-keygen -y -f {{ _volume_path }}/id_ed25519
+  register: beszel_pubkey
+  changed_when: false
+  become: true
+
+- name: Write agent key to .env
+  ansible.builtin.lineinfile:
+    path: "{{ env_file }}"
+    regexp: "^BESZEL_AGENT_KEY="
+    line: "BESZEL_AGENT_KEY={{ beszel_pubkey.stdout }}"
+
+# --- Create superuser for API access (Homepage widget) ---
+
+- name: Read Beszel credentials from .env
+  ansible.builtin.set_fact:
+    beszel_email: "{{ lookup('ini', 'BESZEL_USER', type='properties', file=env_file) }}"
+    beszel_pass: "{{ lookup('ini', 'BESZEL_PASSWORD', type='properties', file=env_file) }}"
+
+- name: Generate Beszel password if not set
+  ansible.builtin.set_fact:
+    beszel_pass: "{{ lookup('password', '/dev/null length=32 chars=ascii_letters,digits') }}"
+  when: beszel_pass == ''
+
+- name: Write Beszel password to .env
+  ansible.builtin.lineinfile:
+    path: "{{ env_file }}"
+    regexp: "^BESZEL_PASSWORD="
+    line: "BESZEL_PASSWORD={{ beszel_pass }}"
+  when: beszel_pass != ''
+
+- name: Create Beszel superuser for API access
+  ansible.builtin.command: >
+    docker exec beszel /beszel superuser upsert {{ beszel_email }} {{ beszel_pass }}
+  changed_when: true
+
+- name: Start Beszel agent
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: start
+    services: [beszel-agent]
+
+# --- Auto-register system via API (trusted header auth) ---
+
+- name: Get Beszel container IP
+  ansible.builtin.command: >
+    docker inspect beszel --format
+    {%- raw %} '{{range .NetworkSettings.Networks}}{{.IPAddress}} {{end}}' {% endraw %}
+  register: beszel_ips
+  changed_when: false
+
+- name: Set Beszel API URL
+  ansible.builtin.set_fact:
+    beszel_api: "http://{{ beszel_ips.stdout.split() | first }}:8090"
+
+- name: Wait for Beszel API
+  ansible.builtin.uri:
+    url: "{{ beszel_api }}/api/health"
+  register: _beszel_health
+  until: _beszel_health.status == 200
+  retries: 30
+  delay: 5
+
+- name: Get Beszel user ID
+  ansible.builtin.uri:
+    url: "{{ beszel_api }}/api/collections/users/records"
+    headers:
+      Remote-Email: "{{ beszel_email }}"
+  register: beszel_users
+
+- name: Check if ragnalab system exists
+  ansible.builtin.uri:
+    url: "{{ beszel_api }}/api/collections/systems/records?filter=(name='ragnalab')"
+    headers:
+      Remote-Email: "{{ beszel_email }}"
+  register: beszel_systems
+
+- name: Register ragnalab system
+  ansible.builtin.uri:
+    url: "{{ beszel_api }}/api/collections/systems/records"
+    method: POST
+    body_format: json
+    headers:
+      Remote-Email: "{{ beszel_email }}"
+    body:
+      name: ragnalab
+      host: host.docker.internal
+      port: 45876
+      users: "{{ beszel_users.json.items[0].id }}"
+    status_code: 200
+  when: beszel_systems.json.totalItems == 0
+
+- name: Beszel post-deploy
+  ansible.builtin.debug:
+    msg: "Beszel hub + agent deployed. Dashboard at https://beszel.{{ domain }}"

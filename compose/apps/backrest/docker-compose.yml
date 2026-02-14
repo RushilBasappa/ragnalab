@@ -2,11 +2,15 @@ services:
   backrest:
     image: garethgeorge/backrest:latest
     container_name: backrest
+    hostname: ragnalab
+    environment:
+      BACKREST_DATA: /backrest/data
+      BACKREST_CONFIG: /backrest/config/config.json
+      XDG_CACHE_HOME: /backrest/cache
     volumes:
-      - backrest_data:/data
-      - backrest_config:/config
-      - backrest_cache:/cache
-      - /var/lib/docker/volumes:/docker-volumes:ro
+      - backrest_data:/backrest
+      - /var/lib/docker/volumes:/docker-volumes
+      - ragnalab_backups:/backups
     networks:
       - traefik_public
     labels:
@@ -26,9 +30,7 @@ services:
 volumes:
   backrest_data:
     external: true
-  backrest_config:
-    external: true
-  backrest_cache:
+  ragnalab_backups:
     external: true
 
 networks:

@@ -209,6 +209,13 @@
         description: Server monitoring
         server: socket-proxy
         container: beszel
+        widget:
+          type: beszel
+          url: http://beszel:8090
+          username: "{{HOMEPAGE_VAR_BESZEL_USER}}"
+          password: "{{HOMEPAGE_VAR_BESZEL_PASSWORD}}"
+          systemId: ragnalab
+          version: 2
 
     - Speedtest Tracker:
         icon: speedtest-tracker.png

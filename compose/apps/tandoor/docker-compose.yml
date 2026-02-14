@@ -19,7 +19,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 512M
     depends_on:
       tandoor-db:
         condition: service_healthy
@@ -27,7 +27,7 @@ services:
       traefik.enable: "true"
       traefik.http.routers.tandoor.rule: "Host(`recipes.${DOMAIN}`)"
       traefik.http.routers.tandoor.entrypoints: websecure
-      traefik.http.services.tandoor.loadbalancer.server.port: "8080"
+      traefik.http.services.tandoor.loadbalancer.server.port: "80"
       traefik.http.routers.tandoor.middlewares: authelia@docker
       kuma.tandoor.http.name: Tandoor Recipes
       kuma.tandoor.http.url: https://recipes.${DOMAIN}

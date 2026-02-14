@@ -1,5 +1,9 @@
 ---
-# Backrest
+# Backrest — automated backup with pre-seeded config
+
+- name: Set .env path
+  ansible.builtin.set_fact:
+    env_file: "{{ playbook_dir }}/../compose/.env"
 
 - name: Create volumes
   ansible.builtin.include_tasks: ../shared/helpers.yml
@@ -9,6 +13,85 @@
       - backrest_data
       - backrest_config
       - backrest_cache
+      - ragnalab_backups
+
+- name: Read restic password from .env
+  ansible.builtin.set_fact:
+    backrest_restic_pass: "{{ lookup('ini', 'BACKREST_RESTIC_PASSWORD', type='properties', file=env_file) }}"
+
+- name: Generate restic password if not set
+  ansible.builtin.set_fact:
+    backrest_restic_pass: "{{ lookup('password', '/dev/null length=32 chars=ascii_letters,digits') }}"
+  when: backrest_restic_pass == ''
+
+- name: Write restic password to .env
+  ansible.builtin.lineinfile:
+    path: "{{ env_file }}"
+    regexp: "^BACKREST_RESTIC_PASSWORD="
+    line: "BACKREST_RESTIC_PASSWORD={{ backrest_restic_pass }}"
+
+- name: Get config volume path
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: get-volume-path
+    volume_name: backrest_config
+
+- name: Pre-seed Backrest config
+  ansible.builtin.copy:
+    content: |
+      {
+        "modno": 0,
+        "version": 4,
+        "instance": "ragnalab",
+        "repos": [
+          {
+            "id": "local-backups",
+            "uri": "/backups",
+            "password": "{{ backrest_restic_pass }}",
+            "autoUnlock": true,
+            "autoInitialize": true,
+            "prunePolicy": {
+              "schedule": { "maxFrequencyDays": 7 },
+              "maxUnusedPercent": 25
+            },
+            "checkPolicy": {
+              "schedule": { "maxFrequencyDays": 30 },
+              "structureOnly": true
+            }
+          }
+        ],
+        "plans": [
+          {
+            "id": "docker-volumes-daily",
+            "repo": "local-backups",
+            "paths": ["/docker-volumes"],
+            "excludes": [
+              "media_data",
+              "backrest_data",
+              "backrest_config",
+              "backrest_cache",
+              "ragnalab_backups"
+            ],
+            "schedule": {
+              "cron": "0 3 * * *",
+              "clock": "CLOCK_LOCAL"
+            },
+            "retention": {
+              "policyTimeBucketed": {
+                "daily": 15,
+                "weekly": 4,
+                "monthly": 3,
+                "keepLastN": 3
+              }
+            },
+            "skipIfUnchanged": true
+          }
+        ]
+      }
+    dest: "{{ _volume_path }}/config.json"
+    mode: "0600"
+    force: false
+  become: true
 
 - name: Start Backrest
   ansible.builtin.include_tasks: ../shared/helpers.yml

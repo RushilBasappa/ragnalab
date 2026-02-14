@@ -3,7 +3,7 @@ ANSIBLE  := ANSIBLE_CONFIG=ansible/ansible.cfg ansible-playbook -i ansible/inven
 VAULT    := --vault-password-file .vault_pass
 SITE     := $(ANSIBLE) ansible/site.yml $(VAULT)
 
-.PHONY: help init sync hooks fix-locale install-ansible bootstrap deploy-infra deploy-media deploy-apps deploy-all status keys service teardown teardown-all rename-domain
+.PHONY: help init sync hooks fix-locale install-ansible bootstrap deploy-infra deploy-media deploy-apps deploy-all status keys service teardown teardown-all rename-domain backup restore
 
 # --- Setup ---
 
@@ -79,6 +79,41 @@ rename-domain: ## Change domain everywhere: make rename-domain NEW=example.com
 		ansible/tasks/apps/jellyseerr.yml \
 		compose/.env; \
 	echo "Done. Run 'make sync' then redeploy affected services."
+
+backup: ## Trigger a manual Backrest backup
+	@curl -sf -X POST http://localhost:9898/v1.Backrest/Backup \
+		-H 'Content-Type: application/json' \
+		-d '{"value":"docker-volumes-daily"}' && echo "Backup triggered." || echo "Error: is Backrest running?"
+
+restore: ## Restore volumes: make restore APP="tandoor tandoor-db" VOL="tandoor_postgres_data tandoor_static tandoor_media"
+	@[ -n "$(APP)" ] && [ -n "$(VOL)" ] || (echo "Usage: make restore APP=\"container(s)\" VOL=\"volume(s)\""; exit 1)
+	@echo "Stopping containers..."
+	@for app in $(APP); do \
+		echo "  $$app"; \
+		docker stop $$app 2>/dev/null || true; \
+		docker rm $$app 2>/dev/null || true; \
+	done
+	@echo "Removing volumes..."
+	@for vol in $(VOL); do \
+		echo "  $$vol"; \
+		docker volume rm $$vol 2>/dev/null || true; \
+	done
+	@echo ""
+	@echo "Now restore in Backrest UI:"
+	@for vol in $(VOL); do \
+		echo "  - $$vol"; \
+	done
+	@echo "  1. Browse snapshot → select the volumes above"
+	@echo "  2. Set target path to: /docker-volumes"
+	@echo "  3. Click Restore"
+	@echo ""
+	@echo "Press Enter when restore is complete..." && read dummy
+	@for vol in $(VOL); do \
+		docker volume create $$vol; \
+	done
+	@echo "Starting services..."
+	@cd compose && docker compose up -d $(APP)
+	@echo "Done."
 
 keys: ## Extract API keys from *arr apps
 	@for app in sonarr radarr prowlarr; do \
