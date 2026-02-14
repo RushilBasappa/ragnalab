@@ -1,0 +1,58 @@
+---
+# ADD INDEXER PROXY (FlareSolverr for Prowlarr)
+# Required: prowlarr_api_key, prowlarr_port (default: 9696)
+# Optional: proxy_name, proxy_host, proxy_timeout
+
+- name: Set indexer proxy defaults
+  ansible.builtin.set_fact:
+    _proxy_name: "{{ proxy_name | default('FlareSolverr') }}"
+    _proxy_host: "{{ proxy_host | default('http://flaresolverr:8191') }}"
+    _proxy_timeout: "{{ proxy_timeout | default(60) }}"
+    _prowlarr_port: "{{ prowlarr_port | default(9696) }}"
+    _proxy_tag: "{{ proxy_tag | default('flaresolverr') }}"
+
+# Step 1: Create or find the tag
+- name: "[prowlarr] Check existing tags"
+  ansible.builtin.command: >
+    docker exec prowlarr curl -sf
+    -H 'X-Api-Key: {{ prowlarr_api_key }}'
+    http://localhost:{{ _prowlarr_port }}/api/v1/tag
+  register: _prowlarr_tags
+  changed_when: false
+
+- name: "[prowlarr] Create '{{ _proxy_tag }}' tag"
+  ansible.builtin.command: >
+    docker exec prowlarr curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -H 'X-Api-Key: {{ prowlarr_api_key }}'
+    -d '{"label":"{{ _proxy_tag }}"}'
+    http://localhost:{{ _prowlarr_port }}/api/v1/tag
+  register: _created_tag
+  when: "_proxy_tag not in _prowlarr_tags.stdout"
+  changed_when: true
+
+- name: "[prowlarr] Extract tag ID"
+  ansible.builtin.set_fact:
+    _proxy_tag_id: >-
+      {{ (_created_tag.stdout | from_json).id
+         if _created_tag is not skipped
+         else (_prowlarr_tags.stdout | from_json | selectattr('label', 'equalto', _proxy_tag) | first).id }}
+
+# Step 2: Create the indexer proxy with the tag
+- name: "[prowlarr] Check existing indexer proxies"
+  ansible.builtin.command: >
+    docker exec prowlarr curl -sf
+    -H 'X-Api-Key: {{ prowlarr_api_key }}'
+    http://localhost:{{ _prowlarr_port }}/api/v1/indexerProxy
+  register: _prowlarr_proxies
+  changed_when: false
+
+- name: "[prowlarr] Add {{ _proxy_name }} indexer proxy"
+  ansible.builtin.command: >
+    docker exec prowlarr curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -H 'X-Api-Key: {{ prowlarr_api_key }}'
+    -d '{"name":"{{ _proxy_name }}","implementation":"FlareSolverr","configContract":"FlareSolverrSettings","tags":[{{ _proxy_tag_id }}],"fields":[{"name":"host","value":"{{ _proxy_host }}"},{"name":"requestTimeout","value":{{ _proxy_timeout }}}]}'
+    http://localhost:{{ _prowlarr_port }}/api/v1/indexerProxy
+  when: "_proxy_name not in _prowlarr_proxies.stdout"
+  changed_when: true

@@ -1,25 +1,29 @@
 ---
-# Top bar widgets - Quick access and system overview
+# Top bar widgets
+
 - logo:
-    icon: https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/homelab.png
+    icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/homelab.png
+
+- greeting:
+    text_size: xl
+    text: "Welcome to RagnaLab"
 
 - search:
     provider: google
     target: _blank
-    showSearchSuggestions: true
 
 - datetime:
     text_size: xl
     format:
-      dateStyle: short
+      dateStyle: long
       timeStyle: short
       hour12: false
 
-# Resource widgets - System health monitoring
 - resources:
     label: System
+    expanded: true
     cpu: true
     memory: true
     disk: /
-    expanded: true
     diskUnits: bytes
+    uptime: true

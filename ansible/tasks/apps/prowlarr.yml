@@ -1,5 +1,5 @@
 ---
-# Prowlarr
+# Prowlarr + FlareSolverr (CloudFlare bypass for indexers)
 
 - name: Create volumes
   ansible.builtin.include_tasks: ../shared/helpers.yml
@@ -62,3 +62,13 @@
     http://localhost:9696/api/v1/applications
   when: "'Radarr' not in prowlarr_apps.stdout"
   changed_when: true
+
+# Prowlarr-specific: add FlareSolverr as indexer proxy for CloudFlare bypass
+- name: Add FlareSolverr indexer proxy to Prowlarr
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: add-indexer-proxy
+    prowlarr_port: 9696
+    proxy_name: FlareSolverr
+    proxy_host: http://flaresolverr:8191
+    proxy_timeout: 60

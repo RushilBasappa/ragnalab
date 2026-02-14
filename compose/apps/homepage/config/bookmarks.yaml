@@ -1,31 +1,24 @@
 ---
-# Quick access bookmarks organized by category
+# Quick access bookmarks - organized for homelab management workflow
 
-- Documentation:
+- Homelab Resources:
     - Homepage Docs:
         - abbr: HP
           href: https://gethomepage.dev/
           icon: https://gethomepage.dev/img/banner_light@2x.png
-          description: Homepage configuration guide
+          description: Homepage widget and config reference
 
-    - Docker Docs:
-        - abbr: DC
-          href: https://docs.docker.com/
-          icon: docker.png
-          description: Docker documentation
-
-    - Traefik Docs:
-        - abbr: TF
-          href: https://doc.traefik.io/traefik/
-          icon: traefik.png
-          description: Traefik proxy documentation
-
-- Self-Hosted Resources:
     - Awesome Selfhosted:
         - abbr: ASH
           href: https://awesome-selfhosted.net/
           icon: https://awesome-selfhosted.net/icons/icon-512x512.png
-          description: Curated list of self-hosted software
+          description: Discover new self-hosted apps
+
+    - r/selfhosted:
+        - abbr: SSH
+          href: https://reddit.com/r/selfhosted
+          icon: reddit.png
+          description: Self-hosting community and support
 
     - LinuxServer.io:
         - abbr: LS
@@ -33,21 +26,59 @@
           icon: linuxserver.png
           description: Quality container images
 
-    - r/selfhosted:
-        - abbr: SSH
-          href: https://reddit.com/r/selfhosted
-          icon: reddit.png
-          description: Self-hosting community
+- Infrastructure Docs:
+    - Docker Docs:
+        - abbr: DC
+          href: https://docs.docker.com/
+          icon: docker.png
+          description: Docker and Compose reference
 
-- Media Resources:
+    - Traefik Docs:
+        - abbr: TF
+          href: https://doc.traefik.io/traefik/
+          icon: traefik.png
+          description: Reverse proxy configuration
+
+    - Tailscale Docs:
+        - abbr: TS
+          href: https://tailscale.com/kb/
+          icon: tailscale.png
+          description: VPN setup and troubleshooting
+
+    - Ansible Docs:
+        - abbr: AN
+          href: https://docs.ansible.com/
+          icon: ansible.png
+          description: Automation and provisioning
+
+- Media Stack Guides:
     - TRaSH Guides:
         - abbr: TG
           href: https://trash-guides.info/
           icon: https://trash-guides.info/assets/img/site/TRaSH-logo.png
-          description: Media server setup guides
+          description: Optimal media stack configuration
 
     - ServarrWiki:
         - abbr: SW
           href: https://wiki.servarr.com/
           icon: https://wiki.servarr.com/assets/img/logo.png
-          description: Arr stack documentation
+          description: Arr stack setup and API docs
+
+    - Jellyfin Docs:
+        - abbr: JF
+          href: https://jellyfin.org/docs/
+          icon: jellyfin.png
+          description: Media server configuration
+
+- Community & Tools:
+    - GitHub:
+        - abbr: GH
+          href: https://github.com/
+          icon: github.png
+          description: Code repositories
+
+    - Dashboard Icons:
+        - abbr: DI
+          href: https://github.com/walkxcode/dashboard-icons
+          icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/default.png
+          description: Icon library for services

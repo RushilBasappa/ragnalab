@@ -1,10 +1,15 @@
 ---
-# Media
-- Media:
+# RagnaLab Services
+# Organized by function with rich widget integration and status monitoring
+
+# ============================================================================
+# MEDIA STREAMING - Primary consumption endpoints
+# ============================================================================
+- Media Streaming:
     - Jellyfin:
         icon: jellyfin.png
         href: https://jellyfin.ragnalab.xyz
-        description: Media streaming server
+        description: Stream movies, TV shows, and music
         server: socket-proxy
         container: jellyfin
         widget:
@@ -13,58 +18,78 @@
           key: "{{HOMEPAGE_VAR_JELLYFIN_API_KEY}}"
           enableBlocks: true
           enableNowPlaying: true
+        ping: https://jellyfin.ragnalab.xyz
 
     - Jellyseerr:
         icon: jellyseerr.png
         href: https://requests.ragnalab.xyz
-        description: Media requests and discovery
+        description: Request and discover new media
         server: socket-proxy
         container: jellyseerr
         widget:
           type: jellyseerr
           url: http://jellyseerr:5055
           key: "{{HOMEPAGE_VAR_JELLYSEERR_API_KEY}}"
+        ping: https://requests.ragnalab.xyz
 
+# ============================================================================
+# MEDIA MANAGEMENT - Automation stack
+# ============================================================================
+- Media Management:
     - Radarr:
         icon: radarr.png
         href: https://radarr.ragnalab.xyz
-        description: Movie collection manager
+        description: Automated movie downloads
+        server: socket-proxy
+        container: radarr
         widget:
           type: radarr
           url: http://radarr:7878
           key: "{{HOMEPAGE_VAR_RADARR_API_KEY}}"
+          enableQueue: true
+        ping: https://radarr.ragnalab.xyz
 
     - Sonarr:
         icon: sonarr.png
         href: https://sonarr.ragnalab.xyz
-        description: TV show collection manager
+        description: Automated TV show downloads
+        server: socket-proxy
+        container: sonarr
         widget:
           type: sonarr
           url: http://sonarr:8989
           key: "{{HOMEPAGE_VAR_SONARR_API_KEY}}"
+          enableQueue: true
+        ping: https://sonarr.ragnalab.xyz
 
     - Prowlarr:
         icon: prowlarr.png
         href: https://prowlarr.ragnalab.xyz
-        description: Indexer manager
+        description: Indexer management for all *arr apps
+        server: socket-proxy
+        container: prowlarr
         widget:
           type: prowlarr
           url: http://prowlarr:9696
           key: "{{HOMEPAGE_VAR_PROWLARR_API_KEY}}"
+        ping: https://prowlarr.ragnalab.xyz
 
     - Bazarr:
         icon: bazarr.png
         href: https://bazarr.ragnalab.xyz
-        description: Subtitle manager
+        description: Automated subtitle downloads
+        server: socket-proxy
+        container: bazarr
         widget:
           type: bazarr
           url: http://bazarr:6767
           key: "{{HOMEPAGE_VAR_BAZARR_API_KEY}}"
+        ping: https://bazarr.ragnalab.xyz
 
     - qBittorrent:
         icon: qbittorrent.png
         href: https://qbit.ragnalab.xyz
-        description: Torrent client (via VPN)
+        description: Torrent client behind VPN
         server: socket-proxy
         container: qbittorrent
         widget:
@@ -72,22 +97,125 @@
           url: http://gluetun:8080
           username: "{{HOMEPAGE_VAR_QBITTORRENT_USERNAME}}"
           password: "{{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}"
+        ping: https://qbit.ragnalab.xyz
 
-# Infrastructure
+    - FlareSolverr:
+        icon: flaresolverr.png
+        description: CloudFlare bypass proxy for indexers
+        server: socket-proxy
+        container: flaresolverr
+        ping: http://flaresolverr:8191/health
+
+# ============================================================================
+# DOCUMENTS & NOTES - Knowledge management
+# ============================================================================
+- Documents & Notes:
+    - Paperless-ngx:
+        icon: paperless.png
+        href: https://paperless.ragnalab.xyz
+        description: Digital document archive
+        server: socket-proxy
+        container: paperless-ngx
+        widget:
+          type: paperlessngx
+          url: http://paperless-ngx:8000
+          key: "{{HOMEPAGE_VAR_PAPERLESS_API_KEY}}"
+        ping: https://paperless.ragnalab.xyz
+
+    - Obsidian LiveSync:
+        icon: obsidian.png
+        href: https://obsidian.ragnalab.xyz
+        description: Self-hosted note synchronization
+        server: socket-proxy
+        container: obsidian-livesync
+        ping: https://obsidian.ragnalab.xyz
+
+    - FreshRSS:
+        icon: freshrss.png
+        href: https://rss.ragnalab.xyz
+        description: RSS feed aggregator
+        server: socket-proxy
+        container: freshrss
+        ping: https://rss.ragnalab.xyz
+
+# ============================================================================
+# PERSONAL APPS - Daily utilities
+# ============================================================================
+- Personal Apps:
+    - Vaultwarden:
+        icon: bitwarden.png
+        href: https://vault.ragnalab.xyz
+        description: Self-hosted password manager
+        server: socket-proxy
+        container: vaultwarden
+        ping: https://vault.ragnalab.xyz
+
+    - Tandoor Recipes:
+        icon: tandoor.png
+        href: https://recipes.ragnalab.xyz
+        description: Recipe collection and meal planning
+        server: socket-proxy
+        container: tandoor
+        ping: https://recipes.ragnalab.xyz
+
+    - Actual Budget:
+        icon: actual.png
+        href: https://budget.ragnalab.xyz
+        description: Personal finance tracking
+        server: socket-proxy
+        container: actual-budget
+        ping: https://budget.ragnalab.xyz
+
+    - Ntfy:
+        icon: ntfy.png
+        href: https://ntfy.ragnalab.xyz
+        description: Push notification service
+        server: socket-proxy
+        container: ntfy
+        ping: https://ntfy.ragnalab.xyz
+
+# ============================================================================
+# FILE MANAGEMENT - Storage and sync
+# ============================================================================
+- File Management:
+    - Syncthing:
+        icon: syncthing.png
+        href: https://sync.ragnalab.xyz
+        description: Cross-device file synchronization
+        server: socket-proxy
+        container: syncthing
+        ping: https://sync.ragnalab.xyz
+
+    - FileBrowser:
+        icon: filebrowser.png
+        href: https://files.ragnalab.xyz
+        description: Web-based file manager
+        server: socket-proxy
+        container: filebrowser
+        ping: https://files.ragnalab.xyz
+
+# ============================================================================
+# INFRASTRUCTURE - Core services
+# ============================================================================
 - Infrastructure:
     - Traefik:
         icon: traefik.png
         href: https://traefik.ragnalab.xyz
-        description: Reverse proxy and SSL
+        description: Reverse proxy with automatic SSL
         server: socket-proxy
         container: traefik
+        widget:
+          type: traefik
+          url: http://traefik:8080
+        ping: https://traefik.ragnalab.xyz
 
     - Authelia:
         icon: authelia.png
         href: https://auth.ragnalab.xyz
-        description: Single sign-on
+        description: Single sign-on and 2FA
         server: socket-proxy
         container: authelia
+        ping: https://auth.ragnalab.xyz
 
     - Pi-hole:
         icon: pi-hole.png
@@ -95,118 +223,72 @@
         description: Network-wide ad blocking
         server: socket-proxy
         container: pihole
+        widget:
+          type: pihole
+          url: http://pihole:80
+          key: "{{HOMEPAGE_VAR_PIHOLE_API_KEY}}"
+        ping: https://pihole.ragnalab.xyz
 
     - Tailscale:
         icon: tailscale.png
+        href: https://login.tailscale.com/admin/machines
         description: Mesh VPN network
+        ping: 100.64.0.1  # CHANGEME: Your Tailscale IP
 
     - Backrest:
         icon: backrest.png
         href: https://backups.ragnalab.xyz
-        description: Backup management
+        description: Restic backup orchestration
         server: socket-proxy
         container: backrest
+        ping: https://backups.ragnalab.xyz
 
+# ============================================================================
+# HOME & REMOTE - Physical integration
+# ============================================================================
+- Home & Remote:
     - Home Assistant:
         icon: home-assistant.png
         href: https://ha.ragnalab.xyz
-        description: Home automation
+        description: Home automation hub
         server: socket-proxy
         container: homeassistant
+        ping: https://ha.ragnalab.xyz
 
-# Productivity
-- Productivity:
-    - Vaultwarden:
-        icon: bitwarden.png
-        href: https://vault.ragnalab.xyz
-        description: Password manager
+    - RustDesk:
+        icon: rustdesk.png
+        description: Self-hosted remote desktop server
         server: socket-proxy
-        container: vaultwarden
+        container: rustdesk-hbbs
 
-    - Paperless-ngx:
-        icon: paperless.png
-        href: https://paperless.ragnalab.xyz
-        description: Document management
-        server: socket-proxy
-        container: paperless-ngx
-        widget:
-          type: paperlessngx
-          url: http://paperless-ngx:8000
-          key: "{{HOMEPAGE_VAR_PAPERLESS_API_KEY}}"
-
-    - Tandoor Recipes:
-        icon: tandoor.png
-        href: https://recipes.ragnalab.xyz
-        description: Recipe manager
-        server: socket-proxy
-        container: tandoor
-
-    - Ntfy:
-        icon: ntfy.png
-        href: https://ntfy.ragnalab.xyz
-        description: Push notifications
-        server: socket-proxy
-        container: ntfy
-
-    - FreshRSS:
-        icon: freshrss.png
-        href: https://rss.ragnalab.xyz
-        description: RSS feed reader
-        server: socket-proxy
-        container: freshrss
-
-    - Actual Budget:
-        icon: actual.png
-        href: https://budget.ragnalab.xyz
-        description: Personal budgeting
-        server: socket-proxy
-        container: actual-budget
-
-    - Obsidian LiveSync:
-        icon: obsidian.png
-        href: https://obsidian.ragnalab.xyz
-        description: Obsidian notes sync
-        server: socket-proxy
-        container: obsidian-livesync
-
-    - Syncthing:
-        icon: syncthing.png
-        href: https://sync.ragnalab.xyz
-        description: File synchronization
-        server: socket-proxy
-        container: syncthing
-
-    - FileBrowser:
-        icon: filebrowser.png
-        href: https://files.ragnalab.xyz
-        description: Web file manager
-        server: socket-proxy
-        container: filebrowser
-
-# Monitoring
+# ============================================================================
+# MONITORING - Observability and metrics
+# ============================================================================
 - Monitoring:
     - Uptime Kuma:
         icon: uptime-kuma.png
         href: https://uptime.ragnalab.xyz
-        description: Uptime monitoring
+        description: Service uptime monitoring
         server: socket-proxy
         container: uptime-kuma
         widget:
           type: uptimekuma
           url: http://uptime-kuma:3001
           slug: "{{HOMEPAGE_VAR_UPTIME_KUMA_SLUG}}"
+        ping: https://uptime.ragnalab.xyz
 
     - Dozzle:
         icon: dozzle.png
         href: https://logs.ragnalab.xyz
-        description: Container log viewer
+        description: Real-time container logs
         server: socket-proxy
         container: dozzle
+        ping: https://logs.ragnalab.xyz
 
     - Beszel:
         icon: beszel.png
         href: https://beszel.ragnalab.xyz
-        description: Server monitoring
+        description: Lightweight server metrics
         server: socket-proxy
         container: beszel
         widget:
@@ -216,21 +298,15 @@
           password: "{{HOMEPAGE_VAR_BESZEL_PASSWORD}}"
           systemId: ragnalab
           version: 2
+        ping: https://beszel.ragnalab.xyz
 
     - Speedtest Tracker:
         icon: speedtest-tracker.png
         href: https://speed.ragnalab.xyz
-        description: Internet speed monitoring
+        description: Internet speed history
         server: socket-proxy
         container: speedtest-tracker
         widget:
           type: speedtest
           url: http://speedtest-tracker:80
-
-# Remote Access
-- Remote Access:
-    - RustDesk:
-        icon: rustdesk.png
-        description: Remote desktop relay server
-        server: socket-proxy
-        container: rustdesk-hbbs
+        ping: https://speed.ragnalab.xyz

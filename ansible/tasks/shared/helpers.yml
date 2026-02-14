@@ -23,6 +23,7 @@
 #   add-root-folder     - Check and add root folder if missing
 #   add-download-client - Check and add qBittorrent download client if missing
 #   add-jellyfin-notify - Check and add Jellyfin notification connection if missing
+#   add-indexer-proxy   - Check and add FlareSolverr indexer proxy to Prowlarr
 #   configure-quality   - Run quality profile Python script
 
 - name: "Dispatch helper: {{ helper }}"
