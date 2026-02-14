@@ -2,14 +2,15 @@
 # Tailscale VPN setup
 
 - name: Add Tailscale GPG key
-  ansible.builtin.apt_key:
+  ansible.builtin.get_url:
     url: https://pkgs.tailscale.com/stable/debian/{{ ansible_distribution_release }}.noarmor.gpg
-    state: present
+    dest: /usr/share/keyrings/tailscale-archive-keyring.gpg
+    mode: "0644"
   become: true
 
 - name: Add Tailscale APT repository
   ansible.builtin.apt_repository:
-    repo: "deb https://pkgs.tailscale.com/stable/debian {{ ansible_distribution_release }} main"
+    repo: "deb [signed-by=/usr/share/keyrings/tailscale-archive-keyring.gpg] https://pkgs.tailscale.com/stable/debian {{ ansible_distribution_release }} main"
     state: present
   become: true
 
