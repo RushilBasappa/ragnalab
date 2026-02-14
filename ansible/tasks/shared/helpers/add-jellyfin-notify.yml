@@ -2,9 +2,10 @@
 # ADD JELLYFIN NOTIFICATION
 # Required: arr_name, arr_port, arr_api_path, arr_api_key
 # Optional: arr_jellyfin_events (dict of app-specific on* flags)
-- name: "[{{ arr_name | default('?') }}] Read Jellyfin API key from .env"
+#           arr_jellyfin_api_key (if not provided, reads from JELLYFIN_API_KEY in .env)
+- name: "[{{ arr_name | default('?') }}] Set Jellyfin API key"
   ansible.builtin.set_fact:
-    _jellyfin_api_key: "{{ lookup('ansible.builtin.ini', 'JELLYFIN_API_KEY', type='properties', file=playbook_dir + '/../compose/.env') }}"
+    _jellyfin_api_key: "{{ arr_jellyfin_api_key | default(lookup('ansible.builtin.ini', 'JELLYFIN_API_KEY', type='properties', file=playbook_dir + '/../compose/.env')) }}"
 
 - name: "[{{ arr_name | default('?') }}] Check existing notifications"
   ansible.builtin.command: >

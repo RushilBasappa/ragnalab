@@ -1,0 +1,70 @@
+---
+# CREATE JELLYFIN API KEY
+# Required: key_name (e.g., "arr-notifications")
+# Optional: None
+# Sets: _jellyfin_arr_api_key (the created or existing key)
+
+- name: "[Jellyfin] Read admin credentials from .env"
+  ansible.builtin.set_fact:
+    _jf_admin_user: "{{ lookup('ansible.builtin.ini', 'JELLYFIN_ADMIN_USER', type='properties', file=playbook_dir + '/../compose/.env') }}"
+    _jf_admin_pass: "{{ lookup('ansible.builtin.ini', 'JELLYFIN_ADMIN_PASSWORD', type='properties', file=playbook_dir + '/../compose/.env') }}"
+
+- name: "[Jellyfin] Authenticate to get access token"
+  ansible.builtin.command: >
+    docker exec jellyfin curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -H 'X-Emby-Authorization: MediaBrowser Client="Ansible", Device="Automation", DeviceId="ansible-{{ key_name }}", Version="1.0.0"'
+    -d '{"Username":"{{ _jf_admin_user }}","Pw":"{{ _jf_admin_pass }}"}'
+    http://localhost:8096/Users/AuthenticateByName
+  register: _jf_auth_response
+  changed_when: false
+
+- name: "[Jellyfin] Extract access token"
+  ansible.builtin.set_fact:
+    _jf_access_token: "{{ (_jf_auth_response.stdout | from_json).AccessToken }}"
+
+- name: "[Jellyfin] List existing API keys"
+  ansible.builtin.command: >
+    docker exec jellyfin curl -sf
+    -H 'X-Emby-Token: {{ _jf_access_token }}'
+    http://localhost:8096/Auth/Keys
+  register: _jf_keys_response
+  changed_when: false
+
+- name: "[Jellyfin] Parse existing keys"
+  ansible.builtin.set_fact:
+    _jf_existing_keys: "{{ (_jf_keys_response.stdout | from_json).Items }}"
+
+- name: "[Jellyfin] Check if key '{{ key_name }}' exists"
+  ansible.builtin.set_fact:
+    _jf_matching_keys: "{{ _jf_existing_keys | selectattr('AppName', 'equalto', key_name) | list }}"
+
+- name: "[Jellyfin] Create new API key '{{ key_name }}'"
+  ansible.builtin.command: >
+    docker exec jellyfin curl -sf -X POST
+    -H 'X-Emby-Token: {{ _jf_access_token }}'
+    http://localhost:8096/Auth/Keys?app={{ key_name | urlencode }}
+  when: _jf_matching_keys | length == 0
+  changed_when: true
+
+- name: "[Jellyfin] Re-fetch keys after creation"
+  ansible.builtin.command: >
+    docker exec jellyfin curl -sf
+    -H 'X-Emby-Token: {{ _jf_access_token }}'
+    http://localhost:8096/Auth/Keys
+  register: _jf_keys_response
+  changed_when: false
+  when: _jf_matching_keys | length == 0
+
+- name: "[Jellyfin] Update key list after creation"
+  ansible.builtin.set_fact:
+    _jf_matching_keys: "{{ (_jf_keys_response.stdout | from_json).Items | selectattr('AppName', 'equalto', key_name) | list }}"
+  when: _jf_matching_keys | length == 0
+
+- name: "[Jellyfin] Set API key fact"
+  ansible.builtin.set_fact:
+    _jellyfin_arr_api_key: "{{ (_jf_matching_keys | first).AccessToken }}"
+
+- name: "[Jellyfin] API key for '{{ key_name }}'"
+  ansible.builtin.debug:
+    msg: "Using {{ 'existing' if _jf_matching_keys | length > 0 else 'new' }} API key for '{{ key_name }}'"

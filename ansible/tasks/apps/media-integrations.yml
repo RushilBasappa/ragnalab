@@ -1,6 +1,13 @@
 ---
 # Cross-app integrations (runs after all media apps are deployed)
 
+# Create dedicated Jellyfin API key for arr notifications
+- name: Create Jellyfin API key for arr notifications
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: create-jellyfin-apikey
+    key_name: arr-notifications
+
 # Sonarr → Jellyfin
 - name: Read Sonarr API key
   ansible.builtin.include_tasks: ../shared/helpers.yml
@@ -17,6 +24,7 @@
     arr_port: 8989
     arr_api_path: /api/v3
     arr_api_key: "{{ sonarr_api_key }}"
+    arr_jellyfin_api_key: "{{ _jellyfin_arr_api_key }}"
     arr_jellyfin_events:
       onSeriesAdd: false
       onSeriesDelete: true
@@ -39,6 +47,7 @@
     arr_port: 7878
     arr_api_path: /api/v3
     arr_api_key: "{{ radarr_api_key }}"
+    arr_jellyfin_api_key: "{{ _jellyfin_arr_api_key }}"
     arr_jellyfin_events:
       onMovieAdded: false
       onMovieDelete: true

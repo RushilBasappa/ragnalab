@@ -25,6 +25,9 @@
 #   add-jellyfin-notify - Check and add Jellyfin notification connection if missing
 #   add-indexer-proxy   - Check and add FlareSolverr indexer proxy to Prowlarr
 #   configure-quality   - Run quality profile Python script
+#
+# Jellyfin Actions:
+#   create-jellyfin-apikey - Create or retrieve a named Jellyfin API key (idempotent)
 
 - name: "Dispatch helper: {{ helper }}"
   ansible.builtin.include_tasks: "helpers/{{ helper }}.yml"
