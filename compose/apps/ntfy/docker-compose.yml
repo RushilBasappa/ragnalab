@@ -4,7 +4,7 @@ services:
     container_name: ntfy
     command: serve
     volumes:
-      - ntfy_cache:/var/cache/ntfy
+      - ntfy_data:/var/cache/ntfy
       - ./server.yml:/etc/ntfy/server.yml:ro
     networks:
       - traefik_public
@@ -28,7 +28,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  ntfy_cache:
+  ntfy_data:
     external: true
 
 networks:

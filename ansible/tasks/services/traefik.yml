@@ -6,9 +6,9 @@
     name: traefik_public
     driver: bridge
 
-- name: Create traefik_acme volume
+- name: Create traefik_data volume
   community.docker.docker_volume:
-    name: traefik_acme
+    name: traefik_data
 
 - name: Start Traefik
   community.docker.docker_compose_v2:

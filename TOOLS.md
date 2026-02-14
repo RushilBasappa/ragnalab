@@ -293,9 +293,10 @@
 ## Storage Architecture
 
 ### Docker Volumes
-- **33 named volumes** (all `external: true`)
+- **All named volumes** (all `external: true`)
 - Location: `/var/lib/docker/volumes/`
-- Naming: `<service>_<purpose>` (e.g., `sonarr_config`, `jellyfin_config`)
+- Naming: `<service>_data` (unified naming - e.g., `sonarr_data`, `jellyfin_data`)
+- Multi-service apps use subdirectories (e.g., `tandoor_data/postgres`, `paperless_data/redis`)
 
 ### Media Storage
 - **Shared volume:** `media_data`

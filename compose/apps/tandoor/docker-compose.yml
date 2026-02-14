@@ -12,8 +12,16 @@ services:
       POSTGRES_DB: tandoor
       REMOTE_USER_AUTH: "1"
     volumes:
-      - tandoor_static:/opt/recipes/staticfiles
-      - tandoor_media:/opt/recipes/mediafiles
+      - type: volume
+        source: tandoor_data
+        target: /opt/recipes/staticfiles
+        volume:
+          subpath: static
+      - type: volume
+        source: tandoor_data
+        target: /opt/recipes/mediafiles
+        volume:
+          subpath: media
     networks:
       - traefik_public
     deploy:
@@ -41,7 +49,11 @@ services:
       POSTGRES_PASSWORD: ${TANDOOR_DB_PASSWORD}
       POSTGRES_DB: tandoor
     volumes:
-      - tandoor_postgres_data:/var/lib/postgresql/data
+      - type: volume
+        source: tandoor_data
+        target: /var/lib/postgresql/data
+        volume:
+          subpath: postgres
     networks:
       - traefik_public
     healthcheck:
@@ -56,11 +68,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  tandoor_postgres_data:
-    external: true
-  tandoor_static:
-    external: true
-  tandoor_media:
+  tandoor_data:
     external: true
 
 networks:

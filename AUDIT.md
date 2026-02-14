@@ -80,18 +80,17 @@
 # Configure Backrest to backup critical volumes nightly:
 # Priority 1 (critical):
 - vaultwarden_data        # Passwords
-- paperless_data          # Documents
-- paperless_media
+- paperless_data          # Documents (includes app, media, export, consume, redis)
 - authelia_data           # Users and sessions
 
 # Priority 2 (important):
-- *_config volumes        # Service configurations
-- jellyfin_config         # Watch history, metadata
+- *_data volumes          # All service data (unified naming)
+- jellyfin_data           # Watch history, metadata
 - uptime_kuma_data        # Monitoring history
 
 # Priority 3 (nice to have):
-- freshrss_config
-- tandoor_*
+- freshrss_data
+- tandoor_data            # Includes postgres, static, media
 - actual_budget_data
 
 # Backup target: Backblaze B2

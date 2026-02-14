@@ -85,7 +85,7 @@ backup: ## Trigger a manual Backrest backup
 		-H 'Content-Type: application/json' \
 		-d '{"value":"docker-volumes-daily"}' && echo "Backup triggered." || echo "Error: is Backrest running?"
 
-restore: ## Restore volumes: make restore APP="tandoor tandoor-db" VOL="tandoor_postgres_data tandoor_static tandoor_media"
+restore: ## Restore volumes: make restore APP="tandoor tandoor-db" VOL="tandoor_data"
 	@[ -n "$(APP)" ] && [ -n "$(VOL)" ] || (echo "Usage: make restore APP=\"container(s)\" VOL=\"volume(s)\""; exit 1)
 	@echo "Stopping containers..."
 	@for app in $(APP); do \
@@ -117,7 +117,7 @@ restore: ## Restore volumes: make restore APP="tandoor tandoor-db" VOL="tandoor_
 
 keys: ## Extract API keys from *arr apps
 	@for app in sonarr radarr prowlarr; do \
-		vol="/var/lib/docker/volumes/$${app}_config/_data/config.xml"; \
+		vol="/var/lib/docker/volumes/$${app}_data/_data/config.xml"; \
 		key=$$(sudo sed -n 's/.*<ApiKey>\(.*\)<\/ApiKey>.*/\1/p' "$$vol" 2>/dev/null); \
 		printf "%-10s %s\n" "$$app" "$${key:-not deployed}"; \
 	done

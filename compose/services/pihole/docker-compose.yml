@@ -9,8 +9,16 @@ services:
       - "53:53/tcp"
       - "53:53/udp"
     volumes:
-      - pihole_etc:/etc/pihole
-      - pihole_dnsmasq:/etc/dnsmasq.d
+      - type: volume
+        source: pihole_data
+        target: /etc/pihole
+        volume:
+          subpath: pihole
+      - type: volume
+        source: pihole_data
+        target: /etc/dnsmasq.d
+        volume:
+          subpath: dnsmasq
     networks:
       - traefik_public
     labels:
@@ -34,9 +42,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  pihole_etc:
-    external: true
-  pihole_dnsmasq:
+  pihole_data:
     external: true
 
 networks:

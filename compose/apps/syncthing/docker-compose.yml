@@ -7,7 +7,7 @@ services:
       - "22000:22000/udp"
       - "21027:21027/udp"
     volumes:
-      - syncthing_config:/var/syncthing
+      - syncthing_data:/var/syncthing
     networks:
       - traefik_public
     labels:
@@ -25,7 +25,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  syncthing_config:
+  syncthing_data:
     external: true
 
 networks:

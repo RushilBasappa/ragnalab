@@ -5,7 +5,7 @@ services:
     environment:
       TZ: Etc/UTC
     volumes:
-      - jellyseerr_config:/app/config
+      - jellyseerr_data:/app/config
     networks:
       - traefik_public
     labels:
@@ -28,7 +28,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  jellyseerr_config:
+  jellyseerr_data:
     external: true
 
 networks:

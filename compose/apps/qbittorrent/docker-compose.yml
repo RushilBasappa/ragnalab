@@ -15,7 +15,11 @@ services:
       VPN_PORT_FORWARDING: "on"
       VPN_PORT_FORWARDING_PROVIDER: protonvpn
     volumes:
-      - gluetun_data:/gluetun
+      - type: volume
+        source: qbittorrent_data
+        target: /gluetun
+        volume:
+          subpath: gluetun
     networks:
       - traefik_public
     labels:
@@ -41,7 +45,11 @@ services:
       TZ: Etc/UTC
       WEBUI_PORT: "8080"
     volumes:
-      - qbittorrent_config:/config
+      - type: volume
+        source: qbittorrent_data
+        target: /config
+        volume:
+          subpath: config
       - media_data:/data
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080"]
@@ -58,9 +66,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  gluetun_data:
-    external: true
-  qbittorrent_config:
+  qbittorrent_data:
     external: true
   media_data:
     external: true

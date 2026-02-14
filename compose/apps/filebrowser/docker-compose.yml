@@ -5,8 +5,16 @@ services:
     environment:
       FB_NOAUTH: "true"
     volumes:
-      - filebrowser_db:/database
-      - filebrowser_data:/srv
+      - type: volume
+        source: filebrowser_data
+        target: /database
+        volume:
+          subpath: db
+      - type: volume
+        source: filebrowser_data
+        target: /srv
+        volume:
+          subpath: srv
     networks:
       - traefik_public
     labels:
@@ -24,8 +32,6 @@ services:
     restart: unless-stopped
 
 volumes:
-  filebrowser_db:
-    external: true
   filebrowser_data:
     external: true
 

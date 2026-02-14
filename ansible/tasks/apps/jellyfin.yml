@@ -5,7 +5,7 @@
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     helper: create-volumes
-    volumes: [jellyfin_config, media_data]
+    volumes: [jellyfin_data, media_data]
 
 - name: Start Jellyfin
   ansible.builtin.include_tasks: ../shared/helpers.yml
@@ -13,11 +13,11 @@
     helper: start
     services: [jellyfin]
 
-- name: Get jellyfin_config volume path
+- name: Get jellyfin_data volume path
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     helper: get-volume-path
-    volume_name: jellyfin_config
+    volume_name: jellyfin_data
 
 - name: Wait for Jellyfin system config to exist
   ansible.builtin.include_tasks: ../shared/helpers.yml

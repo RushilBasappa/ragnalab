@@ -5,7 +5,7 @@
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     helper: create-volumes
-    volumes: [bazarr_config, media_data]
+    volumes: [bazarr_data, media_data]
 
 - name: Start Bazarr
   ansible.builtin.include_tasks: ../shared/helpers.yml
@@ -20,11 +20,11 @@
     container_name: bazarr
     check_port: 6767
 
-- name: Get bazarr_config volume path
+- name: Get bazarr_data volume path
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     helper: get-volume-path
-    volume_name: bazarr_config
+    volume_name: bazarr_data
 
 - name: Set config path
   ansible.builtin.set_fact:
@@ -53,12 +53,12 @@
 - name: Read Bazarr config
   ansible.builtin.slurp:
     src: "{{ bazarr_conf }}"
-  register: bazarr_config_raw
+  register: bazarr_data_raw
   become: true
 
 - name: Patch Bazarr config
   ansible.builtin.copy:
-    content: "{{ bazarr_config_raw.content | b64decode | from_yaml | combine(overrides, recursive=True) | to_nice_yaml(indent=2) }}"
+    content: "{{ bazarr_data_raw.content | b64decode | from_yaml | combine(overrides, recursive=True) | to_nice_yaml(indent=2) }}"
     dest: "{{ bazarr_conf }}"
     owner: "1000"
     group: "1000"

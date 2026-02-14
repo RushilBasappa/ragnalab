@@ -11,8 +11,6 @@
     helper: create-volumes
     volumes:
       - backrest_data
-      - backrest_config
-      - backrest_cache
       - ragnalab_backups
 
 - name: Read restic password from .env
@@ -34,7 +32,7 @@
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     helper: get-volume-path
-    volume_name: backrest_config
+    volume_name: backrest_data
 
 - name: Pre-seed Backrest config
   ansible.builtin.copy:
@@ -68,8 +66,6 @@
             "excludes": [
               "media_data",
               "backrest_data",
-              "backrest_config",
-              "backrest_cache",
               "ragnalab_backups"
             ],
             "schedule": {
@@ -88,7 +84,7 @@
           }
         ]
       }
-    dest: "{{ _volume_path }}/config.json"
+    dest: "{{ _volume_path }}/config/config.json"
     mode: "0600"
     force: false
   become: true

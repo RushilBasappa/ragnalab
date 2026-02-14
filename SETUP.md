@@ -729,10 +729,10 @@ docker restart authelia
 
 # Critical volumes (backup priority):
 # - vaultwarden_data (passwords)
-# - paperless_data + paperless_media (documents)
+# - paperless_data (documents - includes app, media, export, consume, redis)
 # - authelia_data (users and sessions)
-# - *_config volumes (all service configs)
-# - jellyfin_config (watch history, metadata)
+# - *_data volumes (all service data - unified naming convention)
+# - jellyfin_data (watch history, metadata)
 ```
 
 ### Manual Backup

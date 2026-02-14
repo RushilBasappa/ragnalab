@@ -5,7 +5,7 @@ services:
     devices:
       - /dev/video19:/dev/video19
     volumes:
-      - jellyfin_config:/config
+      - jellyfin_data:/config
       - media_data:/data
     ports:
       - "8096:8096"
@@ -31,7 +31,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  jellyfin_config:
+  jellyfin_data:
     external: true
   media_data:
     external: true

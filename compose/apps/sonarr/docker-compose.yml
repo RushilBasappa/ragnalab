@@ -7,7 +7,7 @@ services:
       PGID: "1000"
       TZ: Etc/UTC
     volumes:
-      - sonarr_config:/config
+      - sonarr_data:/config
       - media_data:/data
     networks:
       - traefik_public
@@ -32,7 +32,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  sonarr_config:
+  sonarr_data:
     external: true
   media_data:
     external: true

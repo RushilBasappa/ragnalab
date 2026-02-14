@@ -5,7 +5,7 @@
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     helper: create-volumes
-    volumes: [homeassistant_config]
+    volumes: [homeassistant_data]
 
 - name: Start Home Assistant
   ansible.builtin.include_tasks: ../shared/helpers.yml

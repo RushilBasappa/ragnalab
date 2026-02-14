@@ -7,10 +7,6 @@
     helper: create-volumes
     volumes:
       - paperless_data
-      - paperless_media
-      - paperless_export
-      - paperless_consume
-      - paperless_redis_data
 
 - name: Start Paperless-ngx
   ansible.builtin.include_tasks: ../shared/helpers.yml

@@ -5,7 +5,7 @@
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     helper: create-volumes
-    volumes: [syncthing_config]
+    volumes: [syncthing_data]
 
 - name: Start Syncthing
   ansible.builtin.include_tasks: ../shared/helpers.yml
@@ -13,11 +13,11 @@
     helper: start
     services: [syncthing]
 
-- name: Get syncthing_config volume path
+- name: Get syncthing_data volume path
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     helper: get-volume-path
-    volume_name: syncthing_config
+    volume_name: syncthing_data
 
 - name: Set config path
   ansible.builtin.set_fact:

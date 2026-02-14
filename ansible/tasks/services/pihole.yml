@@ -1,13 +1,9 @@
 ---
 # Pi-hole DNS
 
-- name: Create pihole_etc volume
+- name: Create pihole_data volume
   community.docker.docker_volume:
-    name: pihole_etc
-
-- name: Create pihole_dnsmasq volume
-  community.docker.docker_volume:
-    name: pihole_dnsmasq
+    name: pihole_data
 
 - name: Start Pi-hole
   community.docker.docker_compose_v2:

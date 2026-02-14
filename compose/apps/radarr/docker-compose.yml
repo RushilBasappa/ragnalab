@@ -7,7 +7,7 @@ services:
       PGID: "1000"
       TZ: Etc/UTC
     volumes:
-      - radarr_config:/config
+      - radarr_data:/config
       - media_data:/data
     networks:
       - traefik_public
@@ -32,7 +32,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  radarr_config:
+  radarr_data:
     external: true
   media_data:
     external: true

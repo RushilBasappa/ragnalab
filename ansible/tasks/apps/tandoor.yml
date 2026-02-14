@@ -6,9 +6,7 @@
   vars:
     helper: create-volumes
     volumes:
-      - tandoor_postgres_data
-      - tandoor_static
-      - tandoor_media
+      - tandoor_data
 
 - name: Start Tandoor Recipes
   ansible.builtin.include_tasks: ../shared/helpers.yml

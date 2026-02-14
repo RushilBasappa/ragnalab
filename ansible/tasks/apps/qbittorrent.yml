@@ -5,7 +5,7 @@
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     helper: create-volumes
-    volumes: [gluetun_data, qbittorrent_config, media_data]
+    volumes: [qbittorrent_data, media_data]
 
 - name: Start Gluetun + qBittorrent
   ansible.builtin.include_tasks: ../shared/helpers.yml
@@ -25,11 +25,11 @@
   ansible.builtin.include_tasks: ../shared/helpers.yml
   vars:
     helper: get-volume-path
-    volume_name: qbittorrent_config
+    volume_name: qbittorrent_data
 
 - name: Set config path
   ansible.builtin.set_fact:
-    qbit_conf: "{{ _volume_path }}/qBittorrent/qBittorrent.conf"
+    qbit_conf: "{{ _volume_path }}/config/qBittorrent/qBittorrent.conf"
 
 - name: Wait for qBittorrent config to exist
   ansible.builtin.include_tasks: ../shared/helpers.yml

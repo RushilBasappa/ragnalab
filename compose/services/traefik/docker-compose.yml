@@ -10,7 +10,7 @@ services:
       - "443:443"
     volumes:
       - ./traefik.yml:/etc/traefik/traefik.yml:ro
-      - traefik_acme:/acme
+      - traefik_data:/acme
     networks:
       - socket_proxy
       - traefik_public
@@ -38,7 +38,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  traefik_acme:
+  traefik_data:
     external: true
 
 networks:
