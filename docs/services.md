@@ -410,4 +410,8 @@ make teardown APP=ntfy      # Remove a service
 - Hardcoded domain across all configs
 
 ### Planned Improvements
-See [audit.md](audit.md) for detailed recommendations and improvement roadmap.
+- Configure automated backups via Backrest
+- Pin all Docker images to specific versions
+- Add firewall (UFW) management
+- Bind Pi-hole DNS to specific interfaces
+- Templatize hardcoded domain

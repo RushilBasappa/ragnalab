@@ -837,7 +837,6 @@ sudo systemctl restart docker
 
 For issues, questions, or contributions:
 - Check existing issues in the repository
-- Review [audit.md](audit.md) for known limitations
 - Submit PRs with improvements
 
 **Note:** This is a personal homelab setup. Adapt configurations to your needs and security requirements.

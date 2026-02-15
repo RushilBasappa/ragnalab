@@ -35,10 +35,14 @@ cd ragnalab
 # Install prerequisites
 make fix-locale && make install-ansible
 
-# Configure vault password and secrets (see docs/setup.md)
+# Set up vault password
 echo 'your-vault-password' > .vault_pass
 chmod 600 .vault_pass
-make init
+
+# Configure environment secrets
+cp compose/.env.example compose/.env
+nano compose/.env                        # Fill in all values
+make sync                                # Encrypt .env to Ansible Vault
 
 # Bootstrap system (installs Docker, Tailscale, SSH keys, Zsh)
 make bootstrap
@@ -46,6 +50,8 @@ make bootstrap
 # Deploy everything
 make deploy-all
 ```
+
+> **Existing deployment?** If you already have an encrypted `ansible/vars/secrets.yml`, skip the `.env` steps above and run `make init` to decrypt it instead.
 
 See [docs/setup.md](docs/setup.md) for the complete deployment guide.
 
@@ -88,8 +94,7 @@ ragnalab/
 │   └── .env.example           # Environment template
 ├── docs/                      # Documentation
 │   ├── setup.md               # Complete deployment guide
-│   ├── services.md            # Service catalog and architecture
-│   └── audit.md               # Infrastructure audit and recommendations
+│   └── services.md            # Service catalog and architecture
 ├── hooks/                     # Git pre-commit hooks
 │   └── pre-commit             # Auto-encrypt .env to Ansible Vault
 ├── Makefile                   # Operational commands
@@ -126,7 +131,6 @@ Run `make help` for the complete list.
 
 - **[docs/setup.md](docs/setup.md)** - Complete deployment guide from bare Pi to production
 - **[docs/services.md](docs/services.md)** - Service catalog, architecture, and resource allocation
-- **[docs/audit.md](docs/audit.md)** - Infrastructure audit and improvement roadmap
 
 ## Security & Best Practices
 
