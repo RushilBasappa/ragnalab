@@ -410,4 +410,4 @@ make teardown APP=ntfy      # Remove a service
 - Hardcoded domain across all configs
 
 ### Planned Improvements
-See `AUDIT.md` for detailed recommendations and improvement roadmap.
+See [audit.md](audit.md) for detailed recommendations and improvement roadmap.

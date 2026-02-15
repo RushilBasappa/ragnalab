@@ -824,7 +824,7 @@ sudo systemctl restart docker
 
 ## Additional Resources
 
-- **RagnaLab Documentation:** See TOOLS.md for detailed service descriptions
+- **RagnaLab Documentation:** See [services.md](services.md) for detailed service descriptions
 - **Ansible Automation:** See ansible/tasks/ for task details
 - **Docker Compose:** See compose/apps/ for service definitions
 - **Traefik Docs:** https://doc.traefik.io/traefik/
@@ -837,7 +837,7 @@ sudo systemctl restart docker
 
 For issues, questions, or contributions:
 - Check existing issues in the repository
-- Review AUDIT.md for known limitations
+- Review [audit.md](audit.md) for known limitations
 - Submit PRs with improvements
 
 **Note:** This is a personal homelab setup. Adapt configurations to your needs and security requirements.

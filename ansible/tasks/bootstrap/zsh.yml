@@ -1,9 +1,12 @@
 ---
 # Zsh + Starship prompt setup
 
-- name: Install zsh
+- name: Install zsh and plugins
   ansible.builtin.apt:
-    name: zsh
+    name:
+      - zsh
+      - zsh-autosuggestions
+      - zsh-history-substring-search
     state: present
   become: true
 
@@ -23,9 +26,27 @@
   when: not starship_bin.stat.exists
   become: true
 
-- name: Ensure zshrc contains starship init
-  ansible.builtin.lineinfile:
+- name: Configure zshrc
+  ansible.builtin.blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    line: 'eval "$(starship init zsh)"'
     create: true
     mode: "0644"
+    marker: "# {mark} ragnalab-managed"
+    block: |
+      # Plugins
+      source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+      source /usr/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+
+      # Bind up/down arrows to history substring search
+      bindkey '^[[A' history-substring-search-up
+      bindkey '^[[B' history-substring-search-down
+
+      # History settings
+      HISTSIZE=10000
+      SAVEHIST=10000
+      HISTFILE=~/.zsh_history
+      setopt SHARE_HISTORY
+      setopt HIST_IGNORE_DUPS
+
+      # Prompt
+      eval "$(starship init zsh)"
