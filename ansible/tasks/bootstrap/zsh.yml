@@ -1,19 +1,10 @@
 ---
-# Zsh + Starship prompt setup
+# Zsh + Zinit + Starship prompt setup
 
-- name: Install zsh and autosuggestions
+- name: Install zsh
   ansible.builtin.apt:
-    name:
-      - zsh
-      - zsh-autosuggestions
+    name: zsh
     state: present
-  become: true
-
-- name: Clone zsh-history-substring-search
-  ansible.builtin.git:
-    repo: https://github.com/zsh-users/zsh-history-substring-search.git
-    dest: /usr/share/zsh-history-substring-search
-    depth: 1
   become: true
 
 - name: Set zsh as default shell
@@ -21,6 +12,12 @@
     name: "{{ ansible_user_id }}"
     shell: /usr/bin/zsh
   become: true
+
+- name: Install Zinit
+  ansible.builtin.git:
+    repo: https://github.com/zdharma-continuum/zinit.git
+    dest: "{{ ansible_env.HOME }}/.local/share/zinit/zinit.git"
+    depth: 1
 
 - name: Check if Starship is installed
   ansible.builtin.stat:
@@ -39,9 +36,12 @@
     mode: "0644"
     marker: "# {mark} ragnalab-managed"
     block: |
+      # Zinit
+      source "${HOME}/.local/share/zinit/zinit.git/zinit.zsh"
+
       # Plugins
-      source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-      source /usr/share/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh
+      zinit light zsh-users/zsh-autosuggestions
+      zinit light zsh-users/zsh-history-substring-search
 
       # Bind up/down arrows to history substring search
       bindkey '^[[A' history-substring-search-up
