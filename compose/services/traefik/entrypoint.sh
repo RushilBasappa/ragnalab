@@ -1,3 +1,11 @@
+#!/bin/sh
+set -e
+
+# Create traefik config directory if it doesn't exist
+mkdir -p /etc/traefik
+
+# Generate traefik.yml with EAB credentials from environment variables
+cat > /etc/traefik/traefik-generated.yml <<EOF
 global:
   sendAnonymousUsage: false
 
@@ -17,7 +25,7 @@ entryPoints:
         entryPoint:
           to: websecure
           scheme: https
-          
+
   websecure:
     address: ":443"
     http:
@@ -40,7 +48,9 @@ certificatesResolvers:
           - "1.1.1.1:53"
           - "8.8.8.8:53"
         delayBeforeCheck: 10
-      # EAB credentials injected via CLI flags (see docker-compose.yml command section)
+      eab:
+        kid: ${ZEROSSL_EAB_KID}
+        hmacEncoded: ${ZEROSSL_EAB_HMAC}
 
   letsencrypt:
     acme:
@@ -58,3 +68,7 @@ providers:
     endpoint: "tcp://socket-proxy:2375"
     exposedByDefault: false
     network: traefik_public
+EOF
+
+# Start Traefik with the generated config
+exec traefik --configFile=/etc/traefik/traefik-generated.yml

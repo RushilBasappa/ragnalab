@@ -2,14 +2,17 @@ services:
   traefik:
     image: traefik:v3
     container_name: traefik
+    entrypoint: /entrypoint.sh
     environment:
       CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN}
       CF_API_EMAIL: ${CF_API_EMAIL}
+      ZEROSSL_EAB_KID: ${ZEROSSL_EAB_KID}
+      ZEROSSL_EAB_HMAC: ${ZEROSSL_EAB_HMAC}
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./entrypoint.sh:/entrypoint.sh:ro
       - traefik_data:/acme
     networks:
       - socket_proxy
