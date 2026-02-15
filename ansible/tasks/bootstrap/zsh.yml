@@ -1,13 +1,19 @@
 ---
 # Zsh + Starship prompt setup
 
-- name: Install zsh and plugins
+- name: Install zsh and autosuggestions
   ansible.builtin.apt:
     name:
       - zsh
       - zsh-autosuggestions
-      - zsh-history-substring-search
     state: present
+  become: true
+
+- name: Clone zsh-history-substring-search
+  ansible.builtin.git:
+    repo: https://github.com/zsh-users/zsh-history-substring-search.git
+    dest: /usr/share/zsh-history-substring-search
+    depth: 1
   become: true
 
 - name: Set zsh as default shell
@@ -35,7 +41,7 @@
     block: |
       # Plugins
       source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-      source /usr/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+      source /usr/share/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh
 
       # Bind up/down arrows to history substring search
       bindkey '^[[A' history-substring-search-up
