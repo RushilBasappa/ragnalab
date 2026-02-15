@@ -18,7 +18,6 @@
           key: "{{HOMEPAGE_VAR_JELLYFIN_API_KEY}}"
           enableBlocks: true
           enableNowPlaying: true
-        ping: https://jellyfin.ragnalab.xyz
 
     - Jellyseerr:
         icon: jellyseerr.png
@@ -30,7 +29,6 @@
           type: jellyseerr
           url: http://jellyseerr:5055
           key: "{{HOMEPAGE_VAR_JELLYSEERR_API_KEY}}"
-        ping: https://requests.ragnalab.xyz
 
 # ============================================================================
 # MEDIA MANAGEMENT - Automation stack
@@ -47,7 +45,6 @@
           url: http://radarr:7878
           key: "{{HOMEPAGE_VAR_RADARR_API_KEY}}"
           enableQueue: true
-        ping: https://radarr.ragnalab.xyz
 
     - Sonarr:
         icon: sonarr.png
@@ -60,7 +57,6 @@
           url: http://sonarr:8989
           key: "{{HOMEPAGE_VAR_SONARR_API_KEY}}"
           enableQueue: true
-        ping: https://sonarr.ragnalab.xyz
 
     - Prowlarr:
         icon: prowlarr.png
@@ -72,7 +68,6 @@
           type: prowlarr
           url: http://prowlarr:9696
           key: "{{HOMEPAGE_VAR_PROWLARR_API_KEY}}"
-        ping: https://prowlarr.ragnalab.xyz
 
     - Bazarr:
         icon: bazarr.png
@@ -84,7 +79,6 @@
           type: bazarr
           url: http://bazarr:6767
           key: "{{HOMEPAGE_VAR_BAZARR_API_KEY}}"
-        ping: https://bazarr.ragnalab.xyz
 
     - qBittorrent:
         icon: qbittorrent.png
@@ -97,14 +91,7 @@
           url: http://gluetun:8080
           username: "{{HOMEPAGE_VAR_QBITTORRENT_USERNAME}}"
           password: "{{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}"
-        ping: https://qbit.ragnalab.xyz
 
-    - FlareSolverr:
-        icon: flaresolverr.png
-        description: CloudFlare bypass proxy for indexers
-        server: socket-proxy
-        container: flaresolverr
-        ping: http://flaresolverr:8191/health
 
 # ============================================================================
 # DOCUMENTS & NOTES - Knowledge management
@@ -120,7 +107,6 @@
           type: paperlessngx
           url: http://paperless-ngx:8000
           key: "{{HOMEPAGE_VAR_PAPERLESS_API_KEY}}"
-        ping: https://paperless.ragnalab.xyz
 
     - Obsidian LiveSync:
         icon: obsidian.png
@@ -128,7 +114,6 @@
         description: Self-hosted note synchronization
         server: socket-proxy
         container: obsidian-livesync
-        ping: https://obsidian.ragnalab.xyz
 
     - FreshRSS:
         icon: freshrss.png
@@ -136,7 +121,6 @@
         description: RSS feed aggregator
         server: socket-proxy
         container: freshrss
-        ping: https://rss.ragnalab.xyz
 
 # ============================================================================
 # PERSONAL APPS - Daily utilities
@@ -148,7 +132,6 @@
         description: Self-hosted password manager
         server: socket-proxy
         container: vaultwarden
-        ping: https://vault.ragnalab.xyz
 
     - Tandoor Recipes:
         icon: tandoor.png
@@ -156,7 +139,6 @@
         description: Recipe collection and meal planning
         server: socket-proxy
         container: tandoor
-        ping: https://recipes.ragnalab.xyz
 
     - Actual Budget:
         icon: actual.png
@@ -164,7 +146,6 @@
         description: Personal finance tracking
         server: socket-proxy
         container: actual-budget
-        ping: https://budget.ragnalab.xyz
 
     - Ntfy:
         icon: ntfy.png
@@ -172,7 +153,6 @@
         description: Push notification service
         server: socket-proxy
         container: ntfy
-        ping: https://ntfy.ragnalab.xyz
 
 # ============================================================================
 # FILE MANAGEMENT - Storage and sync
@@ -184,7 +164,6 @@
         description: Cross-device file synchronization
         server: socket-proxy
         container: syncthing
-        ping: https://sync.ragnalab.xyz
 
     - FileBrowser:
         icon: filebrowser.png
@@ -192,7 +171,6 @@
         description: Web-based file manager
         server: socket-proxy
         container: filebrowser
-        ping: https://files.ragnalab.xyz
 
 # ============================================================================
 # INFRASTRUCTURE - Core services
@@ -207,7 +185,6 @@
         widget:
           type: traefik
           url: http://traefik:8080
-        ping: https://traefik.ragnalab.xyz
 
     - Authelia:
         icon: authelia.png
@@ -215,7 +192,6 @@
         description: Single sign-on and 2FA
         server: socket-proxy
         container: authelia
-        ping: https://auth.ragnalab.xyz
 
     - Pi-hole:
         icon: pi-hole.png
@@ -227,13 +203,11 @@
           type: pihole
           url: http://pihole:80
           key: "{{HOMEPAGE_VAR_PIHOLE_API_KEY}}"
-        ping: https://pihole.ragnalab.xyz
 
     - Tailscale:
         icon: tailscale.png
         href: https://login.tailscale.com/admin/machines
         description: Mesh VPN network
-        ping: 100.64.0.1  # CHANGEME: Your Tailscale IP
 
     - Backrest:
         icon: backrest.png
@@ -241,7 +215,6 @@
         description: Restic backup orchestration
         server: socket-proxy
         container: backrest
-        ping: https://backups.ragnalab.xyz
 
 # ============================================================================
 # HOME & REMOTE - Physical integration
@@ -253,7 +226,6 @@
         description: Home automation hub
         server: socket-proxy
         container: homeassistant
-        ping: https://ha.ragnalab.xyz
 
     - RustDesk:
         icon: rustdesk.png
@@ -275,7 +247,6 @@
           type: uptimekuma
           url: http://uptime-kuma:3001
           slug: "{{HOMEPAGE_VAR_UPTIME_KUMA_SLUG}}"
-        ping: https://uptime.ragnalab.xyz
 
     - Dozzle:
         icon: dozzle.png
@@ -283,7 +254,6 @@
         description: Real-time container logs
         server: socket-proxy
         container: dozzle
-        ping: https://logs.ragnalab.xyz
 
     - Beszel:
         icon: beszel.png
@@ -298,7 +268,6 @@
           password: "{{HOMEPAGE_VAR_BESZEL_PASSWORD}}"
           systemId: ragnalab
           version: 2
-        ping: https://beszel.ragnalab.xyz
 
     - Speedtest Tracker:
         icon: speedtest-tracker.png
@@ -309,4 +278,3 @@
         widget:
           type: speedtest
           url: http://speedtest-tracker:80
-        ping: https://speed.ragnalab.xyz

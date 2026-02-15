@@ -61,9 +61,9 @@
       ansible.builtin.import_tasks: tasks/apps/radarr.yml
       tags: [radarr, media]
 
-    - name: Prowlarr + FlareSolverr
+    - name: Prowlarr
       ansible.builtin.import_tasks: tasks/apps/prowlarr.yml
-      tags: [prowlarr, flaresolverr, media]
+      tags: [prowlarr, media]
 
     - name: Bazarr
       ansible.builtin.import_tasks: tasks/apps/bazarr.yml
