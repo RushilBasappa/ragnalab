@@ -18,6 +18,14 @@ authentication_backend:
 access_control:
   default_policy: one_factor
   rules:
+    # Allow favicon requests without authentication
+    - domain: "*.ragnalab.xyz"
+      resources:
+        - "^/favicon\\.(ico|png|svg)$"
+        - "^/apple-touch-icon"
+        - "^/site\\.webmanifest$"
+      policy: bypass
+
     - domain: auth.ragnalab.xyz
       policy: bypass
     - domain: vault.ragnalab.xyz
