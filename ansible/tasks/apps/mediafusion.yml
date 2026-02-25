@@ -1,0 +1,206 @@
+---
+# MediaFusion v5 Beta (Tamil/Telugu indexer via Prowlarr Torznab)
+
+- name: Create volumes
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: create-volumes
+    volumes: [mediafusion_data]
+
+- name: Create subpaths
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: create-subpaths
+    volume_name: mediafusion_data
+    subpaths: [mongo, redis, postgres]
+
+- name: Start MediaFusion
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: start
+    services: [mediafusion, mediafusion-worker, mediafusion-mongo, mediafusion-postgres, mediafusion-redis, flaresolverr]
+
+- name: Wait for MediaFusion healthy
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: wait-ready
+    container_name: mediafusion
+    check_port: 8000
+    health_path: health
+
+# --- Seed tracker table with public trackers ---
+# MediaFusion ships with resources/json/trackers.json but doesn't auto-populate
+# the PostgreSQL tracker table on fresh setup. Without trackers in the DB, the
+# Torznab API generates bare magnet links (no &tr= params), which causes
+# qBittorrent to get stuck at "downloading metadata" through VPN.
+
+- name: Seed public trackers into PostgreSQL
+  ansible.builtin.command: >
+    docker exec mediafusion python -c "
+    import json, subprocess, sys;
+    trackers = json.load(open('/mediafusion/resources/json/trackers.json'));
+    sql = ';'.join([
+      \"INSERT INTO tracker (url, status, success_count, failure_count, success_rate, created_at) VALUES ('\" + t.replace(\"'\", \"''\") + \"', 'WORKING', 0, 0, 0.0, NOW()) ON CONFLICT (url) DO NOTHING\"
+      for t in trackers
+    ]);
+    result = subprocess.run(
+      ['psql', '-U', 'mediafusion', '-h', 'mediafusion-postgres', '-c', sql],
+      capture_output=True, text=True, env={**__import__('os').environ, 'PGPASSWORD': 'mediafusion'}
+    );
+    print(result.stdout);
+    sys.exit(result.returncode)
+    "
+  register: seed_trackers
+  changed_when: "'INSERT' in seed_trackers.stdout"
+
+- name: Link existing torrents to public trackers
+  ansible.builtin.command: >
+    docker exec mediafusion-postgres psql -U mediafusion -c "
+    INSERT INTO torrent_tracker_link (torrent_id, tracker_id)
+    SELECT ts.id, t.id
+    FROM torrent_stream ts
+    CROSS JOIN tracker t
+    WHERE t.url IN (
+      'udp://tracker.opentrackr.org:1337/announce',
+      'udp://open.stealth.si:80/announce',
+      'udp://tracker.torrent.eu.org:451/announce',
+      'udp://tracker.bittor.pw:1337/announce',
+      'udp://open.demonii.com:1337/announce',
+      'udp://exodus.desync.com:6969/announce',
+      'udp://tracker.openbittorrent.com:80/announce',
+      'udp://open.tracker.cl:1337/announce'
+    )
+    AND NOT EXISTS (
+      SELECT 1 FROM torrent_tracker_link ttl
+      WHERE ttl.torrent_id = ts.id AND ttl.tracker_id = t.id
+    )"
+  register: link_trackers
+  changed_when: "'INSERT 0 0' not in link_trackers.stdout"
+
+# --- Clean up stale manually-injected indexers ---
+
+- name: Read Prowlarr API key
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: read-apikey
+    arr_name: prowlarr
+
+- name: Remove stale MediaFusion from Prowlarr (ID 6)
+  ansible.builtin.command: >
+    docker exec prowlarr curl -sf -X DELETE
+    -H 'X-Api-Key: {{ prowlarr_api_key }}'
+    http://localhost:9696/api/v1/indexer/6
+  ignore_errors: true
+  changed_when: true
+
+- name: Read Radarr API key
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: read-apikey
+    arr_name: radarr
+
+- name: Remove stale MediaFusion from Radarr (ID 5)
+  ansible.builtin.command: >
+    docker exec radarr curl -sf -X DELETE
+    -H 'X-Api-Key: {{ radarr_api_key }}'
+    http://localhost:7878/api/v3/indexer/5
+  ignore_errors: true
+  changed_when: true
+
+- name: Read Sonarr API key
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: read-apikey
+    arr_name: sonarr
+
+- name: Remove stale MediaFusion from Sonarr (ID 4)
+  ansible.builtin.command: >
+    docker exec sonarr curl -sf -X DELETE
+    -H 'X-Api-Key: {{ sonarr_api_key }}'
+    http://localhost:8989/api/v3/indexer/4
+  ignore_errors: true
+  changed_when: true
+
+# --- Register MediaFusion user and get UUID for Torznab API key ---
+# v5 API requires X-API-Key header on all requests.
+# Register returns {access_token, user: {uuid}} directly (no email verification on self-hosted).
+# Torznab apikey format: "password:uuid"
+
+- name: Look up MediaFusion credentials from .env
+  ansible.builtin.set_fact:
+    _mf_password: "{{ lookup('ansible.builtin.ini', 'MEDIAFUSION_API_PASSWORD', type='properties', file=env_file) }}"
+    _mf_email: "{{ lookup('ansible.builtin.ini', 'MEDIAFUSION_CONTACT_EMAIL', type='properties', file=env_file) }}"
+
+- name: Register MediaFusion user
+  ansible.builtin.command: >
+    docker exec mediafusion curl -s -X POST
+    -H 'Content-Type: application/json'
+    -H 'X-API-Key: {{ _mf_password }}'
+    -d '{"email": "{{ _mf_email }}", "username": "prowlarr", "password": "{{ _mf_password }}"}'
+    http://localhost:8000/api/v1/auth/register
+  register: mf_register
+  changed_when: "'access_token' in mf_register.stdout"
+  failed_when: "mf_register.rc != 0 and 'already registered' not in mf_register.stdout"
+
+- name: Login to MediaFusion
+  ansible.builtin.command: >
+    docker exec mediafusion curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -H 'X-API-Key: {{ _mf_password }}'
+    -d '{"email": "{{ _mf_email }}", "password": "{{ _mf_password }}"}'
+    http://localhost:8000/api/v1/auth/login
+  register: mf_login
+  when: "'access_token' not in mf_register.stdout"
+  changed_when: false
+
+- name: Set MediaFusion Torznab API key
+  ansible.builtin.set_fact:
+    mediafusion_torznab_key: "{{ _mf_password }}:{{ ((_mf_response | from_json).user.uuid) }}"
+  vars:
+    _mf_response: "{{ mf_register.stdout if 'access_token' in mf_register.stdout else mf_login.stdout }}"
+
+# --- Add MediaFusion as Torznab indexer in Prowlarr ---
+# Two-step approach: Prowlarr validates indexers on add by running an empty search.
+# Even with our entrypoint patches, adding with enable=true can fail validation.
+# Add disabled first (skips validation), then force-enable via PUT.
+
+- name: Check existing Prowlarr indexers
+  ansible.builtin.command: >
+    docker exec prowlarr curl -sf
+    -H 'X-Api-Key: {{ prowlarr_api_key }}'
+    http://localhost:9696/api/v1/indexer
+  register: prowlarr_indexers
+  changed_when: false
+
+- name: Add MediaFusion to Prowlarr (disabled)
+  ansible.builtin.command: >
+    docker exec prowlarr curl -sf -X POST
+    -H 'Content-Type: application/json'
+    -H 'X-Api-Key: {{ prowlarr_api_key }}'
+    -d '{"name":"MediaFusion","enable":false,"implementation":"Torznab","configContract":"TorznabSettings","enableRss":true,"enableAutomaticSearch":true,"enableInteractiveSearch":true,"appProfileId":1,"priority":50,"fields":[{"name":"baseUrl","value":"http://mediafusion:8000/torznab"},{"name":"apiPath","value":"/api"},{"name":"apiKey","value":"{{ mediafusion_torznab_key }}"}]}'
+    http://localhost:9696/api/v1/indexer
+  register: prowlarr_add_result
+  when: "'MediaFusion' not in prowlarr_indexers.stdout"
+  changed_when: true
+
+- name: Get MediaFusion indexer ID
+  ansible.builtin.set_fact:
+    _mf_indexer_id: "{{ (prowlarr_add_result.stdout | from_json).id if prowlarr_add_result is changed else (prowlarr_indexers.stdout | from_json | selectattr('name', 'equalto', 'MediaFusion') | first).id }}"
+
+- name: Get full MediaFusion indexer config
+  ansible.builtin.command: >
+    docker exec prowlarr curl -sf
+    -H 'X-Api-Key: {{ prowlarr_api_key }}'
+    http://localhost:9696/api/v1/indexer/{{ _mf_indexer_id }}
+  register: prowlarr_mf_config
+  changed_when: false
+
+- name: Enable MediaFusion in Prowlarr (force save)
+  ansible.builtin.command: >
+    docker exec prowlarr curl -sf -X PUT
+    -H 'Content-Type: application/json'
+    -H 'X-Api-Key: {{ prowlarr_api_key }}'
+    -d '{{ prowlarr_mf_config.stdout | from_json | combine({"enable": true}) | to_json }}'
+    http://localhost:9696/api/v1/indexer/{{ _mf_indexer_id }}?forceSave=true
+  when: "not (prowlarr_mf_config.stdout | from_json).enable"
+  changed_when: true

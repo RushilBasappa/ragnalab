@@ -1,0 +1,183 @@
+services:
+  mediafusion:
+    image: mhdzumair/mediafusion:beta
+    container_name: mediafusion
+    entrypoint: ["/entrypoint.sh"]
+    volumes:
+      - ./entrypoint.sh:/entrypoint.sh:ro
+    environment:
+      SECRET_KEY: ${MEDIAFUSION_SECRET_KEY}
+      API_PASSWORD: ${MEDIAFUSION_API_PASSWORD}
+      CONTACT_EMAIL: ${MEDIAFUSION_CONTACT_EMAIL}
+      HOST_URL: https://mediafusion.${DOMAIN}
+      MONGO_URI: mongodb://mediafusion-mongo:27017/mediafusion
+      POSTGRES_URI: postgresql+asyncpg://mediafusion:mediafusion@mediafusion-postgres:5432/mediafusion
+      REDIS_URL: redis://mediafusion-redis:6379
+      FLARESOLVERR_URL: http://flaresolverr:8191/v1
+      IS_SCRAP_FROM_TORRENTIO: "true"
+      IS_SCRAP_FROM_PROWLARR: "false"
+      DISABLE_FORMULA_TGX_SCHEDULER: "true"
+      DISABLE_NOWMETV_SCHEDULER: "true"
+      DISABLE_NOWSPORTS_SCHEDULER: "true"
+      DISABLE_SPORT_VIDEO_SCHEDULER: "true"
+      DISABLE_MOTOGP_TGX_SCHEDULER: "true"
+      DISABLE_WWE_TGX_SCHEDULER: "true"
+      DISABLE_UFC_TGX_SCHEDULER: "true"
+      DISABLE_MOVIES_TV_TGX_SCHEDULER: "true"
+      DB_MAX_CONNECTIONS: "20"
+      REDIS_MAX_CONNECTIONS: "50"
+    networks:
+      - traefik_public
+      - mediafusion_internal
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 120s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    depends_on:
+      mediafusion-mongo:
+        condition: service_healthy
+      mediafusion-postgres:
+        condition: service_healthy
+      mediafusion-redis:
+        condition: service_healthy
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.mediafusion.rule: "Host(`mediafusion.${DOMAIN}`)"
+      traefik.http.routers.mediafusion.entrypoints: websecure
+      traefik.http.services.mediafusion.loadbalancer.server.port: "8000"
+      traefik.http.routers.mediafusion.middlewares: authelia@docker
+      kuma.mediafusion.http.name: MediaFusion
+      kuma.mediafusion.http.url: https://mediafusion.${DOMAIN}
+    restart: unless-stopped
+
+  mediafusion-worker:
+    image: mhdzumair/mediafusion:beta
+    container_name: mediafusion-worker
+    command: ["dramatiq", "api.task", "-p", "1", "-t", "1"]
+    environment:
+      SECRET_KEY: ${MEDIAFUSION_SECRET_KEY}
+      API_PASSWORD: ${MEDIAFUSION_API_PASSWORD}
+      CONTACT_EMAIL: ${MEDIAFUSION_CONTACT_EMAIL}
+      HOST_URL: https://mediafusion.${DOMAIN}
+      MONGO_URI: mongodb://mediafusion-mongo:27017/mediafusion
+      POSTGRES_URI: postgresql+asyncpg://mediafusion:mediafusion@mediafusion-postgres:5432/mediafusion
+      REDIS_URL: redis://mediafusion-redis:6379
+      FLARESOLVERR_URL: http://flaresolverr:8191/v1
+      IS_SCRAP_FROM_TORRENTIO: "true"
+      IS_SCRAP_FROM_PROWLARR: "false"
+      DB_MAX_CONNECTIONS: "20"
+      REDIS_MAX_CONNECTIONS: "50"
+    networks:
+      - mediafusion_internal
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    depends_on:
+      mediafusion-mongo:
+        condition: service_healthy
+      mediafusion-postgres:
+        condition: service_healthy
+      mediafusion-redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  mediafusion-mongo:
+    image: mongo:7
+    container_name: mediafusion-mongo
+    volumes:
+      - type: volume
+        source: mediafusion_data
+        target: /data/db
+        volume:
+          subpath: mongo
+    networks:
+      - mediafusion_internal
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    restart: unless-stopped
+
+  mediafusion-postgres:
+    image: postgres:16-alpine
+    container_name: mediafusion-postgres
+    environment:
+      POSTGRES_USER: mediafusion
+      POSTGRES_PASSWORD: mediafusion
+      POSTGRES_DB: mediafusion
+    volumes:
+      - type: volume
+        source: mediafusion_data
+        target: /var/lib/postgresql/data
+        volume:
+          subpath: postgres
+    networks:
+      - mediafusion_internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mediafusion"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    restart: unless-stopped
+
+  mediafusion-redis:
+    image: redis:alpine
+    container_name: mediafusion-redis
+    volumes:
+      - type: volume
+        source: mediafusion_data
+        target: /data
+        volume:
+          subpath: redis
+    networks:
+      - mediafusion_internal
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+    restart: unless-stopped
+
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:v3.3.22 # last working ARM64 build
+    container_name: flaresolverr
+    environment:
+      LOG_LEVEL: info
+    networks:
+      - mediafusion_internal
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    restart: unless-stopped
+
+volumes:
+  mediafusion_data:
+    external: true
+
+networks:
+  traefik_public:
+    external: true
+  mediafusion_internal:
+    driver: bridge

@@ -77,6 +77,10 @@
       ansible.builtin.import_tasks: tasks/apps/jellyseerr.yml
       tags: [jellyseerr, media]
 
+    - name: MediaFusion
+      ansible.builtin.import_tasks: tasks/apps/mediafusion.yml
+      tags: [mediafusion, media]
+
     # ── Monitoring ───────────────────────────────────────────────
     - name: Uptime Kuma
       ansible.builtin.import_tasks: tasks/apps/uptime-kuma.yml

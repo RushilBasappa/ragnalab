@@ -32,6 +32,10 @@
       ansible.builtin.import_tasks: tasks/apps/prowlarr.yml
       tags: [media, prowlarr]
 
+    - name: MediaFusion (Tamil/Telugu Indexer)
+      ansible.builtin.import_tasks: tasks/apps/mediafusion.yml
+      tags: [media, mediafusion]
+
     - name: Bazarr (Subtitles)
       ansible.builtin.import_tasks: tasks/apps/bazarr.yml
       tags: [media, bazarr]
