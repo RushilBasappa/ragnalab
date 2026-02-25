@@ -202,7 +202,8 @@
         widget:
           type: pihole
           url: http://pihole:80
-          key: "{{HOMEPAGE_VAR_PIHOLE_API_KEY}}"
+          version: 6
+          key: "{{HOMEPAGE_VAR_PIHOLE_PASSWORD}}"
 
     - Tailscale:
         icon: tailscale.png
