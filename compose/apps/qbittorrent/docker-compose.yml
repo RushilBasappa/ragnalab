@@ -10,6 +10,10 @@ services:
       SERVER_COUNTRIES: ${SERVER_COUNTRIES}
       VPN_PORT_FORWARDING: "on"
       VPN_PORT_FORWARDING_PROVIDER: protonvpn
+      VPN_PORT_FORWARDING_UP_COMMAND: >-
+        /bin/sh -c 'wget -q -O /dev/null
+        --post-data="json={\"listen_port\":{{PORTS}}}"
+        http://localhost:8080/api/v2/app/setPreferences'
     volumes:
       - type: volume
         source: qbittorrent_data
@@ -25,12 +29,16 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128M
+          memory: 256M
     labels:
       traefik.enable: "true"
       traefik.http.routers.qbittorrent.rule: "Host(`qbit.${DOMAIN}`)"
       traefik.http.routers.qbittorrent.entrypoints: websecure
       traefik.http.services.qbittorrent.loadbalancer.server.port: "8080"
+      traefik.http.services.qbittorrent.loadbalancer.server.scheme: "http"
+      traefik.http.services.qbittorrent.loadbalancer.healthcheck.path: "/"
+      traefik.http.services.qbittorrent.loadbalancer.healthcheck.interval: "15s"
+      traefik.http.services.qbittorrent.loadbalancer.healthcheck.timeout: "5s"
       kuma.qbittorrent.http.name: qBittorrent
       kuma.qbittorrent.http.url: https://qbit.${DOMAIN}
     healthcheck:
@@ -58,7 +66,7 @@ services:
           subpath: config
       - /srv:/data
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8080 && curl -f --max-time 5 http://127.0.0.1:9999"]
+      test: ["CMD-SHELL", "curl -sf http://localhost:8080 > /dev/null"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -71,6 +79,21 @@ services:
       gluetun:
         condition: service_healthy
         restart: true
+    restart: unless-stopped
+
+  autoheal:
+    image: willfarrell/autoheal:latest
+    container_name: autoheal
+    environment:
+      AUTOHEAL_CONTAINER_LABEL: all
+      AUTOHEAL_INTERVAL: 30
+      AUTOHEAL_START_PERIOD: 60
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    deploy:
+      resources:
+        limits:
+          memory: 32M
     restart: unless-stopped
 
 volumes:
