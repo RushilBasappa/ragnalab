@@ -24,6 +24,11 @@ services:
       DISABLE_WWE_TGX_SCHEDULER: "true"
       DISABLE_UFC_TGX_SCHEDULER: "true"
       DISABLE_MOVIES_TV_TGX_SCHEDULER: "true"
+      DISABLE_FORMULA_EXT_SCHEDULER: "true"
+      DISABLE_UFC_EXT_SCHEDULER: "true"
+      DISABLE_WWE_EXT_SCHEDULER: "true"
+      DISABLE_MOTOGP_EXT_SCHEDULER: "true"
+      DISABLE_MOVIES_TV_EXT_SCHEDULER: "true"
       DB_MAX_CONNECTIONS: "20"
       REDIS_MAX_CONNECTIONS: "50"
     networks:
@@ -86,6 +91,10 @@ services:
         condition: service_healthy
       mediafusion-redis:
         condition: service_healthy
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
     restart: unless-stopped
 
   mediafusion-mongo:
