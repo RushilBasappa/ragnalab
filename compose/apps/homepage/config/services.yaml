@@ -122,6 +122,13 @@
         server: socket-proxy
         container: freshrss
 
+    - Rustpad:
+        icon: si-hackthebox
+        href: https://pad.ragnalab.xyz
+        description: Collaborative code editor
+        server: socket-proxy
+        container: rustpad
+
 # ============================================================================
 # PERSONAL APPS - Daily utilities
 # ============================================================================
@@ -134,14 +141,14 @@
         container: vaultwarden
 
     - Tandoor Recipes:
-        icon: tandoor.png
+        icon: tandoor-recipes.png
         href: https://recipes.ragnalab.xyz
         description: Recipe collection and meal planning
         server: socket-proxy
         container: tandoor
 
     - Actual Budget:
-        icon: actual.png
+        icon: actual-budget.png
         href: https://budget.ragnalab.xyz
         description: Personal finance tracking
         server: socket-proxy
