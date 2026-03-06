@@ -20,6 +20,7 @@ include:
   - apps/jellyseerr/docker-compose.yml
   - apps/mediafusion/docker-compose.yml
   - apps/freshrss/docker-compose.yml
+  - apps/rustpad/docker-compose.yml
   - apps/actual-budget/docker-compose.yml
   - apps/obsidian-livesync/docker-compose.yml
   - apps/syncthing/docker-compose.yml

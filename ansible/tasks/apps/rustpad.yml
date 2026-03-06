@@ -1,0 +1,21 @@
+---
+# Rustpad
+# Image runs as UID 1000:1000 (non-root scratch image), so the volume
+# must be owned by that user for SQLite to create/write the database.
+
+- name: Create volumes
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: create-volumes
+    volumes: [rustpad_data]
+
+- name: Fix volume ownership for non-root container
+  ansible.builtin.command:
+    cmd: docker run --rm -v rustpad_data:/data busybox chown 1000:1000 /data
+  changed_when: false
+
+- name: Start Rustpad
+  ansible.builtin.include_tasks: ../shared/helpers.yml
+  vars:
+    helper: start
+    services: [rustpad]

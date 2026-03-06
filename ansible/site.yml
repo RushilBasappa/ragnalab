@@ -119,6 +119,10 @@
       ansible.builtin.import_tasks: tasks/apps/actual-budget.yml
       tags: [actual-budget, apps]
 
+    - name: Rustpad
+      ansible.builtin.import_tasks: tasks/apps/rustpad.yml
+      tags: [rustpad, apps]
+
     # ── Sync & Storage ───────────────────────────────────────────
     - name: Obsidian LiveSync
       ansible.builtin.import_tasks: tasks/apps/obsidian-livesync.yml

@@ -1,0 +1,31 @@
+services:
+  rustpad:
+    image: ekzhang/rustpad:latest
+    container_name: rustpad
+    environment:
+      SQLITE_URI: "sqlite:///persist/rustpad.db"
+      EXPIRY_DAYS: "0"
+    volumes:
+      - rustpad_data:/persist
+    networks:
+      - traefik_public
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.rustpad.rule: "Host(`pad.${DOMAIN}`)"
+      traefik.http.routers.rustpad.entrypoints: websecure
+      traefik.http.services.rustpad.loadbalancer.server.port: "3030"
+      kuma.rustpad.http.name: Rustpad
+      kuma.rustpad.http.url: https://pad.${DOMAIN}
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+    restart: unless-stopped
+
+volumes:
+  rustpad_data:
+    external: true
+
+networks:
+  traefik_public:
+    external: true
