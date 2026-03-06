@@ -1,6 +1,10 @@
 ---
 server:
   address: "tcp://:9091"
+  timeouts:
+    read: 10s
+    write: 10s
+    idle: 120s
   endpoints:
     authz:
       forward-auth:
